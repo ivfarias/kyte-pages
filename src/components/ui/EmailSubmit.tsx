@@ -40,15 +40,29 @@ export const EmailSubmit = ({
     }, []);
 
     useEffect(() => {
-        // Load the external script
-        const script = document.createElement("script");
-        script.src = "/api/kyteAuth.js";
-        script.async = true;
-        document.body.appendChild(script);
+        // Check if scripts already exist
+        if (!document.querySelector('script[src="/api/kyte-shared.js"]')) {
+            const sharedScript = document.createElement("script");
+            sharedScript.src = "/api/kyte-shared.js";
+            sharedScript.async = false;
+            document.body.appendChild(sharedScript);
+        }
+
+        if (!document.querySelector('script[src="/api/kyteAuth.js"]')) {
+            const authScript = document.createElement("script");
+            authScript.src = "/api/kyteAuth.js";
+            authScript.async = false;
+            document.body.appendChild(authScript);
+        }
 
         // Cleanup
         return () => {
-            document.body.removeChild(script);
+            const scripts = document.querySelectorAll('script[src^="/api/kyte"]');
+            scripts.forEach(script => {
+                if (!document.querySelector('[data-kyte-form-auth="true"]')) {
+                    script.remove();
+                }
+            });
         };
     }, []);
 
