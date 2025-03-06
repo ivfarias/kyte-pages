@@ -77,40 +77,40 @@ import Pricing from "../components/Pricing.astro";
   <section
     class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
   >
-    <div class="my-24 px-8 md:px-16 max-w-[1250px] mx-auto">
+    <div class="my-24 px-8 md:px-16 max-w-[1080px] mx-auto">
       <Heading2 client:load color="kyte-gray">
         Qual estratégia você quer neste momento do seu negócio?
       </Heading2>
     </div>
     <div
-      class="bg-white w-full max-w-[1250px] mx-auto flex flex-col md:flex-row gap-8 justify-center items-center px-8 md:px-16"
+      class="bg-white w-full max-w-[1250px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-8 md:px-16"
     >
       <Card
-        mainImage=""
+        mainImage="/images/lowestPriceOverlayImage.png"
         overlayImage="/images/lowestPriceOverlayImage.png"
         title={`Vender mais rápido: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
         ).toFixed(2)}`}
-        content="Preço mais atrativo que seus concorrentes..."
+        content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
         borderColor="#F3A626"
       />
       <Card
-        mainImage=""
+        mainImage="/images/mediumPriceOverlayImage.png"
         overlayImage="/images/mediumPriceOverlayImage.png"
         title={`Maximizar seus lucros: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
         ).toFixed(2)}`}
-        content="Vender com estratégia..."
+        content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
         borderColor="#2DD1AC"
       />
       <Card
-        mainImage=""
+        mainImage="/images/highestPriceOverlayImage.png"
         overlayImage="/images/highestPriceOverlayImage.png"
         title={`Selecionar melhor seus clientes: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketHighestPrice") ||
             "0",
         ).toFixed(2)}`}
-        content="Valorizar a qualidade..."
+        content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
         borderColor="#547AB8"
       />
     </div>
