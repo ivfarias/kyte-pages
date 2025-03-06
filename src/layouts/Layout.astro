@@ -1,0 +1,33 @@
+---
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="description"
+			content="Idol is an elegant landing page template for micro SaaS products built with AstroJS & Tailwind CSS"
+		/>
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="font-graphik m-0 bg-gray09">
+		<slot />
+		<script
+			defer
+			src="https://mintyebfontkit.blob.core.windows.net/$web/kyte-shared.min.js"
+		></script>
+		<script
+			defer
+			src="https://mintyebfontkit.blob.core.windows.net/$web/kyte-form-steps.min.js"
+		></script>
+	</body>
+</html>

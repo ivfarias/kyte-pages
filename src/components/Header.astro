@@ -1,0 +1,40 @@
+---
+import Logo from "../assets/kyteLogoGreen.svg";
+import Text from "./ui/Text";
+import Button from "./ui/Button";
+---
+
+<header
+  class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-4 my-12 bg-white rounded-lg"
+>
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <div class="w-1/3">
+      <a href="#" class="inline-block">
+        <img
+          src={Logo.src}
+          alt="Kyte Logo In Green"
+          class="w-[50px] mt-[5px]"
+        />
+      </a>
+    </div>
+    <nav class="w-1/3 md:block hidden">
+      <ul class="flex justify-center items-center space-x-5">
+        <li>
+          <a href="#features">
+            <Text color="kyte-gray" size="medium">Features</Text>
+          </a>
+        </li>
+        <li>
+          <a href="#pricing">
+            <Text color="kyte-gray" size="medium">Pricing</Text>
+          </a>
+        </li>
+        <li>
+          <a href="#customers">
+            <Text color="kyte-gray" size="medium">Customers</Text>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,78 @@
+---
+import Text from "./ui/Text";
+import Heading4 from "./ui/Heading4";
+
+interface Props {
+    number: number;
+    mainImageBg: string;
+    overlayImage?: string;
+    title: string;
+    content: string;
+    isReversed?: boolean;
+}
+
+const {
+    number,
+    mainImageBg,
+    overlayImage,
+    title,
+    content,
+    isReversed = false,
+} = Astro.props;
+---
+
+<div
+    class:list={[
+        "flex flex-col items-center md:flex-row gap-8 relative",
+        isReversed ? "md:flex-row-reverse" : "",
+        isReversed ? "md:items-end" : "md:items-start",
+    ]}
+>
+    <div class="flex-shrink-0">
+        <div
+            class:list={[
+                "w-10 h-10 md:w-16 md:h-16 bg-[#2DD1AC] rounded-full flex items-center justify-center text-white text-2xl md:text-4xl font-medium shadow-lg absolute z-20",
+                isReversed
+                    ? "right-0 translate-x-1/2 md:translate-x-0"
+                    : "left-0 -translate-x-1/2 md:translate-x-0",
+                "top-[180px] md:top-[140px]",
+            ]}
+        >
+            {number}
+        </div>
+    </div>
+    <div class="max-w-[420px] justify-items-center">
+        <div class="relative mt-40 h-[280px] z-10 flex justify-center md:mt-12">
+            <div class="relative h-[210px] w-[280px] sm:w-[320px]">
+                <div
+                    class="w-full h-full rounded-2xl"
+                    style={`background-color: ${mainImageBg}`}
+                >
+                </div>
+                {
+                    overlayImage && (
+                        <img
+                            src={overlayImage}
+                            alt="Overlay image"
+                            class="absolute left-1/2 -translate-x-1/2 w-full max-h-[none] object-contain bottom-0"
+                        />
+                    )
+                }
+            </div>
+        </div>
+        <div
+            class="bg-[#E3F6F1] rounded-xl overflow-visible relative -mt-[160px] w-[340px] sm:w-[420px]"
+        >
+            <div class="px-6 pt-[120px] pb-6">
+                <div class="w-full max-w-[320px] mx-auto">
+                    <Heading4 client:load color="kyte-gray" align="left-all">
+                        {title}
+                    </Heading4>
+                    <Text client:load color="kyte-gray" size="small">
+                        {content}
+                    </Text>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

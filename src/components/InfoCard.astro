@@ -1,0 +1,100 @@
+---
+import Text from "./ui/Text";
+import Heading3 from "./ui/Heading3";
+
+interface Props {
+    title: string;
+    content: string;
+    image: string;
+    imageLink: string;
+    isReversed?: boolean;
+    icon?: string;
+}
+
+const {
+    title,
+    content,
+    image,
+    imageLink,
+    isReversed = false,
+    icon,
+} = Astro.props;
+---
+
+<div class="w-full">
+    <div
+        class="flex flex-col md:flex-row md:justify-between items-center gap-2 md:px-4 md:py-8 md:gap-4"
+    >
+        {
+            !isReversed ? (
+                <>
+                    <div class="flex-1 max-w-[480px] w-full flex flex-col items-center text-center md:text-left md:items-start">
+                        <div class="flex items-center gap-4">
+                            {icon && (
+                                <img src={icon} alt="Icon" class="w-6 h-6" />
+                            )}
+                            <Heading3
+                                client:load
+                                color="kyte-gray"
+                                align="left-all"
+                            >
+                                {title}
+                            </Heading3>
+                        </div>
+                        <Text client:load color="kyte-gray" size="medium">
+                            {content}
+                        </Text>
+                    </div>
+                    <div class="w-full flex justify-center md:flex-1 md:justify-end">
+                        <a
+                            href={imageLink || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="w-full max-w-[480px]"
+                        >
+                            <img
+                                src={image}
+                                alt={title}
+                                class="w-full h-auto rounded-lg"
+                            />
+                        </a>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div class="w-full flex justify-center md:flex-1 md:justify-start order-2 md:order-1">
+                        <a
+                            href={imageLink || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="w-full max-w-[480px]"
+                        >
+                            <img
+                                src={image}
+                                alt={title}
+                                class="w-full h-auto rounded-lg"
+                            />
+                        </a>
+                    </div>
+                    <div class="flex-1 space-y-4 order-1 md:order-2 max-w-[480px] w-full flex flex-col items-center text-center md:text-left md:items-start">
+                        <div class="flex items-center gap-4 justify-between">
+                            <Heading3
+                                client:load
+                                color="kyte-gray"
+                                align="left-all"
+                            >
+                                {title}
+                            </Heading3>
+                            {icon && (
+                                <img src={icon} alt="Icon" class="w-6 h-6" />
+                            )}
+                        </div>
+                        <Text client:load color="kyte-gray" size="medium">
+                            {content}
+                        </Text>
+                    </div>
+                </>
+            )
+        }
+    </div>
+</div>

@@ -1,0 +1,60 @@
+/* Font declarations */
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom properties */
+:root {
+  --accent: #cc4b06;
+  --dark: #000;
+  --tenary: #ecf7f8;
+}
+
+/* Custom classes */
+.h1-title {
+  @apply text-6xl font-bold;
+}
+.h2-title {
+  @apply text-5xl font-bold;
+}
+.l-subtitle {
+  @apply text-3xl font-bold;
+}
+.s-subtitle {
+  @apply font-bold;
+}
+.s-paragraph {
+  @apply text-xl;
+}
+.button {
+  @apply rounded-lg transition-opacity hover:opacity-80;
+}
+.button-primary {
+  @apply bg-[var(--accent)] border-[var(--accent)] text-white;
+}
+

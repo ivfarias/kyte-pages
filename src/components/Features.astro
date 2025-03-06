@@ -1,0 +1,126 @@
+---
+import CallToAction from "./CallToAction.astro";
+import FeatureCard from "./FeatureCard.astro";
+import Heading2 from "./ui/Heading2";
+import Text from "./ui/Text";
+import { EmailSubmit } from "./ui/EmailSubmit";
+
+const features = [
+    {
+        number: 1,
+        title: "Ampliar seus canais de venda",
+        description:
+            "Você vai ter mais chances de vender mais se aumentar o número de locais que sua loja aparece. Venda na loja online, no WhatsApp, Instagram, Facebook, TikTok, e diversifique sua atuação.",
+        overlayImage: "/src/assets/featureImage1.png",
+    },
+    {
+        number: 2,
+        title: "Monitorar suas vendas e estoque",
+        description:
+            "Acompanhe todas as suas vendas e movimentações dos produtos no seu estoque. Fique sempre de olho no que está acontecendo, de qualquer lugar que estiver, a qualquer momento.",
+        overlayImage: "/src/assets/featureImage2.png",
+    },
+    {
+        number: 3,
+        title: "Melhorar a experiência do cliente na sua loja",
+        description:
+            "Tenha uma loja online com divisão por setores, fácil de navegar, e de fazer e acompanhar o pedido. Faça de um jeito que estimule a pessoa a voltar e comprar com você de novo.",
+        overlayImage: "/src/assets/featureImage3.png",
+    },
+    {
+        number: 4,
+        title: "Descobrir os produtos mais vendidos (e os que têm pouca saída)",
+        description:
+            "Acompanhe os números do seu negócio para saber onde estão os maiores gastos e como reduzi-los, quais itens são os favoritos da sua clientela e como vendê-los ainda mais, e quais estão parados no estoque e o que fazer para resolver.",
+        overlayImage: "/src/assets/featureImage4.png",
+    },
+];
+---
+
+<div
+    class="bg-white rounded-xl mt-[320px] md:mt-80 mb-6 px-8 md:px-16 w-[calc(100%-2rem)] md:w-full max-w-[1080px] relative mx-4 md:mx-auto"
+>
+    <div
+        class="absolute left-0 right-0 -top-[240px] md:-top-[140px] flex justify-center w-full"
+    >
+        <div class="w-[90%] md:w-[80%]">
+            <CallToAction
+                type="email"
+                variant="primary"
+                heading="Quer uma ajuda para vender melhor?"
+                content="O Kyte é um sistema de vendas que ajuda você a vender melhor seus produtos, melhorar a experiência do cliente e garantir que você consiga sempre a maior margem de lucro."
+                buttonText="Começar agora"
+                isHidden={true}
+                lang="pt"
+                plan="prime"
+                recurrence="monthly"
+                flow="subscription"
+            />
+        </div>
+    </div>
+
+    <div class="relative pt-24 md:pt-32 pb-16">
+        <div class="space-y-16 px-3 md:px-0">
+            <div class="my-24">
+                <Heading2 color="kyte-gray" align="center-all">
+                    Agora que você já sabe o preço ideal dos seus produtos, o
+                    que precisa fazer?
+                </Heading2>
+            </div>
+            <div class="relative">
+                <div
+                    class="absolute left-1/2 top-0 bottom-0 w-[3px] bg-[#2DD1AC]"
+                >
+                </div>
+                {
+                    features.map((feature, index) => (
+                        <FeatureCard
+                            mainImageBg="#2DD1AC"
+                            content={feature.description}
+                            {...feature}
+                            isReversed={index % 2 !== 0}
+                        />
+                    ))
+                }
+            </div>
+            <div class="my-12 py-12 justify-items-center">
+                <Heading2 color="kyte-gray" align="center-all">
+                    Para vender mais e melhor é simples e custa menos de R$3 por
+                    dia.
+                </Heading2>
+
+                {/* Desktop version */}
+                <div class="hidden md:block">
+                    <EmailSubmit
+                        client:load
+                        isHidden={true}
+                        lang="pt"
+                        plan="prime"
+                        recurrence="monthly"
+                        os="lp"
+                        app="web"
+                        flow="subscription"
+                        formAuth={true}
+                        buttonText="Começar agora"
+                    />
+                </div>
+
+                {/* Mobile version */}
+                <div class="md:hidden">
+                    <EmailSubmit
+                        client:load
+                        isHidden={true}
+                        lang="pt"
+                        plan="prime"
+                        recurrence="monthly"
+                        os="lp"
+                        app="pos"
+                        flow="subscription"
+                        formAuth={true}
+                        buttonText="Começar agora"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

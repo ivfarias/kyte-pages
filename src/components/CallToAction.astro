@@ -1,0 +1,121 @@
+---
+import Heading2 from "./ui/Heading2";
+import Text from "./ui/Text";
+import Button from "./ui/Button";
+import { EmailSubmit } from "./ui/EmailSubmit";
+
+interface Props {
+    heading: string;
+    content: string;
+    buttonText: string;
+    buttonLink?: string;
+    type?: "cta" | "email";
+    variant?: "primary" | "secondary";
+    isHidden?: boolean;
+    lang?: string;
+    plan?: string;
+    recurrence?: string;
+    os?: string;
+    flow?: string;
+    formAuth?: boolean;
+}
+
+const {
+    heading,
+    content,
+    buttonText,
+    buttonLink,
+    type = "cta",
+    variant = "primary",
+    isHidden = false,
+    lang = "pt",
+    plan = "",
+    recurrence = "",
+    os = "lp",
+    flow = "subscription",
+    formAuth = true,
+} = Astro.props;
+
+const styles = {
+    primary: {
+        background: "bg-primary",
+        headingColor: "white" as const,
+        textColor: "white" as const,
+        buttonVariant: "outline" as const,
+    },
+    secondary: {
+        background: "bg-[#F7F7F8]",
+        headingColor: "kyte-gray" as const,
+        textColor: "kyte-gray" as const,
+        buttonVariant: "primary" as const,
+    },
+};
+
+const currentStyle = styles[variant];
+---
+
+<div
+    class={`w-[100%] md:w-full rounded-xl ${currentStyle.background} justify-items-center py-4 px-4 md:px-6 mx-auto`}
+>
+    <div class="max-w-[640px] flex flex-col gap-2 items-center mx-auto">
+        <Heading2
+            client:visible
+            color={currentStyle.headingColor}
+            align="center-all"
+        >
+            {heading}
+        </Heading2>
+        <Text
+            client:visible
+            color={currentStyle.textColor}
+            size="medium"
+            align="center-all"
+        >
+            {content}
+        </Text>
+        {
+            type === "email" ? (
+                <>
+                    <div class="hidden md:block">
+                        <EmailSubmit
+                            client:visible
+                            buttonText={buttonText}
+                            isHidden={isHidden}
+                            variant={currentStyle.buttonVariant}
+                            lang={lang}
+                            plan={plan}
+                            recurrence={recurrence}
+                            os={os}
+                            app="web"
+                            flow={flow}
+                            formAuth={formAuth}
+                        />
+                    </div>
+                    <div class="md:hidden">
+                        <EmailSubmit
+                            client:visible
+                            buttonText={buttonText}
+                            isHidden={isHidden}
+                            variant={currentStyle.buttonVariant}
+                            lang={lang}
+                            plan={plan}
+                            recurrence={recurrence}
+                            os={os}
+                            app="pos"
+                            flow={flow}
+                            formAuth={formAuth}
+                        />
+                    </div>
+                </>
+            ) : (
+                <Button
+                    client:visible
+                    variant={currentStyle.buttonVariant}
+                    href={buttonLink}
+                >
+                    {buttonText}
+                </Button>
+            )
+        }
+    </div>
+</div>

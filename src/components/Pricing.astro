@@ -1,0 +1,203 @@
+---
+import Heading2 from "../components/ui/Heading2";
+import Heading3 from "../components/ui/Heading3";
+import { EmailSubmit } from "../components/ui/EmailSubmit";
+import Text from "../components/ui/Text";
+---
+
+<section
+  class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
+>
+  <Heading2> Todo negócio precisa de um plano </Heading2>
+  <Text size="medium" align="center-all" color="kyte-gray">
+    Sem contratos ou taxas ocultas. Pague no boleto, pix ou cartão. Cancele
+    quando quiser.
+  </Text>
+  <div class="pt-6 pb-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <!--Switch-->
+        <div class="flex justify-center items-center">
+          <label
+            class="min-w-[3.5rem] text-xl relative text-gray-900 mr-4 font-medium"
+            >Mensal</label
+          >
+          <input
+            type="checkbox"
+            id="billing-toggle"
+            class="relative shrink-0 w-11 h-6 p-0.5 bg-gray09 checked:bg-none checked:bg-gray09 rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:border-green02 appearance-none
+                            before:inline-block before:w-5 before:h-5 before:bg-green02 checked:before:bg-green02 before:translate-x-0 checked:before:translate-x-full before:shadow before:rounded-full before:transform before:transition before:ease-in-out before:duration-200"
+          />
+          <label
+            class="relative min-w-[3.5rem] font-medium text-xl text-textColor ml-4"
+          >
+            Anual
+          </label>
+        </div>
+        <!--Switch End-->
+      </div>
+
+      <!--Single Card-->
+      <div class="grid place-items-center">
+        <div class="w-full max-w-lg">
+          <div
+            class="flex flex-col text-gray-900 rounded-2xl bg-white border-2 border-primary"
+          >
+            <div
+              class="uppercase bg-primary to-violet-600 rounded-t-2xl p-3 text-center text-white"
+            >
+              Melhor Custo Benefício
+            </div>
+            <div class="p-6 xl:py-9 xl:px-12">
+              <Heading3>Plano PRIME</Heading3>
+              <div class="flex items-center mb-6">
+                <span
+                  class="text-5xl font-semibold text-textColor"
+                  id="price-display">R$ 89,90</span
+                >
+                <Text size="large" id="price-period">/ mês</Text>
+              </div>
+              <!--List-->
+              <ul class="mb-12 space-y-4 text-left text-lg">
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible
+                    >Ponto de Venda no celular e computador</Text
+                  >
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Controle de Estoque</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Fluxo de Caixa Completo</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Controle de Fiado</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Catálogo online</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Atendimento por WhatsApp</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Gestão de Fornecedores</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Importação de Produtos em Massa</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible
+                    >IA para Criar Descrições de Produtos</Text
+                  >
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Recibos personalizados</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Gestão de Gastos</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Vendedores ilimitados</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible
+                    >Atendimento prioritário durante a semana</Text
+                  >
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible>Atendimento Exclusivo aos Sábados</Text>
+                </li>
+                <li class="flex items-center gap-2">
+                  ✅
+                  <Text client:visible
+                    >Videochamada com equipe de atendimento</Text
+                  >
+                </li>
+              </ul>
+              {/* Desktop version */}
+              <div class="hidden md:block">
+                <EmailSubmit
+                  isHidden={true}
+                  lang="pt"
+                  plan="prime"
+                  recurrence="monthly"
+                  os="lp"
+                  app="web"
+                  flow="subscription"
+                  formAuth={true}
+                  buttonText="Começar agora"
+                />
+              </div>
+
+              {/* Mobile version */}
+              <div class="md:hidden">
+                <EmailSubmit
+                  isHidden={true}
+                  lang="pt"
+                  plan="starter"
+                  recurrence="yearly"
+                  os="lp"
+                  app="pos"
+                  flow="subscription"
+                  formAuth={true}
+                  buttonText="Começar agora"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const BILLING_PERIODS = {
+        MONTHLY: "monthly",
+        YEARLY: "yearly",
+      } as const;
+
+      const prices = {
+        monthly: "R$ 89,90",
+        yearly: "R$ 899,90",
+      } as const;
+
+      const updatePricing = (isYearly: boolean): void => {
+        const priceDisplay = document.getElementById("price-display");
+        const pricePeriod = document.getElementById("price-period");
+
+        if (!priceDisplay || !pricePeriod) return;
+
+        const period = isYearly
+          ? BILLING_PERIODS.YEARLY
+          : BILLING_PERIODS.MONTHLY;
+        priceDisplay.textContent = prices[period];
+        pricePeriod.textContent = isYearly ? "/ ano" : "/ mês";
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById(
+          "billing-toggle",
+        ) as HTMLInputElement | null;
+        if (!toggle) return;
+
+        toggle.addEventListener("change", (event: Event) => {
+          const target = event.currentTarget as HTMLInputElement;
+          updatePricing(target.checked);
+        });
+      });
+    </script>
+  </div>
+</section>

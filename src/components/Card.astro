@@ -1,0 +1,47 @@
+---
+import Text from "./ui/Text";
+import Heading4 from "./ui/Heading4";
+
+interface Props {
+    mainImage: string;
+    overlayImage?: string;
+    title: string;
+    content: string;
+    borderColor?: string;
+}
+
+const { overlayImage, title, content, borderColor = "#CAD6DA" } = Astro.props;
+---
+
+<div class="relative max-w-xs font-graphik">
+    <div
+        class={`bg-white rounded-xl overflow-visible border-2 relative h-[480px]`}
+        style={`border-color: ${borderColor}`}
+    >
+        <div class="relative mx-6 mt-3 mb-6 h-[210px]">
+            <div
+                class="w-full h-full rounded-2xl"
+                style={`background-color: ${borderColor}`}
+            >
+            </div>
+            {
+                overlayImage && (
+                    <img
+                        src={overlayImage}
+                        alt="Overlay image"
+                        class="absolute left-1/2 -translate-x-1/2 w-full max-h-[none] object-contain bottom-0"
+                    />
+                )
+            }
+        </div>
+        <!-- Card content -->
+        <div class="px-6">
+            <Heading4 client:load color="kyte-gray" align="left-all">
+                {title}
+            </Heading4>
+            <Text client:load color="kyte-gray" size="small">
+                {content}
+            </Text>
+        </div>
+    </div>
+</div>
