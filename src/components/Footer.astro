@@ -1,5 +1,4 @@
 ---
-import Logo from "../assets/kyteLogoGreen.svg";
 import Text from "./ui/Text";
 import Heading4 from "./ui/Heading4";
 ---
@@ -11,7 +10,11 @@ import Heading4 from "./ui/Heading4";
     class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col"
   >
     <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-      <img src={Logo.src} alt="Kyte Logo" class="w-[50px] my-4" />
+      <img
+        src="/images/kyteLogoGreen.svg"
+        alt="Kyte Logo"
+        class="w-[50px] my-4"
+      />
       <Text client:load size="small" color="secondary-gray">
         Criamos grandes soluções para pequenos comércios
       </Text>

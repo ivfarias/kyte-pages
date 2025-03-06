@@ -11,9 +11,6 @@ import PriceChart from "../components/Chart";
 import Card from "../components/Card.astro";
 import Gauge from "../components/Gauge";
 import Features from "../components/Features.astro";
-import lowestPriceOverlayImage from "/images/lowestPriceOverlayImage.png";
-import mediumPriceOverlayImage from "/images/mediumPriceOverlayImage.png";
-import highestPriceOverlayImage from "/images/highestPriceOverlayImage.png";
 import InfoCard from "../components/InfoCard.astro";
 import Pricing from "../components/Pricing.astro";
 ---
@@ -90,30 +87,30 @@ import Pricing from "../components/Pricing.astro";
     >
       <Card
         mainImage=""
-        overlayImage={lowestPriceOverlayImage.src}
+        overlayImage="/images/lowestPriceOverlayImage.png"
         title={`Vender mais rápido: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
         ).toFixed(2)}`}
-        content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
+        content="Preço mais atrativo que seus concorrentes..."
         borderColor="#F3A626"
       />
       <Card
         mainImage=""
-        overlayImage={mediumPriceOverlayImage.src}
+        overlayImage="/images/mediumPriceOverlayImage.png"
         title={`Maximizar seus lucros: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
         ).toFixed(2)}`}
-        content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
+        content="Vender com estratégia..."
         borderColor="#2DD1AC"
       />
       <Card
         mainImage=""
-        overlayImage={highestPriceOverlayImage.src}
+        overlayImage="/images/highestPriceOverlayImage.png"
         title={`Selecionar melhor seus clientes: R$ ${parseFloat(
           new URLSearchParams(Astro.url.search).get("marketHighestPrice") ||
             "0",
         ).toFixed(2)}`}
-        content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
+        content="Valorizar a qualidade..."
         borderColor="#547AB8"
       />
     </div>
