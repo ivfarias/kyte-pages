@@ -42,7 +42,7 @@ export const EmailSubmit = ({
     useEffect(() => {
         // Load the external script
         const script = document.createElement("script");
-        script.src = "./src/api/kyteAuth.js";
+        script.src = "/public/api/kyteAuth.js";
         script.async = true;
         document.body.appendChild(script);
 
