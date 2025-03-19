@@ -1,0 +1,47 @@
+<svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1.25" y="1.25" width="65.8333" height="79.9999" rx="6.75" fill="white" stroke="#444E5E" stroke-width="2.5"/>
+<mask id="path-2-inside-1_1301_12031" fill="white">
+<rect x="9.16638" y="29.1665" width="13.3333" height="12.5" rx="2"/>
+</mask>
+<rect x="9.16638" y="29.1665" width="13.3333" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-2-inside-1_1301_12031)"/>
+<mask id="path-3-inside-2_1301_12031" fill="white">
+<rect x="9.16638" y="45.833" width="13.3333" height="12.5" rx="2"/>
+</mask>
+<rect x="9.16638" y="45.833" width="13.3333" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-3-inside-2_1301_12031)"/>
+<mask id="path-4-inside-3_1301_12031" fill="white">
+<rect x="9.16638" y="62.5" width="13.3333" height="12.5" rx="2"/>
+</mask>
+<rect x="9.16638" y="62.5" width="13.3333" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-4-inside-3_1301_12031)"/>
+<mask id="path-5-inside-4_1301_12031" fill="white">
+<rect x="27.5002" y="29.1665" width="14.1667" height="12.5" rx="2"/>
+</mask>
+<rect x="27.5002" y="29.1665" width="14.1667" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-5-inside-4_1301_12031)"/>
+<mask id="path-6-inside-5_1301_12031" fill="white">
+<rect x="27.5002" y="45.8335" width="14.1667" height="12.5" rx="2"/>
+</mask>
+<rect x="27.5002" y="45.8335" width="14.1667" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-6-inside-5_1301_12031)"/>
+<mask id="path-7-inside-6_1301_12031" fill="white">
+<rect x="27.5002" y="62.5" width="14.1667" height="12.5" rx="2"/>
+</mask>
+<rect x="27.5002" y="62.5" width="14.1667" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-7-inside-6_1301_12031)"/>
+<mask id="path-8-inside-7_1301_12031" fill="white">
+<rect x="46.667" y="45.833" width="13.3333" height="29.1666" rx="2"/>
+</mask>
+<rect x="46.667" y="45.833" width="13.3333" height="29.1666" rx="2" fill="#363F4D" stroke="#363F4D" stroke-width="5" mask="url(#path-8-inside-7_1301_12031)"/>
+<mask id="path-9-inside-8_1301_12031" fill="white">
+<rect x="8.33337" y="8.3335" width="51.6666" height="15.8333" rx="2"/>
+</mask>
+<rect x="8.33337" y="8.3335" width="51.6666" height="15.8333" rx="2" fill="#2DD1AC" stroke="#444E5E" stroke-width="5" mask="url(#path-9-inside-8_1301_12031)"/>
+<mask id="path-10-inside-9_1301_12031" fill="white">
+<rect x="46.667" y="29.1665" width="13.3333" height="12.5" rx="2"/>
+</mask>
+<rect x="46.667" y="29.1665" width="13.3333" height="12.5" rx="2" fill="#D9DCE2" stroke="#444E5E" stroke-width="5" mask="url(#path-10-inside-9_1301_12031)"/>
+<rect x="35.4165" y="29.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#D9DCE2" stroke="#444E5E" stroke-width="2.5"/>
+<rect x="44.5829" y="39.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#D9DCE2" stroke="#444E5E" stroke-width="2.5"/>
+<rect x="40.4167" y="49.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#A9B1BE" stroke="#444E5E" stroke-width="2.5"/>
+<rect x="40.4167" y="59.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#D9DCE2" stroke="#444E5E" stroke-width="2.5"/>
+<rect x="40.4167" y="69.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#A9B1BE" stroke="#444E5E" stroke-width="2.5"/>
+<rect x="40.4167" y="79.5835" width="48.3333" height="9.16666" rx="4.58333" fill="#808C9E" stroke="#444E5E" stroke-width="2.5"/>
+<circle cx="79.1668" cy="69.1668" r="19.5833" fill="white" stroke="#444E5E" stroke-width="2.5"/>
+<path d="M81.6664 64.1668C81.6664 62.1827 80.4164 60.5954 79.1664 60.5954M79.1664 60.5954C79.1664 58.8907 79.1664 55.8335 79.1664 55.8335M79.1664 60.5954C76.3539 60.5954 75.4164 65.7541 79.1664 68.3335C82.9164 70.9128 81.6664 76.0716 79.1664 76.0716M79.1664 76.0716C79.1664 77.9312 79.1664 80.8335 79.1664 80.8335M79.1664 76.0716C77.2914 76.0716 76.6664 74.0874 76.6664 72.5001" stroke="#444E5E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

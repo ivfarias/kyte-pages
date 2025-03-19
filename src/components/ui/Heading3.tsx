@@ -30,7 +30,7 @@ export default function h3({ children, color = "kyte-gray", align = "center-all"
     return (
         <h3
             id={id}
-            className={`text-2xl font-medium my-8 leading-relaxed max-w-xl mx-auto ${alignMap[align]} ${className || ''}`}
+            className={`text-2xl md:text-3xl font-semibold mt-4 mb-3 leading-normal max-w-xl mx-auto ${alignMap[align]} ${className || ''}`}
             style={{ color: colorMap[color] }}
         >
             {children}

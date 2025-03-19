@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border-left-color: #2DD1AC;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-text">Criando sua conta... Aguarde.</div>
+    <div class="spinner"></div>
+
+    <!-- Hidden Kyte Auth Form -->
+    <form id="kyte-auth-form" method="get" class="combine-form" data-kyte-form-auth="true" data-kyte-lang=""
+        data-kyte-plan="" data-kyte-recurrence="" data-kyte-os="" data-kyte-app="" data-kyte-flow="">
+        <input type="email" name="email" id="email" required hidden>
+        <!-- Hidden submit button to allow event handlers to trigger -->
+        <input type="submit" id="kyte-submit" hidden>
+    </form>
+    <!-- Scripts Kyte -->
+    <link rel="stylesheet" href="https://mintyebfontkit.blob.core.windows.net/$web/kyte-front.min.css">
+    <script defer src="https://mintyebfontkit.blob.core.windows.net/$web/kyte-shared.min.js"></script>
+    <script defer src="https://mintyebfontkit.blob.core.windows.net/$web/kyte-form-auth.min.js"></script>
+    <script defer src="https://mintyebfontkit.blob.core.windows.net/$web/kyte-form-steps.min.js"></script>
+    <script defer>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param) || null;
+        }
+
+        function updateForm() {
+            const email = getQueryParam("email");
+            const os = getQueryParam("os");
+            const flow = getQueryParam("flow");
+            const app = getQueryParam("app");
+            const lang = getQueryParam("lang");
+            const recurrence = getQueryParam("recurrence");
+            const plan = getQueryParam("plan");
+
+            console.log("📥 URL Parameters Received:", { email, os, flow, app, lang, recurrence, plan });
+            if (!email) {
+                console.error("No email provided.");
+                document.querySelector(".loading-text").innerText = "Erro: Nenhum e-mail encontrado.";
+                return;
+            }
+
+            const form = document.getElementById("kyte-auth-form");
+            const emailInput = document.getElementById("email");
+            if (emailInput) {
+                emailInput.value = decodeURIComponent(email);
+            } else {
+                console.error("Email input not found.");
+            }
+
+            if (os) form.setAttribute("data-kyte-os", os);
+            if (flow) form.setAttribute("data-kyte-flow", flow);
+            if (app) form.setAttribute("data-kyte-app", app);
+            if (lang) form.setAttribute("data-kyte-lang", lang);
+            if (recurrence) form.setAttribute("data-kyte-recurrence", recurrence);
+            if (plan) form.setAttribute("data-kyte-plan", plan);
+
+            console.log("✅ Form Attributes Updated:", { email, os, flow, app, lang, recurrence, plan });
+        }
+
+        function submitForm() {
+            // Instead of form.submit(), trigger a click on the submit button.
+            const submitBtn = document.getElementById("kyte-submit");
+            if (submitBtn) {
+                console.log("🚀 Simulating click on submit button...");
+                submitBtn.click();
+            } else {
+                console.error("Submit button not found.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            updateForm();
+            // Wait 6 seconds to ensure the page and Kyte scripts are fully loaded.
+            console.log("⏳ Waiting 6 seconds before simulating form submission...");
+            setTimeout(() => {
+                submitForm();
+            }, 6000);
+        });
+    </script>
+</body>
+
+</html>

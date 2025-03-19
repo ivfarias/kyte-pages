@@ -1,8 +1,8 @@
 ---
 import Heading2 from "../components/ui/Heading2";
 import Heading3 from "../components/ui/Heading3";
-import { EmailSubmit } from "../components/ui/EmailSubmit";
 import Text from "../components/ui/Text";
+import RedirectButton from "./ui/RedirectCheckout";
 ---
 
 <section
@@ -52,7 +52,7 @@ import Text from "../components/ui/Text";
               <Heading3>Plano PRIME</Heading3>
               <div class="flex items-center mb-6">
                 <span
-                  class="text-5xl font-semibold text-textColor"
+                  class="text-5xl font-semibold text-gray02"
                   id="price-display">R$ 89,90</span
                 >
                 <Text size="large" id="price-period">/ mês</Text>
@@ -130,74 +130,74 @@ import Text from "../components/ui/Text";
               </ul>
               {/* Desktop version */}
               <div class="hidden md:block">
-                <EmailSubmit
-                  isHidden={true}
-                  lang="pt"
-                  plan="prime"
-                  recurrence="monthly"
+                <RedirectButton
+                  buttonText="Começar agora"
+                  redirectUrl="https://kyteapp.com/loading"
                   os="lp"
+                  flow="subscription"
                   app="web"
-                  flow="subscription"
-                  formAuth={true}
-                  buttonText="Começar agora"
-                />
-              </div>
-
-              {/* Mobile version */}
-              <div class="md:hidden">
-                <EmailSubmit
-                  isHidden={true}
                   lang="pt"
-                  plan="starter"
-                  recurrence="yearly"
-                  os="lp"
-                  app="pos"
-                  flow="subscription"
-                  formAuth={true}
-                  buttonText="Começar agora"
+                  recurrence="monthly"
+                  plan="prime"
+                  client:only="react"
                 />
+
+                {/* Mobile version */}
+                <div class="md:hidden">
+                  <RedirectButton
+                    buttonText="Começar agora"
+                    redirectUrl="https://kyteapp.com/loading"
+                    os="lp"
+                    flow="subscription"
+                    app="pos"
+                    lang="pt"
+                    recurrence="monthly"
+                    plan="prime"
+                    client:only="react"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <script>
-      const BILLING_PERIODS = {
-        MONTHLY: "monthly",
-        YEARLY: "yearly",
-      } as const;
+      <script>
+        const BILLING_PERIODS = {
+          MONTHLY: "monthly",
+          YEARLY: "yearly",
+        } as const;
 
-      const prices = {
-        monthly: "R$ 89,90",
-        yearly: "R$ 899,90",
-      } as const;
+        const prices = {
+          monthly: "R$ 89,90",
+          yearly: "R$ 899,90",
+        } as const;
 
-      const updatePricing = (isYearly: boolean): void => {
-        const priceDisplay = document.getElementById("price-display");
-        const pricePeriod = document.getElementById("price-period");
+        const updatePricing = (isYearly: boolean): void => {
+          const priceDisplay = document.getElementById("price-display");
+          const pricePeriod = document.getElementById("price-period");
 
-        if (!priceDisplay || !pricePeriod) return;
+          if (!priceDisplay || !pricePeriod) return;
 
-        const period = isYearly
-          ? BILLING_PERIODS.YEARLY
-          : BILLING_PERIODS.MONTHLY;
-        priceDisplay.textContent = prices[period];
-        pricePeriod.textContent = isYearly ? "/ ano" : "/ mês";
-      };
+          const period = isYearly
+            ? BILLING_PERIODS.YEARLY
+            : BILLING_PERIODS.MONTHLY;
+          priceDisplay.textContent = prices[period];
+          pricePeriod.textContent = isYearly ? "/ ano" : "/ mês";
+        };
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const toggle = document.getElementById(
-          "billing-toggle",
-        ) as HTMLInputElement | null;
-        if (!toggle) return;
+        document.addEventListener("DOMContentLoaded", () => {
+          const toggle = document.getElementById(
+            "billing-toggle",
+          ) as HTMLInputElement | null;
+          if (!toggle) return;
 
-        toggle.addEventListener("change", (event: Event) => {
-          const target = event.currentTarget as HTMLInputElement;
-          updatePricing(target.checked);
+          toggle.addEventListener("change", (event: Event) => {
+            const target = event.currentTarget as HTMLInputElement;
+            updatePricing(target.checked);
+          });
         });
-      });
-    </script>
+      </script>
+    </div>
   </div>
 </section>

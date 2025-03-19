@@ -1,22 +1,24 @@
 ---
 import IdealProductPriceCalculator from "./Calculator";
 import BeforeAfterSlider from "../components/BeforeAfterSlider.tsx";
+import Section from "./Section.astro";
+import H1 from "./ui/Heading1";
+import H2 from "./ui/Heading2";
+import Text from "./ui/Text";
 ---
 
-<section
-    class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mt-12 mb-12 bg-white rounded-lg"
->
-    <div class="container mx-auto max-w-6xl">
+<Section variant="white">
+    <div class="container mx-auto max-w-[1080px] pb-12">
         <div class="flex flex-col md:flex-row items-end justify-between gap-8">
             <div class="w-full md:w-1/2 text-center md:text-left">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                <H1 color="kyte-gray" align="left-all">
                     Descubra o preço ideal do seu produto
-                </h1>
-                <p class="mb-8 text-lg">
+                </H1>
+                <Text color="kyte-gray" align="left-all" size="large">
                     Nem tão caro que ninguém compre, tampouco barato demais e
                     reduzir os lucros. Descubra agora qual o preço de venda
                     ideal para o seu produto.
-                </p>
+                </Text>
                 <BeforeAfterSlider
                     client:load
                     beforeImage="/images/beforeImage.webp"
@@ -47,4 +49,4 @@ import BeforeAfterSlider from "../components/BeforeAfterSlider.tsx";
             </div>
         </div>
     </div>
-</section>
+</Section>

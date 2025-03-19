@@ -1,0 +1,20 @@
+---
+interface Props {
+    variant?: "white" | "gray09" | "transparent";
+}
+
+const { variant = "white" } = Astro.props;
+---
+
+<section
+    class:list={[
+        "w-[calc(100%-2rem)] md:w-full max-w-[1080px] mx-auto px-6 md:px-8 py-12 mb-12 rounded-lg",
+        {
+            "bg-white": variant === "white",
+            "bg-gray09": variant === "gray09",
+            "bg-transparent": variant === "transparent",
+        },
+    ]}
+>
+    <slot />
+</section>

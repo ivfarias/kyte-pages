@@ -5,57 +5,45 @@ interface MauticContact {
   idealPrice: number;
   baseCost: number;
   profitMargin: number;
-  operationalCosts: number;
-  creditCardFees: number;
-  taxes: number;
   email: string;
   marketLowestPrice: number;
   marketMediumPrice: number;
   marketHighestPrice: number;
 }
 
-const MAUTIC_URL = 'https://crm.kyte.is/';
-const BEARER_TOKEN = import.meta.env.MAUTIC_BEARER_TOKEN;
-
-if (!BEARER_TOKEN) {
-    console.error('MAUTIC_BEARER_TOKEN is not defined in environment variables');
-    throw new Error("Missing MAUTIC_BEARER_TOKEN");
-}
-
 export async function createMauticContact(contactData: MauticContact) {
-    try {
-        if (!contactData.email) {
-            throw new Error('Email is required for creating a Mautic contact');
-        }
+  try {
+    if (!contactData.email) {
+      throw new Error('Email is required for creating a Mautic contact');
+    }
 
-        const response = await axios.post(
-      `${MAUTIC_URL}api/contacts/new`,
-      {
-        "email": contactData.email,
-        "custom": {
-          "productName": contactData.productName,
-          "idealPrice": contactData.idealPrice,
-          "baseCost": contactData.baseCost,
-          "profitMargin": contactData.profitMargin,
-          "operationalCosts": contactData.operationalCosts,
-          "creditCardFees": contactData.creditCardFees,
-          "taxes": contactData.taxes,
-          "marketLowestPrice": contactData.marketLowestPrice,
-          "marketMediumPrice": contactData.marketMediumPrice,
-          "marketHighestPrice": contactData.marketHighestPrice
-        }
-      },
+    // Transform the data to flatten field names for Mautic
+    const mauticData = {
+      email: contactData.email,
+      productname: contactData.productName,
+      idealprice: contactData.idealPrice,
+      basecost: contactData.baseCost,
+      profitmargin: contactData.profitMargin,
+      marketlowestprice: contactData.marketLowestPrice,
+      marketmediumprice: contactData.marketMediumPrice,
+      markethighestprice: contactData.marketHighestPrice
+    };
+
+    console.log('📤 Sending data to Mautic:', mauticData);
+    const response = await axios.post(
+      '/api/mautic',  // Using our local API endpoint
+      mauticData,
       {
         headers: {
-          'Authorization': `Bearer ${BEARER_TOKEN}`,
           'Content-Type': 'application/json'
         }
       }
     );
 
+    console.log('✅ Mautic contact created:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error creating Mautic contact:', error);
+    console.error('❌ Error creating Mautic contact:', error);
     throw error;
   }
 }

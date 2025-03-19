@@ -2,7 +2,7 @@
 import Heading2 from "./ui/Heading2";
 import Text from "./ui/Text";
 import Button from "./ui/Button";
-import { EmailSubmit } from "./ui/EmailSubmit";
+import RedirectCheckout from "./ui/RedirectCheckout";
 
 interface Props {
     heading: string;
@@ -18,6 +18,7 @@ interface Props {
     os?: string;
     flow?: string;
     formAuth?: boolean;
+    app?: string;
 }
 
 const {
@@ -27,13 +28,12 @@ const {
     buttonLink,
     type = "cta",
     variant = "primary",
-    isHidden = false,
-    lang = "pt",
+    lang = "",
     plan = "",
     recurrence = "",
     os = "lp",
-    flow = "subscription",
-    formAuth = true,
+    flow = "",
+    app = "",
 } = Astro.props;
 
 const styles = {
@@ -42,12 +42,14 @@ const styles = {
         headingColor: "white" as const,
         textColor: "white" as const,
         buttonVariant: "outline" as const,
+        checkoutVariant: "secondary" as const,
     },
     secondary: {
         background: "bg-[#F7F7F8]",
         headingColor: "kyte-gray" as const,
         textColor: "kyte-gray" as const,
         buttonVariant: "primary" as const,
+        checkoutVariant: "primary" as const,
     },
 };
 
@@ -55,7 +57,7 @@ const currentStyle = styles[variant];
 ---
 
 <div
-    class={`w-[100%] md:w-full rounded-xl ${currentStyle.background} justify-items-center py-4 px-4 md:px-6 mx-auto`}
+    class={`max-w-[1080px] w-[100%] md:w-full rounded-xl ${currentStyle.background} justify-items-center py-8 px-4 md:px-6 mx-auto`}
 >
     <div class="max-w-[640px] flex flex-col gap-2 items-center mx-auto">
         <Heading2
@@ -75,38 +77,18 @@ const currentStyle = styles[variant];
         </Text>
         {
             type === "email" ? (
-                <>
-                    <div class="hidden md:block">
-                        <EmailSubmit
-                            client:visible
-                            buttonText={buttonText}
-                            isHidden={isHidden}
-                            variant={currentStyle.buttonVariant}
-                            lang={lang}
-                            plan={plan}
-                            recurrence={recurrence}
-                            os={os}
-                            app="web"
-                            flow={flow}
-                            formAuth={formAuth}
-                        />
-                    </div>
-                    <div class="md:hidden">
-                        <EmailSubmit
-                            client:visible
-                            buttonText={buttonText}
-                            isHidden={isHidden}
-                            variant={currentStyle.buttonVariant}
-                            lang={lang}
-                            plan={plan}
-                            recurrence={recurrence}
-                            os={os}
-                            app="pos"
-                            flow={flow}
-                            formAuth={formAuth}
-                        />
-                    </div>
-                </>
+                <RedirectCheckout
+                    client:only="react"
+                    buttonText={buttonText}
+                    redirectUrl="https://kyteapp.com/loading"
+                    variant={currentStyle.checkoutVariant}
+                    lang={lang}
+                    plan={plan}
+                    recurrence={recurrence}
+                    os={os}
+                    flow={flow}
+                    app={app}
+                />
             ) : (
                 <Button
                     client:visible

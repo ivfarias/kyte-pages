@@ -2,49 +2,180 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Heading1 from "../components/ui/Heading1";
-import Heading2 from "../components/ui/Heading2";
-import Text from "../components/ui/Text";
 import CallToAction from "../components/CallToAction.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import InfoCard from "../components/InfoCard.astro";
+import Faq from "../components/Faq.astro";
 
 import PriceChart from "../components/Chart";
-import Card from "../components/Card.astro";
 import Gauge from "../components/Gauge";
 import Features from "../components/Features.astro";
-import InfoCard from "../components/InfoCard.astro";
 import Pricing from "../components/Pricing.astro";
+import ProductList from "../components/ProductList";
+import RedirectCheckout from "../components/ui/RedirectCheckout";
+
+import Heading1 from "../components/ui/Heading1";
+import Heading2 from "../components/ui/Heading2";
+import Heading3 from "../components/ui/Heading3";
+import Heading4 from "../components/ui/Heading4";
+import Text from "../components/ui/Text";
+import MarkdownContent from "../components/MarkdownContent";
+import Image from "../components/ui/Image";
+import MauticHandler from "../components/MauticHandler";
+
+const params = Astro.url.searchParams;
+const email = params.get("email") || "";
+const productName = params.get("productName") || "";
+const idealPrice = Number(params.get("idealPrice")) || 0;
+const baseCost = Number(params.get("baseCost")) || 0;
+const profitMargin = Number(params.get("profitMargin")?.replace("%", "")) || 0;
+const marketLowestPrice = Number(params.get("marketLowestPrice")) || 0;
+const marketMediumPrice = Number(params.get("marketMediumPrice")) || 0;
+const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
 ---
 
 <Layout title="Kyte | Resultado do Cálculo">
+  <MauticHandler
+    client:load
+    email={email}
+    productName={productName}
+    idealPrice={idealPrice}
+    baseCost={baseCost}
+    profitMargin={profitMargin}
+    marketLowestPrice={marketLowestPrice}
+    marketMediumPrice={marketMediumPrice}
+    marketHighestPrice={marketHighestPrice}
+  />
   <Header />
-  <header
-    class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
-  >
-    <div class="flex flex-col md:flex-row items-center gap-2 md:gap-12">
-      <div class="text-textColor md:flex-1 text-center md:text-left w-full">
+  <Section>
+    <div class="flex flex-col md:flex-row gap-8 md:gap-12">
+      {/* Left column */}
+      <div class="w-full md:w-1/2">
         <Heading1 client:load align="left-all" color="kyte-gray">
-          O preço ideal de {
+          O preço de {
             new URLSearchParams(Astro.url.search).get("productName") ||
               "seu produto"
-          }
-          é de R$ {
-            parseFloat(
-              new URLSearchParams(Astro.url.search).get("idealPrice") || "0",
-            ).toFixed(2)
+          } está{" "}
+          {
+            (() => {
+              const idealPrice = parseFloat(
+                new URLSearchParams(Astro.url.search).get("idealPrice") || "0",
+              );
+              const marketMediumPrice = parseFloat(
+                new URLSearchParams(Astro.url.search).get(
+                  "marketMediumPrice",
+                ) || "0",
+              );
+
+              let evaluation;
+              if (idealPrice < marketMediumPrice * 0.9) {
+                evaluation = { text: "barato", color: "#FF4E4E" };
+              } else if (idealPrice > marketMediumPrice * 1.1) {
+                evaluation = { text: "caro", color: "#F5A623" };
+              } else {
+                evaluation = { text: "ideal", color: "#2FAE94" };
+              }
+
+              return (
+                <span
+                  style={{
+                    backgroundColor: `${evaluation.color}99`,
+                    padding: "0.10rem 0.5rem",
+                    borderRadius: "4px",
+                  }}
+                >
+                  {evaluation.text}
+                </span>
+              );
+            })()
           }
         </Heading1>
-
-        <Text size="large" align="left-all" color="kyte-gray">
-          Este valor foi estabelecido a partir dos dados fornecidos por você.
-          Além disso, para que você tenha uma visão mais ampla do mercado,
-          apresentamos os menores, médios e maiores valores de {
-            new URLSearchParams(Astro.url.search).get("productName") ||
-              "seu produto"
-          } encontrados na Internet.
-        </Text>
-        <div class="mt-12"></div>
+        <div class="space-y-4">
+          <Text size="large" align="left-all" color="kyte-gray">
+            De acordo com seus dados, o valor ideal seria de{" "}
+            <span style={{ fontWeight: 500 }}>
+              R$ {
+                parseFloat(
+                  new URLSearchParams(Astro.url.search).get("idealPrice") ||
+                    "0",
+                ).toFixed(2)
+              }
+            </span>
+            . Mas, nós fizemos uma comparação com seus concorrentes, e o preço ideal
+            seria entre{" "}
+            <span style={{ fontWeight: 500 }}
+              >R$ {
+                (
+                  parseFloat(
+                    new URLSearchParams(Astro.url.search).get(
+                      "marketMediumPrice",
+                    ) || "0",
+                  ) * 0.85
+                ).toFixed(2)
+              }
+            </span>{" "}
+            e{" "}
+            <span style={{ fontWeight: 500 }}
+              >R$ {
+                (
+                  parseFloat(
+                    new URLSearchParams(Astro.url.search).get(
+                      "marketMediumPrice",
+                    ) || "0",
+                  ) * 1.15
+                ).toFixed(2)
+              }
+            </span>
+            .
+          </Text>
+          <Text size="large" color="kyte-gray" align="left-all">
+            <span style={{ fontWeight: 500 }}
+              >Quer ter mais lucro nesse produto?</span
+            > Recomendamos para você o <span style={{ fontWeight: 500 }}
+              >Ecossistema Multicanal do Kyte</span
+            >, que são ferramentas simples para você vender na loja, na rua ou
+            nas redes sociais. Tudo ao mesmo tempo.
+          </Text>
+          <div class="hidden md:block">
+            <RedirectCheckout
+              client:only="react"
+              buttonText="Quero vender com o Kyte"
+              redirectUrl="https://kyteapp.com/loading"
+              variant="primary"
+              lang="pt"
+              plan="prime"
+              recurrence="monthly"
+              os="lp"
+              flow="subscription"
+              app="web"
+            />
+          </div>
+          <div class="block md:hidden">
+            <RedirectCheckout
+              client:only="react"
+              buttonText="Quero vender com o Kyte"
+              redirectUrl="https://kyteapp.com/loading"
+              variant="primary"
+              lang="pt"
+              plan="prime"
+              recurrence="monthly"
+              os="lp"
+              flow="subscription"
+              app="pos"
+            />
+          </div>
+        </div>
       </div>
-      <div class="md:flex-1 w-full flex justify-center">
+
+      {/* Right column */}
+      <div class="w-full md:w-1/2 flex flex-col items-center">
+        <a
+          href="/"
+          class="text-green03 hover:text-green04 font-medium text-sm mt-8"
+        >
+          Refazer o cálculo
+        </a>
         <Gauge
           client:load
           idealPrice={parseFloat(
@@ -65,201 +196,409 @@ import Pricing from "../components/Pricing.astro";
         />
       </div>
     </div>
-  </header>
-  <section
-    class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
-  >
-    <Heading2 client:load color="kyte-gray">
-      Entenda melhor sua precificação de acordo com o mercado.
-    </Heading2>
-    <PriceChart client:only="react" />
-  </section>
-  <section
-    class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
-  >
-    <div class="my-24 px-8 md:px-16 max-w-[1080px] mx-auto">
-      <Heading2 client:load color="kyte-gray">
-        Qual estratégia você quer neste momento do seu negócio?
-      </Heading2>
-    </div>
-    <div
-      class="bg-white w-full max-w-[1250px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-8 md:px-16"
-    >
-      <Card
-        mainImage="/images/lowestPriceOverlayImage.png"
-        overlayImage="/images/lowestPriceOverlayImage.png"
-        title={`Vender mais rápido: R$ ${parseFloat(
-          new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
-        ).toFixed(2)}`}
-        content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
-        borderColor="#F3A626"
-      />
-      <Card
-        mainImage="/images/mediumPriceOverlayImage.png"
-        overlayImage="/images/mediumPriceOverlayImage.png"
-        title={`Maximizar seus lucros: R$ ${parseFloat(
-          new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
-        ).toFixed(2)}`}
-        content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
-        borderColor="#2DD1AC"
-      />
-      <Card
-        mainImage="/images/highestPriceOverlayImage.png"
-        overlayImage="/images/highestPriceOverlayImage.png"
-        title={`Selecionar melhor seus clientes: R$ ${parseFloat(
-          new URLSearchParams(Astro.url.search).get("marketHighestPrice") ||
-            "0",
-        ).toFixed(2)}`}
-        content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
-        borderColor="#547AB8"
+  </Section>
+</Layout>
+<Section>
+  <Heading2 client:load color="kyte-gray">
+    Entenda melhor sua precificação de acordo com o mercado.
+  </Heading2>
+  <PriceChart client:only="react" />
+  <div class="justify-items-center">
+    <div class="mt-4 prose">
+      <MarkdownContent
+        client:load
+        className="prose-xl"
+        content={`Como você pode ver no gráfico acima, preços para produtos como <strong style="color: #363F4D;">{productName}</strong> costumam variar bastante.
+Já parou para pensar que o preço que você colocar nele pode ser a diferença entre lucrar bem ou apenas "se virar"?
+<br>
+<br>
+A margem de lucro é o coração do seu negócio. Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas. Se for alta demais, pode afastar clientes. E aí, como encontrar o equilíbrio?
+<br>
+<br>`}
       />
     </div>
-  </section>
+    <Heading3 color="kyte-gray" align="left-all">
+      Como calculamos sua margem de lucro?
+    </Heading3>
+    <Image
+      src="/images/hand-notes.svg"
+      alt="Illustration displaying hand notes"
+      size="small"
+    />
+    <div class="mt-4 prose">
+      <MarkdownContent
+        client:load
+        className="prose-xl"
+        content={`  
+A fórmula é simples, mas poderosa:
+#### [(Preço de Venda - Custo Base) / Preço de Venda] x 100
+Por exemplo, se você vende um produto por **R$ 50** e o custo é **R$ 20**, sua margem de lucro será de **60%**.  
 
-  <Features />
-  <section
-    class="w-full max-w-[1080px] mx-auto px-4 md:px-8 py-12 mb-12 bg-white rounded-lg"
-  >
-    <div
-      class="w-full max-w-[1080px] mx-auto px-8 space-y-8 my-24 border-2 border-[#2DD1AC] rounded-xl"
-    >
-      <InfoCard
-        title="Meu negócio é muito pequeno. Será que vai funcionar para mim?"
-        content="Com certeza! O Kyte foi criado pensando exatamente em pequenos empreendedores como você. Seja você autônomo, dono de uma pequena loja física ou alguém que vende online pelo WhatsApp e Instagram, o Kyte ajuda a organizar suas vendas, gerenciar estoque e atender melhor seus clientes. Você não precisa ter uma grande estrutura ou um time enorme para aproveitar os benefícios do Kyte. Ele funciona para quem está começando agora e para quem já tem um negócio rodando, mas precisa de mais controle e eficiência no dia a dia. A gente sabe que o dia a dia de um empreendedor como você não é fácil. Com o Kyte, você profissionaliza sua gestão, simplifica suas vendas e faz tudo isso de um jeito mais tranquilo, sem complicação."
-        image="/images/customer1.webp"
-        imageLink="https://www.youtube.com/shorts/DSPGEuXGwws"
-        isReversed={false}
-      />
-      <InfoCard
-        title="Esqueça o especialista em tecnologia. Aqui, você consegue tocar tudo sozinha"
-        content="Você não precisa saber ou mesmo gostar de tecnologia para usar o Kyte. Na verdade, nós desenvolvemos a plataforma para ser o mais simples e intuitiva possível. Desde o primeiro momento, você cadastra seus produtos, acompanha suas vendas e configura sua loja online sem dificuldades. Tudo foi pensado para que qualquer pessoa, mesmo sem experiência com sistemas de gestão, consiga usar com tranquilidade. E se precisar de ajuda? Nosso time de suporte está sempre pronto para te atender! Oferecemos um atendimento rápido e eficiente para tirar dúvidas e aproveitar ao máximo todos os recursos do Kyte."
-        image="/images/review1a.svg"
-        imageLink="#"
-        isReversed={true}
-      />
-      <InfoCard
-        title="Não é só você na empresa? Pode trazer os funcionários também."
-        content="Coordenar uma equipe de funcionários demanda tempo e paciência. Por isso, nosso sistema é a parte mais descomplicada do seu dia. O Kyte permite que você trabalhe em equipe de forma organizada, garantindo que cada funcionário tenha acesso apenas às informações que você decidir. Isso não só ajuda a manter a segurança das informações, como também evita confusões no gerenciamento do seu negócio. E olha só: você ainda consegue acompanhar o desempenho de cada funcionário, observar o quanto vendem e quanto lucro trazem para sua loja. Tudo de um jeito simples e centralizado."
-        image="/images/customer2.webp"
-        imageLink="https://www.youtube.com/shorts/JaRRiU9m7_M"
-        isReversed={false}
-      />
-      <InfoCard
-        title="Falta de sinal nunca será um problema"
-        content="Sabemos que nem sempre a conexão à internet está estável, e isso não pode ser um obstáculo para o seu negócio. Por isso, o Kyte funciona offline! Se a internet cair ou você estiver em um local sem sinal, ainda consegue criar e atualizar vendas, além de outras informações. Assim que a conexão voltar, todos os dados são sincronizados automaticamente. Isso significa que você nunca perde uma venda e mantém sua operação funcionando normalmente, sem depender das condições da sua conexão."
-        image="/images/review2a.svg"
-        imageLink="#"
-        isReversed={true}
-      />
-      <InfoCard
-        title="Unifique os pedidos na loja física e online"
-        content="Se você vende tanto presencialmente quanto pela internet, sabe como pode ser complicado manter tudo organizado. O Kyte permite que você unifique todas as suas vendas em um só lugar, evitando confusão com estoque e pedidos. Dessa forma, você gerencia sua loja física e online ao mesmo tempo, acompanhando relatórios, controlando o fluxo de caixa e garantindo que tudo esteja sempre atualizado. Seja qual for o seu modelo de negócio, o Kyte se adapta para te ajudar a vender mais e gerenciar melhor."
-        image="/images/customer3.webp"
-        imageLink="https://www.youtube.com/shorts/fU4QNy2FpiY"
-        isReversed={false}
-      />
-      <InfoCard
-        title="Sem tempo? A gente agiliza a configuração para você"
-        content="O tempo é um dos recursos mais valiosos para um empreendedor. É por isso que o Kyte foi desenvolvido para ser rápido e fácil de configurar. Você consegue cadastrar produtos, definir preços e personalizar sua loja online em poucos minutos. O processo é simples e direto, sem burocracia e sem necessidade de treinamentos demorados. Além disso, contamos com recursos de importação de produtos e edição em massa, para que você possa ajustar tudo rapidamente e já começar a vender com muito mais eficiência."
-        image="/images/review3a.svg"
-        imageLink="#"
-        isReversed={true}
-      />
-      <InfoCard
-        title="Traga tudo para o Kyte em poucos cliques"
-        content="Se você já usa outro sistema, não precisa se preocupar! O Kyte oferece ferramentas de importação que facilitam a migração do seu estoque. Você pode importar seus produtos em massa, ajustando informações rapidamente e sem precisar cadastrar tudo do zero. Isso significa que a transição para o Kyte é simples e rápida, garantindo que você comece a usar a plataforma sem interrupções no seu negócio. Nosso suporte também pode ajudar a fazer essa migração da melhor forma possível, garantindo que tudo fique organizado e funcionando perfeitamente desde o primeiro dia."
-        image="/images/customer4.webp"
-        imageLink="https://www.youtube.com/shorts/crl9bpJY8RI"
-        isReversed={false}
-      />
-      <InfoCard
-        title="Tudo isso cabe no seu bolso"
-        content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 3 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
-        image="/images/customer5.webp"
-        imageLink="https://www.youtube.com/watch?v=1J2QocSp4B0&t"
-        isReversed={true}
+Parece fácil, né?  
+
+Mas errar nessa conta pode significar prejuízo ou perder competitividade. Por isso, nossa **[calculadora de precificação](https://kyte.com.br)** já faz esse trabalho para você, mostrando os números ideais para o seu segmento.  
+
+Assim, você foca no que realmente importa: <span style="background-color: #2DD1AC99; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>
+    crescer seu negócio!</strong>
+  </span>`}
       />
     </div>
-  </section>
-  <div class="justify-self-center w-[90%] md:w-[77%] my-12">
-    <CallToAction
-      type="email"
-      variant="primary"
-      heading="Vamos vender e organizar melhor este e outros de seus produtos?"
-      content="Assine o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-      buttonText="Começar agora"
-      isHidden={true}
-      lang="pt"
-      plan="prime"
-      recurrence="monthly"
-      flow="subscription"
+    <div class="justify-self-center w-[90%] md:w-[85%] my-12">
+      <div class="hidden md:block">
+        <CallToAction
+          type="email"
+          variant="primary"
+          heading="Vamos avançar com o crescimento do seu negócio!"
+          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+          buttonText="Quero começar"
+          lang="pt"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
+          app="web"
+        />
+      </div>
+      <div class="block md:hidden">
+        <CallToAction
+          type="email"
+          variant="primary"
+          heading="Vamos avançar com o crescimento do seu negócio!"
+          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+          buttonText="Quero começar"
+          lang="pt"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
+          app="pos"
+        />
+      </div>
+    </div>
+  </div>
+</Section>
+<Section>
+  <div class="justify-items-center">
+    <Heading2 color="kyte-gray" align="left-all"
+      >Análise da Concorrência: Não Fique para Trás!</Heading2
+    >
+    <Image
+      src="/images/Catalogo-beta-ilustra.svg"
+      alt="Illustration of a Catalog and a Lab Vessel"
+      size="small"
+    />
+    <div class="mt-4 prose">
+      <MarkdownContent
+        client:load
+        className="prose-xl"
+        content={`  
+Saber como seus concorrentes estão precificando é essencial para não ficar para trás. Afinal, você pode estar vendendo abaixo ou acima do valor de mercado sem necessidade ou perdendo dinheiro por falta de informação.
+#### **De acordo com nossas pesquisas, trazemos para você três referências importantes:**  
+<span style="font-size: 65px;">👇</span>
+`}
+      />
+    </div>
+    <ProductList client:load />
+    <Heading3 align="left-all"> Como chegamos nestes concorrentes? </Heading3>
+    <Image
+      src="/images/statistics.svg"
+      alt="Illustration depcting product statistics"
+      size="small"
+    />
+    <div class="mt-4 prose">
+      <div class="mt-4 prose">
+        <MarkdownContent
+          client:load
+          className="prose-xl"
+          content={`  
+Para garantir que as informações sobre os concorrentes sejam justas e realistas, utilizamos um método estatístico chamado **Intervalo Interquartil (IQR)**. Ele ajuda a identificar e remover valores extremos (outliers) que poderiam distorcer a análise. Funciona assim: calculamos os preços que estão dentro de uma faixa considerada normal (entre 25% e 75% dos valores) e descartamos aqueles que estão muito acima ou abaixo dessa média. Dessa forma, os concorrentes que mostramos refletem o mercado de maneira mais precisa e confiável para você!`}
+        />
+      </div>
+    </div>
+    <div class="justify-self-center w-[90%] md:w-[85%] my-12">
+      <div class="hidden md:block">
+        <CallToAction
+          type="email"
+          variant="primary"
+          heading="Vamos avançar com o crescimento do seu negócio!"
+          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+          buttonText="Quero começar"
+          lang="pt"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
+          app="web"
+        />
+      </div>
+      <div class="block md:hidden">
+        <CallToAction
+          type="email"
+          variant="primary"
+          heading="Vamos avançar com o crescimento do seu negócio!"
+          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+          buttonText="Quero começar"
+          lang="pt"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
+          app="pos"
+        />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<Section>
+  <Heading2 client:load color="kyte-gray">
+    Qual estratégia você quer neste momento do seu negócio?
+  </Heading2>
+  <div
+    class="bg-white w-full max-w-[1250px] mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-8 px-8 md:px-16"
+  >
+    <Card
+      mainImage="/images/lowestPriceOverlayImage.png"
+      overlayImage="/images/lowestPriceOverlayImage.png"
+      title={`Vender mais rápido: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
+      ).toFixed(2)}`}
+      content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
+      borderColor="#F3A626"
+    />
+    <Card
+      mainImage="/images/mediumPriceOverlayImage.png"
+      overlayImage="/images/mediumPriceOverlayImage.png"
+      title={`Maximizar seus lucros: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
+      ).toFixed(2)}`}
+      content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
+      borderColor="#2DD1AC"
+    />
+    <Card
+      mainImage="/images/highestPriceOverlayImage.png"
+      overlayImage="/images/highestPriceOverlayImage.png"
+      title={`Selecionar melhor seus clientes: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketHighestPrice") || "0",
+      ).toFixed(2)}`}
+      content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
+      borderColor="#547AB8"
     />
   </div>
+  <div class="justify-items-center">
+    <div class="mt-4 prose">
+      <MarkdownContent
+        client:load
+        className="prose-xl"
+        content={`  
+Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}.  
+<br>
+A partir disso, é possível entender tanto se você tem um custo saudável para seu produto, e também se está deixando dinheiro na mesa, ou afastando clientes.
 
-  <Pricing <div id="pricing" />
-  <Footer />
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const resultsDiv = document.getElementById("results");
+- **Posicionamento:** Você quer ser o mais barato, ficar na média ou se destacar como premium?  
+- **Custos:** Seus custos estão cobertos? Lembre-se de incluir tudo, desde matéria-prima até taxas e impostos.  
+- **Diferencial:** Seus clientes estão dispostos a pagar mais por um produto ou serviço de qualidade superior?  
 
-    if (resultsDiv) {
-      let resultsHTML = '<ul class="space-y-2">';
-      params.forEach((value, key) => {
-        let label = key;
-        switch (key) {
-          case "productName":
-            label = "Nome do produto";
-            break;
-          case "baseCost":
-            label = "Custo base";
-            value = `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "profitMargin":
-            label = "Margem de lucro";
-            value = value.includes("%")
-              ? `${parseFloat(value)}%`
-              : `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "operationalCosts":
-            label = "Custos operacionais";
-            value = value.includes("%")
-              ? `${parseFloat(value)}%`
-              : `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "creditCardFees":
-            label = "Taxa de cartão";
-            value = value.includes("%")
-              ? `${parseFloat(value)}%`
-              : `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "taxes":
-            label = "Impostos";
-            value = `${value}%`;
-            break;
-          case "email":
-            label = "Email";
-            break;
-          case "idealPrice":
-            label = "Preço ideal";
-            value = `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "marketLowestPrice":
-            label = "Menor preço no mercado";
-            value = `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "marketMediumPrice":
-            label = "Preço médio no mercado";
-            value = `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-          case "marketHighestPrice":
-            label = "Maior preço no mercado";
-            value = `R$ ${parseFloat(value).toFixed(2)}`;
-            break;
-        }
-        resultsHTML += `<li><strong>${label}:</strong> ${value}</li>`;
-      });
-      resultsHTML += "</ul>";
-      resultsDiv.innerHTML = resultsHTML;
-    }
-  </script>
-</Layout>
+#### <span style="color: #2DD1AC;">Precificar bem não é ser o mais barato, mas sim ter um preço justo que reflita o valor do seu produto e a realidade do seu negócio. E nós estamos aqui para te ajudar nisso!</span>
+<br>
+`}
+      />
+    </div>
+    <Heading3 color="kyte-gray" align="left-all">
+      Erros Comuns na Precificação e Como Evitá-los
+    </Heading3>
+    <Image
+      src="/images/flying-money.svg"
+      alt="Illustration of money flying with wings"
+      size="small"
+    />
+    <div class="mt-4 prose">
+      <MarkdownContent
+        client:load
+        className="prose-xl"
+        content={`  
+Errar na precificação pode ser fatal para o seu negócio. Veja os principais deslizes e como evitá-los:  
+
+#### 1. Ignorar custos ocultos 
+Você sabe exatamente quanto gasta com taxas de pagamento, embalagens, impostos ou até mesmo com a energia do seu estabelecimento? Esses custos precisam estar no seu preço, senão seu lucro vai por água abaixo.
+
+#### 2. Se basear apenas na concorrência  
+O preço do concorrente pode ser uma referência, mas cuidado! Ele pode ter uma estrutura de custos totalmente diferente da sua. O que é lucrativo para ele pode não ser para você.
+
+#### 3. Usar um markup errado
+No segmento de **{businessSegment}**, por exemplo, **o markup ideal é entre <span style="background-color: #FF4E4E99; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>{segmentMargins.low}%</strong></span> e <span style="background-color: #2FAE9499; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>{segmentMargins.high}%</strong></span> 
+do custo base**. Então, se você estiver aplicando algo muito fora disso, pode estar comprometendo sua lucratividade sem perceber. Será que as margens de lucro que você pratica estão dentro do que o mercado recomenda?  
+
+Nós da Kyte criamos o nosso sistema e esta calculadora justamente para garantir maiores taxas de sucesso para o seu negócio!
+<br>
+`}
+      />
+    </div>
+  </div>
+</Section>
+<Features />
+<Section>
+  <div
+    class="w-full max-w-[1080px] mx-auto px-8 space-y-8 my-24 border-2 border-green03 rounded-xl"
+  >
+    <InfoCard
+      title="Meu negócio é muito pequeno. Será que vai funcionar para mim?"
+      content="Com certeza! O Kyte foi criado pensando exatamente em pequenos empreendedores como você. Seja você autônomo, dono de uma pequena loja física ou alguém que vende online pelo WhatsApp e Instagram, o Kyte ajuda a organizar suas vendas, gerenciar estoque e atender melhor seus clientes. Você não precisa ter uma grande estrutura ou um time enorme para aproveitar os benefícios do Kyte. Ele funciona para quem está começando agora e para quem já tem um negócio rodando, mas precisa de mais controle e eficiência no dia a dia. A gente sabe que o dia a dia de um empreendedor como você não é fácil. Com o Kyte, você profissionaliza sua gestão, simplifica suas vendas e faz tudo isso de um jeito mais tranquilo, sem complicação."
+      image="/images/customer1.webp"
+      imageLink="https://www.youtube.com/shorts/DSPGEuXGwws"
+      isReversed={false}
+    />
+    <InfoCard
+      title="Esqueça o especialista em tecnologia. Aqui, você consegue tocar tudo sozinha"
+      content="Você não precisa saber ou mesmo gostar de tecnologia para usar o Kyte. Na verdade, nós desenvolvemos a plataforma para ser o mais simples e intuitiva possível. Desde o primeiro momento, você cadastra seus produtos, acompanha suas vendas e configura sua loja online sem dificuldades. Tudo foi pensado para que qualquer pessoa, mesmo sem experiência com sistemas de gestão, consiga usar com tranquilidade. E se precisar de ajuda? Nosso time de suporte está sempre pronto para te atender! Oferecemos um atendimento rápido e eficiente para tirar dúvidas e aproveitar ao máximo todos os recursos do Kyte."
+      image="/images/review1a.svg"
+      imageLink="#"
+      isReversed={true}
+    />
+    <InfoCard
+      title="Não é só você na empresa? Pode trazer os funcionários também."
+      content="Coordenar uma equipe de funcionários demanda tempo e paciência. Por isso, nosso sistema é a parte mais descomplicada do seu dia. O Kyte permite que você trabalhe em equipe de forma organizada, garantindo que cada funcionário tenha acesso apenas às informações que você decidir. Isso não só ajuda a manter a segurança das informações, como também evita confusões no gerenciamento do seu negócio. E olha só: você ainda consegue acompanhar o desempenho de cada funcionário, observar o quanto vendem e quanto lucro trazem para sua loja. Tudo de um jeito simples e centralizado."
+      image="/images/customer2.webp"
+      imageLink="https://www.youtube.com/shorts/JaRRiU9m7_M"
+      isReversed={false}
+    />
+    <InfoCard
+      title="Falta de sinal nunca será um problema"
+      content="Sabemos que nem sempre a conexão à internet está estável, e isso não pode ser um obstáculo para o seu negócio. Por isso, o Kyte funciona offline! Se a internet cair ou você estiver em um local sem sinal, ainda consegue criar e atualizar vendas, além de outras informações. Assim que a conexão voltar, todos os dados são sincronizados automaticamente. Isso significa que você nunca perde uma venda e mantém sua operação funcionando normalmente, sem depender das condições da sua conexão."
+      image="/images/review2a.svg"
+      imageLink="#"
+      isReversed={true}
+    />
+    <InfoCard
+      title="Unifique os pedidos na loja física e online"
+      content="Se você vende tanto presencialmente quanto pela internet, sabe como pode ser complicado manter tudo organizado. O Kyte permite que você unifique todas as suas vendas em um só lugar, evitando confusão com estoque e pedidos. Dessa forma, você gerencia sua loja física e online ao mesmo tempo, acompanhando relatórios, controlando o fluxo de caixa e garantindo que tudo esteja sempre atualizado. Seja qual for o seu modelo de negócio, o Kyte se adapta para te ajudar a vender mais e gerenciar melhor."
+      image="/images/customer3.webp"
+      imageLink="https://www.youtube.com/shorts/fU4QNy2FpiY"
+      isReversed={false}
+    />
+    <InfoCard
+      title="Sem tempo? A gente agiliza a configuração para você"
+      content="O tempo é um dos recursos mais valiosos para um empreendedor. É por isso que o Kyte foi desenvolvido para ser rápido e fácil de configurar. Você consegue cadastrar produtos, definir preços e personalizar sua loja online em poucos minutos. O processo é simples e direto, sem burocracia e sem necessidade de treinamentos demorados. Além disso, contamos com recursos de importação de produtos e edição em massa, para que você possa ajustar tudo rapidamente e já começar a vender com muito mais eficiência."
+      image="/images/review3a.svg"
+      imageLink="#"
+      isReversed={true}
+    />
+    <InfoCard
+      title="Traga tudo para o Kyte em poucos cliques"
+      content="Se você já usa outro sistema, não precisa se preocupar! O Kyte oferece ferramentas de importação que facilitam a migração do seu estoque. Você pode importar seus produtos em massa, ajustando informações rapidamente e sem precisar cadastrar tudo do zero. Isso significa que a transição para o Kyte é simples e rápida, garantindo que você comece a usar a plataforma sem interrupções no seu negócio. Nosso suporte também pode ajudar a fazer essa migração da melhor forma possível, garantindo que tudo fique organizado e funcionando perfeitamente desde o primeiro dia."
+      image="/images/customer4.webp"
+      imageLink="https://www.youtube.com/shorts/crl9bpJY8RI"
+      isReversed={false}
+    />
+    <InfoCard
+      title="Tudo isso cabe no seu bolso"
+      content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 3 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
+      image="/images/customer5.webp"
+      imageLink="https://www.youtube.com/watch?v=1J2QocSp4B0&t"
+      isReversed={true}
+    />
+  </div>
+</Section>
+<div class="justify-self-center w-[90%] md:w-[85%] my-12">
+  <CallToAction
+    type="email"
+    variant="primary"
+    heading="Vamos vender e organizar melhor este e outros de seus produtos?"
+    content="Assine o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+    buttonText="Começar agora"
+    isHidden={true}
+    lang="pt"
+    plan="prime"
+    recurrence="monthly"
+    flow="subscription"
+  />
+</div>
+<Pricing <div id="pricing" /> />
+<Faq
+  title="Outras perguntas que surgem com frequência"
+  description="Além disso, você pode entrar em contato com a gente através do help@kyte.com.br se quiser conversar"
+  items={[
+    {
+      question: "Isso tudo é caro?",
+      answer:
+        "O Kyte possui um plano bastante acessível. Por R$89.90 ao mês, ou cerca de 3 reais por dia e você só paga pelo que realmente precisa, sem surpresas ou custos extras.",
+      order: 1,
+    },
+    {
+      question: "E se eu perder meus dados?",
+      answer:
+        "O Kyte mantém seus todos os dados do seu negócio na nuvem, garantindo que seus dados estejam seguros e acessíveis a qualquer momento.",
+      order: 2,
+    },
+    {
+      question: "Será que meu time vai saber usar?",
+      answer:
+        "Pensamos bem cada recurso para que qualquer pessoa consiga aprender rapidamente, sem necessidade de muito treino. Mas nosso suporte ao vivo está sempre disponível para ajudar.",
+      order: 3,
+    },
+    {
+      question: "Ele funciona sem internet?",
+      answer:
+        "Você pode criar, ler, atualizar ou deletar informações sobre vendas, produtos, clientes e pedidos mesmo sem internet. Uma vez conectado, seus dados são sincronizados com os demais aparelhos.",
+      order: 4,
+    },
+    {
+      question: "Tenho medo de depender de um aplicativo",
+      answer:
+        "Você já depende de diversas coisas no seu dia a dia — anotações em cadernos, memória ou até arquivos soltos. A diferença é que, com o Kyte, tudo fica centralizado, organizado e acessível de forma simples. Não é só um aplicativo, é uma solução que te dá controle total do seu negócio e ainda economiza tempo.",
+      order: 5,
+    },
+    {
+      question: "E se eu quiser cancelar?",
+      answer:
+        "Nós não trabalhamos com contratos. Então, se você assinou um plano na modalidade mensal, você pode cancelar a qualquer momento e não receber mais cobranças. No entanto, no caso de planos anuais e planos anuais parcelados, infelizmente não conseguimos realizar o cancelamento.",
+      order: 6,
+    },
+  ]}
+/>
+<Footer />
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const resultsDiv = document.getElementById("results");
+
+  if (resultsDiv) {
+    let resultsHTML = '<ul class="space-y-2">';
+    params.forEach((value, key) => {
+      let label = key;
+      switch (key) {
+        case "productName":
+          label = "Nome do produto";
+          break;
+        case "baseCost":
+          label = "Custo base";
+          value = `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+        case "profitMargin":
+          label = "Margem de lucro";
+          value = value.includes("%")
+            ? `${parseFloat(value)}%`
+            : `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+        case "email":
+          label = "Email";
+          break;
+        case "idealPrice":
+          label = "Preço ideal";
+          value = `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+        case "marketLowestPrice":
+          label = "Menor preço no mercado";
+          value = `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+        case "marketMediumPrice":
+          label = "Preço médio no mercado";
+          value = `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+        case "marketHighestPrice":
+          label = "Maior preço no mercado";
+          value = `R$ ${parseFloat(value).toFixed(2)}`;
+          break;
+      }
+      resultsHTML += `<li><strong>${label}:</strong> ${value}</li>`;
+    });
+    resultsHTML += "</ul>";
+    resultsDiv.innerHTML = resultsHTML;
+  }
+</script>

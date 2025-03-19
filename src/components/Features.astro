@@ -2,8 +2,8 @@
 import CallToAction from "./CallToAction.astro";
 import FeatureCard from "./FeatureCard.astro";
 import Heading2 from "./ui/Heading2";
+import RedirectButton from "./ui/RedirectCheckout.tsx";
 import Text from "./ui/Text";
-import { EmailSubmit } from "./ui/EmailSubmit";
 
 const features = [
     {
@@ -41,7 +41,7 @@ const features = [
     class="bg-white rounded-xl mt-[320px] md:mt-80 mb-6 px-8 md:px-16 w-[calc(100%-2rem)] md:w-full max-w-[1080px] relative mx-4 md:mx-auto"
 >
     <div
-        class="absolute left-0 right-0 -top-[240px] md:-top-[140px] flex justify-center w-full"
+        class="absolute left-0 right-0 -top-[280px] md:-top-[180px] flex justify-center w-full z-10"
     >
         <div class="w-[90%] md:w-[80%]">
             <CallToAction
@@ -50,11 +50,11 @@ const features = [
                 heading="Quer uma ajuda para vender melhor?"
                 content="O Kyte é um sistema de vendas que ajuda você a vender melhor seus produtos, melhorar a experiência do cliente e garantir que você consiga sempre a maior margem de lucro."
                 buttonText="Começar agora"
-                isHidden={true}
                 lang="pt"
                 plan="prime"
                 recurrence="monthly"
                 flow="subscription"
+                os="lp"
             />
         </div>
     </div>
@@ -91,33 +91,31 @@ const features = [
 
                 {/* Desktop version */}
                 <div class="hidden md:block">
-                    <EmailSubmit
-                        client:load
-                        isHidden={true}
-                        lang="pt"
-                        plan="prime"
-                        recurrence="monthly"
-                        os="lp"
-                        app="web"
-                        flow="subscription"
-                        formAuth={true}
+                    <RedirectButton
                         buttonText="Começar agora"
+                        redirectUrl="https://kyteapp.com/loading"
+                        os="lp"
+                        flow="subscription"
+                        app="web"
+                        lang="pt"
+                        recurrence="monthly"
+                        plan="prime"
+                        client:only="react"
                     />
                 </div>
 
                 {/* Mobile version */}
                 <div class="md:hidden">
-                    <EmailSubmit
-                        client:load
-                        isHidden={true}
-                        lang="pt"
-                        plan="prime"
-                        recurrence="monthly"
-                        os="lp"
-                        app="pos"
-                        flow="subscription"
-                        formAuth={true}
+                    <RedirectButton
                         buttonText="Começar agora"
+                        redirectUrl="https://kyteapp.com/loading"
+                        os="lp"
+                        flow="subscription"
+                        app="pos"
+                        lang="pt"
+                        recurrence="monthly"
+                        plan="prime"
+                        client:only="react"
                     />
                 </div>
             </div>

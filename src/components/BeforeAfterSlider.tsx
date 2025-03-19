@@ -49,7 +49,7 @@ const BeforeAfterSlider = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[500px] overflow-hidden rounded-xl select-none"
+      className="relative w-full h-[500px] overflow-hidden rounded-xl select-none mt-8"
     >
       {/* Before Image */}
       <div className="absolute inset-0">

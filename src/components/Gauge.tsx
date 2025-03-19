@@ -10,8 +10,24 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
 
     // Calculate needle position (0 to 180 degrees)
     const calculateNeedlePosition = () => {
-        if (idealPrice <= marketLowestPrice) return 0;
-        if (idealPrice >= marketHighestPrice) return 180;
+        // If ideal price is below lowest, calculate percentage below
+        if (idealPrice < marketLowestPrice) {
+            const lowestRange = marketLowestPrice * 0.5; // Consider 50% below lowest as minimum
+            const position = Math.max(
+                0,
+                ((idealPrice - (marketLowestPrice - lowestRange)) / lowestRange) * 45
+            );
+            return position;
+        }
+
+        if (idealPrice > marketHighestPrice) {
+            const highestRange = marketHighestPrice * 0.5; // Consider 50% above highest as maximum
+            const position = Math.min(
+                180,
+                135 + ((idealPrice - marketHighestPrice) / highestRange) * 45
+            );
+            return position;
+        }
 
         // Split the calculation into two ranges: low-to-medium and medium-to-high
         const isInLowerHalf = idealPrice <= marketMediumPrice;
@@ -20,16 +36,15 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
         if (isInLowerHalf) {
             const lowerRange = marketMediumPrice - marketLowestPrice;
             const lowerPosition = idealPrice - marketLowestPrice;
-            // Map 0-90 degrees for lower half
-            position = (lowerPosition / lowerRange) * 90;
+            // Map 45-90 degrees for lower half
+            position = 45 + (lowerPosition / lowerRange) * 45;
         } else {
             const upperRange = marketHighestPrice - marketMediumPrice;
             const upperPosition = idealPrice - marketMediumPrice;
-            // Map 90-180 degrees for upper half
-            position = 90 + (upperPosition / upperRange) * 90;
+            // Map 90-135 degrees for upper half
+            position = 90 + (upperPosition / upperRange) * 45;
         }
 
-        console.log('Calculated Needle Position:', position);
         return position;
     };
 

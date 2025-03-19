@@ -1,0 +1,64 @@
+---
+import Section from "./Section.astro";
+import Heading2 from "./ui/Heading2";
+import Heading4 from "./ui/Heading4";
+import Text from "./ui/Text";
+
+interface FaqItem {
+    question: string;
+    answer: string;
+    order: number;
+}
+
+interface Props {
+    title?: string;
+    description?: string;
+    items: FaqItem[];
+}
+
+const {
+    title = "Outras perguntas que surgem com frequência",
+    description = "A lot of people don't appreciate the moment until it's passed. I'm not trying my hardest, and I'm not trying to do.",
+    items = [],
+} = Astro.props;
+
+const sortedItems = items.sort((a, b) => a.order - b.order);
+---
+
+<Section>
+    <div class="container mx-auto">
+        <div class="mb-14 text-center">
+            <Heading2 color="kyte-gray" align="left-mobile" className="mb-4">
+                {title}
+            </Heading2>
+            <Text
+                color="kyte-gray"
+                size="large"
+                align="left-mobile"
+                className="mx-auto lg:max-w-3xl"
+            >
+                {description}
+            </Text>
+        </div>
+        <div class="max-w-3xl mx-auto grid gap-10">
+            {
+                sortedItems.map((item) => (
+                    <div class="text-left">
+                        <Heading4 color="kyte-gray" align="left-all">
+                            {item.question}
+                        </Heading4>
+                        <div class="border-t border-gray09 pt-4">
+                            <Text
+                                color="kyte-gray"
+                                size="large"
+                                align="left-all"
+                            >
+                                {item.answer}
+                            </Text>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</Section>
