@@ -94,7 +94,7 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
         <div class="space-y-4">
           <Text size="large" align="left-all" color="kyte-gray">
             De acordo com seus dados, o valor ideal seria de{" "}
-            <span style={{ fontWeight: 500 }}>
+            <span style={{ fontWeight: 600 }}>
               R$ {
                 parseFloat(
                   new URLSearchParams(Astro.url.search).get("idealPrice") ||
@@ -104,7 +104,7 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
             </span>
             . Mas, nós fizemos uma comparação com seus concorrentes, e o preço ideal
             seria entre{" "}
-            <span style={{ fontWeight: 500 }}
+            <span style={{ fontWeight: 600 }}
               >R$ {
                 (
                   parseFloat(
@@ -116,7 +116,7 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
               }
             </span>{" "}
             e{" "}
-            <span style={{ fontWeight: 500 }}
+            <span style={{ fontWeight: 600 }}
               >R$ {
                 (
                   parseFloat(
