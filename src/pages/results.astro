@@ -203,7 +203,7 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
     Entenda melhor sua precificação de acordo com o mercado.
   </Heading2>
   <PriceChart client:only="react" />
-  <div class="justify-items-center">
+  <div class="safari:grid justify-items-center">
     <div class="mt-4 prose">
       <MarkdownContent
         client:load
@@ -276,7 +276,7 @@ Assim, você foca no que realmente importa: <span style="background-color: #2DD1
   </div>
 </Section>
 <Section>
-  <div class="justify-items-center">
+  <div class="safari:grid justify-items-center">
     <Heading2 color="kyte-gray" align="left-all"
       >Análise da Concorrência: Não Fique para Trás!</Heading2
     >
@@ -381,7 +381,7 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
       borderColor="#547AB8"
     />
   </div>
-  <div class="justify-items-center">
+  <div class="safari:grid justify-items-center">
     <div class="mt-4 prose">
       <MarkdownContent
         client:load
@@ -408,11 +408,12 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
       alt="Illustration of money flying with wings"
       size="small"
     />
-    <div class="mt-4 prose">
-      <MarkdownContent
-        client:load
-        className="prose-xl"
-        content={`  
+    <div class="safari:grid justify-items-center">
+      <div class="mt-4 prose">
+        <MarkdownContent
+          client:load
+          className="prose-xl"
+          content={`  
 Errar na precificação pode ser fatal para o seu negócio. Veja os principais deslizes e como evitá-los:  
 
 #### 1. Ignorar custos ocultos 
@@ -428,7 +429,8 @@ do custo base**. Então, se você estiver aplicando algo muito fora disso, pode 
 Nós da Kyte criamos o nosso sistema e esta calculadora justamente para garantir maiores taxas de sucesso para o seu negócio!
 <br>
 `}
-      />
+        />
+      </div>
     </div>
   </div>
 </Section>
