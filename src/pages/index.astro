@@ -1,12 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
-import Header from "../components/Header.astro";
+import Banner from "../components/Banner.astro";
 import Footer from "../components/Footer.astro";
 ---
 
 <Layout title="Kyte | Descubra o preço ideal para seu produto" variant="gray09">
-	<Header />
+	<Banner
+		text="Mais de 5 milhões de pessoas já usaram o Kyte"
+		buttonText="Saiba mais"
+		buttonUrl="https://www.kyteapp.com/marketing/sales-led/favorito-bairro"
+	/>
 	<Hero />
 	<Footer />
 </Layout>

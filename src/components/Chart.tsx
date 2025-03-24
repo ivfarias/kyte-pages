@@ -64,8 +64,32 @@ export default function PriceChart() {
             },
             markers: {
                 size: 6,
-                colors: '#2dd1ac',
-                strokeWidth: 0
+                colors: priceData.map(point => point.color), // Use the point colors instead of a single color
+                strokeWidth: 0,
+                hover: {
+                    size: 8,
+                    sizeOffset: 3
+                },
+                discrete: priceData.map((point, index) => ({
+                    seriesIndex: 0,
+                    dataPointIndex: index,
+                    fillColor: point.color,
+                    strokeColor: point.color,
+                    size: 6,
+                }))
+            },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
             },
             grid: { show: true },
             dataLabels: { enabled: false },

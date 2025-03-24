@@ -3,7 +3,6 @@ import IdealProductPriceCalculator from "./Calculator";
 import BeforeAfterSlider from "../components/BeforeAfterSlider.tsx";
 import Section from "./Section.astro";
 import H1 from "./ui/Heading1";
-import H2 from "./ui/Heading2";
 import Text from "./ui/Text";
 ---
 
@@ -12,22 +11,28 @@ import Text from "./ui/Text";
         <div class="flex flex-col md:flex-row items-end justify-between gap-8">
             <div class="w-full md:w-1/2 text-center md:text-left">
                 <H1 color="kyte-gray" align="left-all">
-                    Descubra o preço ideal do seu produto
+                    Encontre o preço ideal com base na concorrência
                 </H1>
                 <Text color="kyte-gray" align="left-all" size="large">
-                    Nem tão caro que ninguém compre, tampouco barato demais e
-                    reduzir os lucros. Descubra agora qual o preço de venda
-                    ideal para o seu produto.
+                    Nem tão caro que ninguém compre, nem tão barato que reduza
+                    seus lucros. Nossa calculadora analisa os preços dos seus
+                    concorrentes na internet para te ajudar a definir o melhor
+                    valor de venda.
                 </Text>
-                <BeforeAfterSlider
-                    client:load
-                    beforeImage="/images/beforeImage.webp"
-                    afterImage="/images/afterImage.webp"
-                    beforeLabel="Antes"
-                    afterLabel="Depois"
-                />
+                <!-- BeforeAfter Slider - Hidden on mobile, visible on desktop -->
+                <div class="hidden md:block">
+                    <BeforeAfterSlider
+                        client:load
+                        beforeImage="/images/beforeImage.webp"
+                        afterImage="/images/afterImage.webp"
+                        beforeLabel="Antes"
+                        afterLabel="Depois"
+                    />
+                </div>
             </div>
+
             <div class="w-full md:w-1/2 justify-items-center">
+                <!-- Calculator - Visible on all screens -->
                 <IdealProductPriceCalculator client:only="react" />
                 <div class="flex flex-row items-center gap-4 mt-6">
                     <img
@@ -46,6 +51,17 @@ import Text from "./ui/Text";
                         width="100"
                     />
                 </div>
+            </div>
+
+            <!-- BeforeAfter Slider - Visible only on mobile -->
+            <div class="block md:hidden w-full">
+                <BeforeAfterSlider
+                    client:load
+                    beforeImage="/images/beforeImage.webp"
+                    afterImage="/images/afterImage.webp"
+                    beforeLabel="Antes"
+                    afterLabel="Depois"
+                />
             </div>
         </div>
     </div>

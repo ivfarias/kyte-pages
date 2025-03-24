@@ -10,42 +10,39 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
 
     // Calculate needle position (0 to 180 degrees)
     const calculateNeedlePosition = () => {
-        // If ideal price is below lowest, calculate percentage below
-        if (idealPrice < marketLowestPrice) {
-            const lowestRange = marketLowestPrice * 0.5; // Consider 50% below lowest as minimum
-            const position = Math.max(
+        // Calculate the ranges for each section
+        const idealLowPrice = marketLowestPrice * 0.85;  // 15% below medium price
+        const idealHighPrice = marketMediumPrice * 1.15; // 15% above medium price
+
+        // If price is below the lowest market price (too cheap)
+        if (idealPrice < idealLowPrice) {
+            const lowestRange = idealLowPrice * 0.5;
+            return Math.max(
                 0,
-                ((idealPrice - (marketLowestPrice - lowestRange)) / lowestRange) * 45
+                ((idealPrice - (idealLowPrice - lowestRange)) / lowestRange) * 45
             );
+        }
+
+        // If price is in the ideal range
+        if (idealPrice >= idealLowPrice && idealPrice <= idealHighPrice) {
+            const range = idealHighPrice - idealLowPrice;
+            const position = ((idealPrice - idealLowPrice) / range) * 90 + 45;
             return position;
         }
 
-        if (idealPrice > marketHighestPrice) {
-            const highestRange = marketHighestPrice * 0.5; // Consider 50% above highest as maximum
-            const position = Math.min(
-                180,
-                135 + ((idealPrice - marketHighestPrice) / highestRange) * 45
-            );
+        // If price is above ideal but below or equal to highest
+        if (idealPrice > idealHighPrice && idealPrice <= marketHighestPrice) {
+            const range = marketHighestPrice - idealHighPrice;
+            const position = ((idealPrice - idealHighPrice) / range) * 45 + 135;
             return position;
         }
 
-        // Split the calculation into two ranges: low-to-medium and medium-to-high
-        const isInLowerHalf = idealPrice <= marketMediumPrice;
-
-        let position;
-        if (isInLowerHalf) {
-            const lowerRange = marketMediumPrice - marketLowestPrice;
-            const lowerPosition = idealPrice - marketLowestPrice;
-            // Map 45-90 degrees for lower half
-            position = 45 + (lowerPosition / lowerRange) * 45;
-        } else {
-            const upperRange = marketHighestPrice - marketMediumPrice;
-            const upperPosition = idealPrice - marketMediumPrice;
-            // Map 90-135 degrees for upper half
-            position = 90 + (upperPosition / upperRange) * 45;
-        }
-
-        return position;
+        // If price is above the highest market price
+        const highestRange = marketHighestPrice * 0.5;
+        return Math.min(
+            180,
+            135 + ((idealPrice - marketHighestPrice) / highestRange) * 45
+        );
     };
 
     const needleRotation = calculateNeedlePosition();

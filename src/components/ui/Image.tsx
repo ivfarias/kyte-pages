@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-type ImageSize = 'small' | 'large' | 'auto';
+type ImageSize = 'xsmall' | 'small' | 'large' | 'auto';
 
 interface ImageProps {
   src: string;
@@ -10,6 +10,7 @@ interface ImageProps {
 }
 
 const sizeClasses: Record<ImageSize, string> = {
+  xsmall: 'w-[120px] h-auto md:w-[160px] md:h-auto mx-auto my-12',
   small: 'w-[160px] h-auto md:w-[240px] md:h-auto mx-auto my-12',
   large: 'w-[340px] h-auto md:w-[414px] md:h-auto mx-auto my-12',
   auto: 'w-full my-6'

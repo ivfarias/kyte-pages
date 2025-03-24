@@ -1,0 +1,68 @@
+---
+import Text from "./ui/Text";
+import Button from "./ui/Button";
+
+interface Props {
+    text?: string;
+    buttonText?: string;
+    buttonUrl?: string;
+}
+
+const {
+    text = "NEW | Material Tailwind PRO, a comprehensive compilation of 200+ sections, now available for your use!",
+    buttonText = "check out",
+    buttonUrl = "#",
+} = Astro.props;
+---
+
+<section class="py-20 container mx-auto max-w-[1080px]">
+    <div
+        class="mb-4 shadow-sm px-4 py-2 flex bg-gray02 flex-wrap items-center justify-between gap-x-2 rounded-md"
+    >
+        <a href={buttonUrl} class="flex-1 cursor-pointer">
+            <Text
+                color="white"
+                size="medium"
+                align="left-all"
+                className="text-sm md:text-base"
+            >
+                {text}
+            </Text>
+        </a>
+        <div class="flex items-center gap-x-2">
+            <div class="hidden md:block">
+                <Button
+                    variant="primary"
+                    type="button"
+                    href={buttonUrl}
+                >
+                    {buttonText}
+                </Button>
+            </div>
+            <button
+                class="relative flex-shrink-0 align-middle select-none font-medium text-center uppercase transition-all w-8 h-8 md:w-10 md:h-10 rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30"
+                type="button"
+                data-ripple-light="true"
+            >
+                <span
+                    class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                        class="text-white w-3 h-3 md:w-4 md:h-4 stroke-2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </span>
+            </button>
+        </div>
+    </div>
+</section>

@@ -3,7 +3,7 @@
 import type React from "react";
 import Text from "./ui/Text";
 import { useState, useEffect } from "react";
-import { Card, Input, Button } from "@material-tailwind/react";
+import { Card, Input, Button, Select, Option, Tooltip } from "@material-tailwind/react";
 import { getMarketPrices } from "../api/googleShopping";
 import { createMauticContact } from "../api/mautic";
 
@@ -307,76 +307,154 @@ export default function IdealProductPriceCalculator() {
             onPointerEnterCapture={() => { }}
             onPointerLeaveCapture={() => { }}
         >
+            <Text
+                color="kyte-gray"
+                align="left-all"
+                size="extra-large"
+                className="font-semibold mb-4"
+            >
+                Preencha as informações e descubra o passo a passo para
+                vender mais e melhor que seus concorrentes
+            </Text>
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <div className="relative">
+                    <div className="flex items-center gap-2">
+                        <div className="relative flex-1">
+                            <Input
+                                onPointerEnterCapture={() => { }}
+                                onPointerLeaveCapture={() => { }}
+                                size="lg"
+                                type="text"
+                                label="Nome do Produto"
+                                placeholder="Ex: Samsung Galaxy S21"
+                                name="productName"
+                                value={formData.productName || " "}
+                                onChange={handleInputChange}
+                                color="teal"
+                                crossOrigin="anonymous"
+                            />
+                            <Tooltip
+                                content="Digite o nome completo do item com especificações. Quanto mais detalhes, melhor os resultados."
+                                placement="top"
+                                className="bg-white text-gray02 p-2 shadow-lg rounded"
+                                trigger="hover click"
+                            >
+                                <button
+                                    type="button"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
+                                    onClick={(e) => e.preventDefault()}
+                                >
+                                    <img
+                                        src="/images/info-icon.svg"
+                                        alt="info"
+                                        width={15}
+                                        height={15}
+                                    />
+                                </button>
+                            </Tooltip>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="relative">
+                    <div className="flex items-center gap-2">
+                        <div className="relative flex-1">
+                            <Input
+                                onPointerEnterCapture={() => { }}
+                                onPointerLeaveCapture={() => { }}
+                                size="lg"
+                                type="text"
+                                label="Preço de custo (R$)"
+                                placeholder="0,00"
+                                value={formData.baseCost.toFixed(2).replace(".", ",")}
+                                onChange={handleBaseCostChange}
+                                color="teal"
+                                crossOrigin="anonymous"
+                            />
+                            <Tooltip
+                                content="Insira o valor pago pelo produto ou gasto para ser fabricado."
+                                placement="top"
+                                className="bg-white text-gray02 p-2 shadow-lg rounded"
+                                trigger="hover click"
+                            >
+                                <button
+                                    type="button"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
+                                    onClick={(e) => e.preventDefault()}
+                                >
+                                    <img
+                                        src="/images/info-icon.svg"
+                                        alt="info"
+                                        width={15}
+                                        height={15}
+                                    />
+                                </button>
+                            </Tooltip>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
-                    <Input
-                        size="lg"
-                        type="text"
-                        label="Nome do Produto"
-                        placeholder="Ex: Samsung Galaxy S21"
-                        name="productName"
-                        value={formData.productName}
-                        onChange={handleInputChange}
-                        color="teal"
+                    <Select
+                        placeholder=""
                         onPointerEnterCapture={() => { }}
                         onPointerLeaveCapture={() => { }}
-                        crossOrigin="anonymous"
-                    />
-                    <Text size="extra-small" color="secondary-gray" className="px-1 pt-1">
-                        Descreva o item com detalhes.
-                    </Text>
-                </div>
-                <div>
-                    <Input
                         size="lg"
-                        type="text"
-                        label="Preço de custo (R$)"
-                        placeholder="0,00"
-                        value={formData.baseCost.toFixed(2).replace(".", ",")}
-                        onChange={handleBaseCostChange}
-                        color="teal"
-                        onPointerEnterCapture={() => { }}
-                        onPointerLeaveCapture={() => { }}
-                        crossOrigin="anonymous"
-                    />
-                </div>
-                <div>
-                    <select
-                        name="businessSegment"
+                        label="Área de atuação"
                         value={formData.businessSegment}
-                        onChange={handleBusinessSegmentChange}
-                        className="text-sm h-[44px] w-full px-2 py-2 rounded-md border border-blue-gray-200 text-textColor focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                        onChange={(value) => handleBusinessSegmentChange({ target: { value } } as any)}
+                        color="teal"
                     >
-                        <option value="">Selecione a área de atuação</option>
-                        {Object.entries(BUSINESS_SEGMENTS).map(([category, segments]) => (
-                            <optgroup key={category} label={category}>
-                                {Object.entries(segments).map(([name]) => (
-                                    <option key={name} value={name}>
-                                        {name}
-                                    </option>
-                                ))}
-                            </optgroup>
-                        ))}
-                    </select>
+                        {Object.entries(BUSINESS_SEGMENTS).map(([category, segments]) => [
+                            <Option key={`category-${category}`} value="" className="font-semibold bg-gray-100" disabled>
+                                {category}
+                            </Option>,
+                            ...Object.entries(segments).map(([name]) => (
+                                <Option key={name} value={name} className="pl-4">
+                                    {name}
+                                </Option>
+                            ))
+                        ]).flat()}
+                    </Select>
                 </div>
+
                 <div className="flex items-center gap-2">
-                    <div className="w-full">
+                    <div className="w-full relative">
                         <Input
+                            onPointerEnterCapture={() => { }}
+                            onPointerLeaveCapture={() => { }}
                             size="lg"
                             type="text"
                             label="Lucro ideal estimado (R$ ou %)"
                             placeholder="0,00"
                             value={
-                                formData.profitMargin.type === "value"
-                                    ? formData.profitMargin.amount.toFixed(2).replace(".", ",")
-                                    : formData.profitMargin.amount.toFixed(2)
+                                formData.profitMargin?.type === "value"
+                                    ? (formData.profitMargin?.amount || 0).toFixed(2).replace(".", ",")
+                                    : (formData.profitMargin?.amount || 0).toFixed(2)
                             }
                             onChange={handlePercentOrValueInputChange}
                             color="teal"
-                            onPointerEnterCapture={() => { }}
-                            onPointerLeaveCapture={() => { }}
                             crossOrigin="anonymous"
                         />
+                        <Tooltip
+                            content="Aqui calculamos a margem de lucro ideal para o seu produto com base no segmento de mercado selecionado. Você pode alterar para um valor fixo ou um percentual."
+                            placement="top"
+                            className="bg-white text-gray02 p-2 shadow-lg rounded"
+                            trigger="hover click"
+                        >
+                            <button
+                                type="button"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
+                                onClick={(e) => e.preventDefault()}
+                            >
+                                <img
+                                    src="/images/info-icon.svg"
+                                    alt="info"
+                                    width={15}
+                                    height={15}
+                                />
+                            </button>
+                        </Tooltip>
                     </div>
                     <select
                         value={formData.profitMargin.type}
@@ -385,11 +463,21 @@ export default function IdealProductPriceCalculator() {
                             setFormData((prev) => {
                                 let newAmount = prev.profitMargin.amount;
                                 if (newType === "value" && prev.profitMargin.type === "percent") {
-                                    newAmount = (prev.baseCost * prev.profitMargin.amount) / 100;
+                                    // Convert percentage to actual value based on base cost
+                                    newAmount = (prev.baseCost * (prev.profitMargin.amount / 100));
                                 } else if (newType === "percent" && prev.profitMargin.type === "value") {
-                                    newAmount = (prev.profitMargin.amount / prev.baseCost) * 100;
+                                    // Convert value to percentage, but only if base cost is not zero
+                                    newAmount = prev.baseCost > 0
+                                        ? (prev.profitMargin.amount / prev.baseCost) * 100
+                                        : 0;
                                 }
-                                return { ...prev, profitMargin: { type: newType, amount: newAmount } };
+                                return {
+                                    ...prev,
+                                    profitMargin: {
+                                        type: newType,
+                                        amount: Number(newAmount.toFixed(2))
+                                    }
+                                };
                             });
                         }}
                         className="text-sm h-[44px] w-16 px-2 py-2 rounded-md border border-blue-gray-200 text-textColor min-w-[64px] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
@@ -400,6 +488,8 @@ export default function IdealProductPriceCalculator() {
                 </div>
                 <div>
                     <Input
+                        onPointerEnterCapture={() => { }}
+                        onPointerLeaveCapture={() => { }}
                         size="lg"
                         type="email"
                         label="Seu E-mail"
@@ -408,15 +498,13 @@ export default function IdealProductPriceCalculator() {
                         value={formData.email}
                         onChange={handleInputChange}
                         color="teal"
-                        onPointerEnterCapture={() => { }}
-                        onPointerLeaveCapture={() => { }}
                         crossOrigin="anonymous"
                     />
                 </div>
                 <Button
                     placeholder=""
                     type="submit"
-                    className="w-full h-11 mt-6 bg-[#2DD1AC] text-white font-bold py-2 px-4 rounded hover:bg-opacity-80"
+                    className="w-full h-11 mt-6 bg-green03 text-white font-bold py-2 px-4 rounded hover:bg-opacity-80"
                     onPointerEnterCapture={() => { }}
                     onPointerLeaveCapture={() => { }}
                 >

@@ -1,0 +1,190 @@
+---
+import { marked } from "marked";
+import Image from "./ui/Image";
+import Text from "./ui/Text";
+
+type ImageSize = "xsmall" | "small" | "large" | "auto";
+
+interface DynamicData {
+    segmentMargins?: {
+        low: number;
+        high: number;
+    };
+    [key: string]: any;
+}
+
+interface Props {
+    tag?: string;
+    title?: string;
+    description?: string;
+    features?: {
+        icon: string;
+        title: string;
+        description: string;
+    }[];
+    imageSrc?: string;
+    imageAlt?: string;
+    imageSize?: ImageSize;
+    data?: DynamicData;
+    reversed?: boolean;
+}
+
+const {
+    tag = "Deploy faster",
+    title = "A better workflow",
+    description = "Lorem ipsum...",
+    features = [{ icon: "", title: "", description: "" }],
+    imageSrc = "/images/hand-notes.svg",
+    imageAlt = "Product screenshot",
+    imageSize = "auto",
+    data = {},
+    reversed = false,
+} = Astro.props;
+
+const parsedFeatures = features.map((feature) => ({
+    ...feature,
+    title: feature.title,
+    description: marked.parse(feature.description),
+}));
+---
+
+<div class="overflow-hidden bg-white py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2"
+        >
+            <div class={`${reversed ? "lg:order-2" : ""}`}>
+                <div class="lg:pt-4 lg:pr-8">
+                    <div class="lg:max-w-lg">
+                        <h2 class="text-base/7 font-semibold text-green03">
+                            {tag}
+                        </h2>
+                        <Text
+                            size="extra-large"
+                            color="kyte-gray"
+                            align="left-all"
+                            className="mt-2 font-semibold tracking-tight text-4xl sm:text-2xl lg:text-3xl"
+                            client:load
+                        >
+                            {title}
+                        </Text>
+                        <div class="mt-6 prose prose-xl">
+                            <Text
+                                size="extra-large"
+                                color="secondary-gray"
+                                align="left-all"
+                                client:load
+                            >
+                                <div
+                                    class="dynamic-content"
+                                    data-content={description}
+                                    data-initial-data={JSON.stringify(data)}
+                                >
+                                    Loading...
+                                </div>
+                            </Text>
+                        </div>
+                        <dl class="mt-10 max-w-xl space-y-8 lg:max-w-none">
+                            {
+                                parsedFeatures.map((feature) => (
+                                    <div class="relative pl-9">
+                                        <dt>
+                                            <svg
+                                                class="absolute top-1 left-1 size-5 text-green03"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                                aria-hidden="true"
+                                                data-slot="icon"
+                                                set:html={feature.icon}
+                                            />
+                                            <Text
+                                                size="large"
+                                                color="kyte-gray"
+                                                align="left-all"
+                                                className="font-semibold inline"
+                                            >
+                                                {feature.title}
+                                            </Text>
+                                        </dt>
+                                        <Text
+                                            size="large"
+                                            color="secondary-gray"
+                                            align="left-all"
+                                            className="inline"
+                                        >
+                                            <Fragment
+                                                set:html={feature.description}
+                                            />
+                                        </Text>
+                                    </div>
+                                ))
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div
+                class={`flex items-center justify-center ${reversed ? "lg:order-1" : ""}`}
+            >
+                <Image src={imageSrc} alt={imageAlt} size={imageSize} />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Import marked in the client-side script
+    import { marked } from "marked";
+
+    function processContent(
+        content: string,
+        data: Record<string, any>,
+    ): string {
+        return content.replace(
+            /\{\s*([a-zA-Z0-9_.]+)(?:\.toFixed\((\d+)\))?\s*\}/g,
+            (match: string, path: string, decimals: string): string => {
+                const parts = path.split(".");
+                let value: any = data;
+
+                for (const part of parts) {
+                    if (value === undefined || value === null) return match;
+                    value = value[part];
+                }
+
+                if (value === undefined || value === null) return match;
+                if (typeof value === "string") value = value.trim();
+                if (decimals !== undefined && typeof value === "number") {
+                    return value.toFixed(parseInt(decimals));
+                }
+                return value.toString();
+            },
+        );
+    }
+
+    function updateDynamicContent(): void {
+        const elements = document.querySelectorAll(".dynamic-content");
+
+        elements.forEach((element) => {
+            try {
+                const content = element.getAttribute("data-content") || "";
+                const initialData = JSON.parse(
+                    element.getAttribute("data-initial-data") || "{}",
+                );
+                const localData = JSON.parse(
+                    localStorage.getItem("idealPriceCalculatorData") || "{}",
+                );
+                const combinedData = { ...initialData, ...localData };
+
+                const processedContent = processContent(content, combinedData);
+                const parsedContent = marked.parse(processedContent);
+
+                element.innerHTML = parsedContent.toString();
+            } catch (error) {
+                console.error("Error updating dynamic content:", error);
+            }
+        });
+    }
+
+    // Event listeners remain the same
+    document.addEventListener("DOMContentLoaded", updateDynamicContent);
+    window.addEventListener("storage", updateDynamicContent);
+</script>

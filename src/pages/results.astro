@@ -7,6 +7,7 @@ import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import InfoCard from "../components/InfoCard.astro";
 import Faq from "../components/Faq.astro";
+import Content from "../components/Content.astro";
 
 import PriceChart from "../components/Chart";
 import Gauge from "../components/Gauge";
@@ -20,8 +21,7 @@ import Heading2 from "../components/ui/Heading2";
 import Heading3 from "../components/ui/Heading3";
 import Heading4 from "../components/ui/Heading4";
 import Text from "../components/ui/Text";
-import MarkdownContent from "../components/MarkdownContent";
-import Image from "../components/ui/Image";
+import Banner from "../components/Banner.astro";
 import MauticHandler from "../components/MauticHandler";
 
 const params = Astro.url.searchParams;
@@ -47,7 +47,11 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
     marketMediumPrice={marketMediumPrice}
     marketHighestPrice={marketHighestPrice}
   />
-  <Header />
+  <Banner
+    text="Que tal vender melhor e maximizar seus lucros como mais de 5 milhões já fizeram por menos de R$3 ao dia?"
+    buttonText="Começar agora"
+    buttonUrl="https://www.kyteapp.com/marketing/sales-led/favorito-bairro"
+  />
   <Section>
     <div class="flex flex-col md:flex-row gap-8 md:gap-12">
       {/* Left column */}
@@ -104,7 +108,13 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
             </span>
             . Mas, nós fizemos uma comparação com seus concorrentes, e o preço ideal
             seria entre{" "}
-            <span style={{ fontWeight: 600 }}
+            <span
+              style={{
+                fontWeight: 600,
+                backgroundColor: "#2DD1AC99",
+                padding: "0.10rem 0.5rem",
+                borderRadius: "4px",
+              }}
               >R$ {
                 (
                   parseFloat(
@@ -114,10 +124,9 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
                   ) * 0.85
                 ).toFixed(2)
               }
-            </span>{" "}
-            e{" "}
-            <span style={{ fontWeight: 600 }}
-              >R$ {
+              {" "}
+              e<br />{" "}
+              R$ {
                 (
                   parseFloat(
                     new URLSearchParams(Astro.url.search).get(
@@ -130,9 +139,9 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
             .
           </Text>
           <Text size="large" color="kyte-gray" align="left-all">
-            <span style={{ fontWeight: 500 }}
+            <span style={{ fontWeight: 600 }}
               >Quer ter mais lucro nesse produto?</span
-            > Recomendamos para você o <span style={{ fontWeight: 500 }}
+            > Recomendamos para você o <span style={{ fontWeight: 600 }}
               >Ecossistema Multicanal do Kyte</span
             >, que são ferramentas simples para você vender na loja, na rua ou
             nas redes sociais. Tudo ao mesmo tempo.
@@ -200,154 +209,6 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
 </Layout>
 <Section>
   <Heading2 client:load color="kyte-gray">
-    Entenda melhor sua precificação de acordo com o mercado.
-  </Heading2>
-  <PriceChart client:only="react" />
-  <div class="safari:grid justify-items-center">
-    <div class="mt-4 prose">
-      <MarkdownContent
-        client:load
-        className="prose-xl"
-        content={`Como você pode ver no gráfico acima, preços para produtos como <strong style="color: #363F4D;">{productName}</strong> costumam variar bastante.
-Já parou para pensar que o preço que você colocar nele pode ser a diferença entre lucrar bem ou apenas "se virar"?
-<br>
-<br>
-A margem de lucro é o coração do seu negócio. Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas. Se for alta demais, pode afastar clientes. E aí, como encontrar o equilíbrio?
-<br>
-<br>`}
-      />
-    </div>
-    <Heading3 color="kyte-gray" align="left-all">
-      Como calculamos sua margem de lucro?
-    </Heading3>
-    <Image
-      src="/images/hand-notes.svg"
-      alt="Illustration displaying hand notes"
-      size="small"
-    />
-    <div class="mt-4 prose">
-      <MarkdownContent
-        client:load
-        className="prose-xl"
-        content={`  
-A fórmula é simples, mas poderosa:
-#### [(Preço de Venda - Custo Base) / Preço de Venda] x 100
-Por exemplo, se você vende um produto por **R$ 50** e o custo é **R$ 20**, sua margem de lucro será de **60%**.  
-
-Parece fácil, né?  
-
-Mas errar nessa conta pode significar prejuízo ou perder competitividade. Por isso, nossa **[calculadora de precificação](https://kyte.com.br)** já faz esse trabalho para você, mostrando os números ideais para o seu segmento.  
-
-Assim, você foca no que realmente importa: <span style="background-color: #2DD1AC99; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>
-    crescer seu negócio!</strong>
-  </span>`}
-      />
-    </div>
-    <div class="justify-self-center w-[90%] md:w-[85%] my-12">
-      <div class="hidden md:block">
-        <CallToAction
-          type="email"
-          variant="primary"
-          heading="Vamos avançar com o crescimento do seu negócio!"
-          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-          buttonText="Quero começar"
-          lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
-          app="web"
-        />
-      </div>
-      <div class="block md:hidden">
-        <CallToAction
-          type="email"
-          variant="primary"
-          heading="Vamos avançar com o crescimento do seu negócio!"
-          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-          buttonText="Quero começar"
-          lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
-          app="pos"
-        />
-      </div>
-    </div>
-  </div>
-</Section>
-<Section>
-  <div class="safari:grid justify-items-center">
-    <Heading2 color="kyte-gray" align="left-all"
-      >Análise da Concorrência: Não Fique para Trás!</Heading2
-    >
-    <Image
-      src="/images/Catalogo-beta-ilustra.svg"
-      alt="Illustration of a Catalog and a Lab Vessel"
-      size="small"
-    />
-    <div class="mt-4 prose">
-      <MarkdownContent
-        client:load
-        className="prose-xl"
-        content={`  
-Saber como seus concorrentes estão precificando é essencial para não ficar para trás. Afinal, você pode estar vendendo abaixo ou acima do valor de mercado sem necessidade ou perdendo dinheiro por falta de informação.
-#### **De acordo com nossas pesquisas, trazemos para você três referências importantes:**  
-<span style="font-size: 65px;">👇</span>
-`}
-      />
-    </div>
-    <ProductList client:load />
-    <Heading3 align="left-all"> Como chegamos nestes concorrentes? </Heading3>
-    <Image
-      src="/images/statistics.svg"
-      alt="Illustration depcting product statistics"
-      size="small"
-    />
-    <div class="mt-4 prose">
-      <div class="mt-4 prose">
-        <MarkdownContent
-          client:load
-          className="prose-xl"
-          content={`  
-Para garantir que as informações sobre os concorrentes sejam justas e realistas, utilizamos um método estatístico chamado **Intervalo Interquartil (IQR)**. Ele ajuda a identificar e remover valores extremos (outliers) que poderiam distorcer a análise. Funciona assim: calculamos os preços que estão dentro de uma faixa considerada normal (entre 25% e 75% dos valores) e descartamos aqueles que estão muito acima ou abaixo dessa média. Dessa forma, os concorrentes que mostramos refletem o mercado de maneira mais precisa e confiável para você!`}
-        />
-      </div>
-    </div>
-    <div class="justify-self-center w-[90%] md:w-[85%] my-12">
-      <div class="hidden md:block">
-        <CallToAction
-          type="email"
-          variant="primary"
-          heading="Vamos avançar com o crescimento do seu negócio!"
-          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-          buttonText="Quero começar"
-          lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
-          app="web"
-        />
-      </div>
-      <div class="block md:hidden">
-        <CallToAction
-          type="email"
-          variant="primary"
-          heading="Vamos avançar com o crescimento do seu negócio!"
-          content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-          buttonText="Quero começar"
-          lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
-          app="pos"
-        />
-      </div>
-    </div>
-  </div>
-</Section>
-
-<Section>
-  <Heading2 client:load color="kyte-gray">
     Qual estratégia você quer neste momento do seu negócio?
   </Heading2>
   <div
@@ -381,12 +242,11 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
       borderColor="#547AB8"
     />
   </div>
-  <div class="safari:grid justify-items-center">
-    <div class="mt-4 prose">
-      <MarkdownContent
-        client:load
-        className="prose-xl"
-        content={`  
+  <div class="grid justify-items-center">
+    <Content
+      tag="Estratégia"
+      title="Como chegar ao seu preço ideal?"
+      description={`  
 Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}.  
 <br>
 A partir disso, é possível entender tanto se você tem um custo saudável para seu produto, e também se está deixando dinheiro na mesa, ou afastando clientes.
@@ -395,47 +255,116 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
 - **Custos:** Seus custos estão cobertos? Lembre-se de incluir tudo, desde matéria-prima até taxas e impostos.  
 - **Diferencial:** Seus clientes estão dispostos a pagar mais por um produto ou serviço de qualidade superior?  
 
-#### <span style="color: #2DD1AC;">Precificar bem não é ser o mais barato, mas sim ter um preço justo que reflita o valor do seu produto e a realidade do seu negócio. E nós estamos aqui para te ajudar nisso!</span>
-<br>
+> Precificar bem não é ser o mais barato, mas sim ter um preço justo que reflita o valor do seu produto e a realidade do seu negócio. E nós estamos aqui para te ajudar nisso!
+
 `}
+      imageSrc="/images/Catalogo-beta-ilustra.svg"
+      imageAlt="Your image alt text"
+      imageSize="small"
+      data={{
+        productName,
+        idealPrice,
+        baseCost,
+        profitMargin,
+        marketLowestPrice,
+        marketMediumPrice,
+        marketHighestPrice,
+      }}
+    />
+  </div>
+  <div class="justify-self-center w-[90%] md:w-[85%] my-12">
+    <div class="hidden md:block">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Vamos avançar com o crescimento do seu negócio!"
+        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="web"
       />
     </div>
-    <Heading3 color="kyte-gray" align="left-all">
-      Erros Comuns na Precificação e Como Evitá-los
-    </Heading3>
-    <Image
-      src="/images/flying-money.svg"
-      alt="Illustration of money flying with wings"
-      size="small"
-    />
-    <div class="safari:grid justify-items-center">
-      <div class="mt-4 prose">
-        <MarkdownContent
-          client:load
-          className="prose-xl"
-          content={`  
-Errar na precificação pode ser fatal para o seu negócio. Veja os principais deslizes e como evitá-los:  
-
-#### 1. Ignorar custos ocultos 
-Você sabe exatamente quanto gasta com taxas de pagamento, embalagens, impostos ou até mesmo com a energia do seu estabelecimento? Esses custos precisam estar no seu preço, senão seu lucro vai por água abaixo.
-
-#### 2. Se basear apenas na concorrência  
-O preço do concorrente pode ser uma referência, mas cuidado! Ele pode ter uma estrutura de custos totalmente diferente da sua. O que é lucrativo para ele pode não ser para você.
-
-#### 3. Usar um markup errado
-No segmento de **{businessSegment}**, por exemplo, **o markup ideal é entre <span style="background-color: #FF4E4E99; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>{segmentMargins.low}%</strong></span> e <span style="background-color: #2FAE9499; padding: 0.10rem 0.5rem; border-radius: 4px;"><strong>{segmentMargins.high}%</strong></span> 
-do custo base**. Então, se você estiver aplicando algo muito fora disso, pode estar comprometendo sua lucratividade sem perceber. Será que as margens de lucro que você pratica estão dentro do que o mercado recomenda?  
-
-Nós da Kyte criamos o nosso sistema e esta calculadora justamente para garantir maiores taxas de sucesso para o seu negócio!
-<br>
-`}
-        />
-      </div>
+    <div class="block md:hidden">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Vamos avançar com o crescimento do seu negócio!"
+        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="pos"
+      />
     </div>
+  </div>
+</Section>
+<Section>
+  <Heading2 color="kyte-gray" align="left-mobile"
+    >Análise da Concorrência: Não Fique para Trás!</Heading2
+  >
+  <PriceChart client:only="react" />
+  <div class="grid justify-items-center">
+    <Content
+      tag="Concorrência"
+      title="Entenda o mercado"
+      description={`Como você pode ver no gráfico acima, preços para produtos como <strong style="color: #363F4D;">{productName}</strong> costumam variar bastante.
+Já parou para pensar que o preço que você colocar nele pode ser a diferença entre lucrar bem ou apenas "se virar"?
+<br>
+<span style="background-color: #2DD1AC99; padding: 0.10rem 0.5rem; border-radius: 4px;">
+<strong>A margem de lucro é o coração do seu negócio.</strong></span>
+Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas. Se for alta demais, pode afastar clientes. E aí, como encontrar o equilíbrio?
+`}
+      imageSrc="/images/hand-notes.svg"
+      imageAlt="Your image alt text"
+      imageSize="small"
+      data={{
+        productName,
+        idealPrice,
+        baseCost,
+        profitMargin,
+        marketLowestPrice,
+        marketMediumPrice,
+        marketHighestPrice,
+      }}
+    />
+  </div>
+  <div
+    class="border-2 overflow-hidden rounded-md my-3 mx-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
+  >
+    <ProductList client:load />
+  </div>
+  <div class="grid justify-items-center">
+    <Content
+      reversed={true}
+      tag="Entenda"
+      title="Como chegamos nestes concorrentes?"
+      description={`  
+Para garantir que as informações sobre os concorrentes sejam justas e realistas, utilizamos um método estatístico chamado **Intervalo Interquartil (IQR)**. Ele ajuda a identificar e remover valores extremos (outliers) que poderiam distorcer a análise. Funciona assim: calculamos os preços que estão dentro de uma faixa considerada normal (entre 25% e 75% dos valores) e descartamos aqueles que estão muito acima ou abaixo dessa média. Dessa forma, os concorrentes que mostramos refletem o mercado de maneira mais precisa e confiável para você!`}
+      imageSrc="/images/statistics.svg"
+      imageAlt="Your image alt text"
+      imageSize="small"
+      data={{
+        productName,
+        idealPrice,
+        baseCost,
+        profitMargin,
+        marketLowestPrice,
+        marketMediumPrice,
+        marketHighestPrice,
+      }}
+    />
   </div>
 </Section>
 <Features />
 <Section>
+  <Heading2 color="kyte-gray" align="left-mobile"
+    >Por que escolher o Kyte?</Heading2
+  >
   <div
     class="w-full max-w-[1080px] mx-auto px-8 space-y-8 my-24 border-2 border-green03 rounded-xl"
   >

@@ -115,12 +115,5 @@ module.exports = withMT({
     },
     plugins: [
         require('@tailwindcss/typography'),
-        function ({ addVariant, e }) {
-            addVariant('safari', ({ modifySelectors, separator }) => {
-                modifySelectors(({ className }) => {
-                    return `@media not all and (min-resolution: 0.001dpcm) { @supports (-webkit-appearance: none) { .${e(`safari${separator}${className}`)} } }`;
-                });
-            });
-        },
     ],
 });
