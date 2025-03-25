@@ -132,7 +132,6 @@ const parsedFeatures = features.map((feature) => ({
     </div>
 </div>
 <script>
-    // Import marked in the client-side script
     import { marked } from "marked";
 
     function processContent(
@@ -184,7 +183,6 @@ const parsedFeatures = features.map((feature) => ({
         });
     }
 
-    // Event listeners remain the same
     document.addEventListener("DOMContentLoaded", updateDynamicContent);
     window.addEventListener("storage", updateDynamicContent);
 </script>

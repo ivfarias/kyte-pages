@@ -33,6 +33,9 @@ const profitMargin = Number(params.get("profitMargin")?.replace("%", "")) || 0;
 const marketLowestPrice = Number(params.get("marketLowestPrice")) || 0;
 const marketMediumPrice = Number(params.get("marketMediumPrice")) || 0;
 const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
+const recommendedMargin = Number(params.get("recommendedMargin")) || 0;
+const recommendedProfitValue =
+  Number(params.get("recommendedProfitValue")) || 0;
 ---
 
 <Layout title="Kyte | Resultado do Cálculo">
@@ -247,7 +250,7 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
       tag="Estratégia"
       title="Como chegar ao seu preço ideal?"
       description={`  
-Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}.  
+Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}, é importante levar alguns outros pontos em consideração.  
 <br>
 A partir disso, é possível entender tanto se você tem um custo saudável para seu produto, e também se está deixando dinheiro na mesa, ou afastando clientes.
 
@@ -269,6 +272,8 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         marketLowestPrice,
         marketMediumPrice,
         marketHighestPrice,
+        recommendedMargin,
+        recommendedProfitValue,
       }}
     />
   </div>
@@ -315,7 +320,7 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
       description={`Como você pode ver no gráfico acima, preços para produtos como <strong style="color: #363F4D;">{productName}</strong> costumam variar bastante.
 Já parou para pensar que o preço que você colocar nele pode ser a diferença entre lucrar bem ou apenas "se virar"?
 <br>
-<span style="background-color: #2DD1AC99; padding: 0.10rem 0.5rem; border-radius: 4px;">
+<span style="background-color: #2DD1AC99; padding: 0.05rem 0.5rem; border-radius: 4px;">
 <strong>A margem de lucro é o coração do seu negócio.</strong></span>
 Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas. Se for alta demais, pode afastar clientes. E aí, como encontrar o equilíbrio?
 `}
