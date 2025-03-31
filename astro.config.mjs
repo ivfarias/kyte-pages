@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel';
 import tailwind from '@astrojs/tailwind';
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [react(), tailwind()],
   output: 'server',
@@ -13,6 +12,27 @@ export default defineConfig({
       'PUBLIC_',
       'SERPER_API_KEY',
       'MAUTIC_BEARER_TOKEN'
-    ]
+    ],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'material-tailwind': ['@material-tailwind/react'],
+            'apexcharts': ['apexcharts']
+          }
+        }
+      },
+      minify: 'esbuild',
+      cssMinify: true
+    },
+    optimizeDeps: {
+      include: [
+        '@material-tailwind/react',
+        'apexcharts'
+      ]
+    },
+    ssr: {
+      noExternal: ['@material-tailwind/react']
+    }
   }
 });

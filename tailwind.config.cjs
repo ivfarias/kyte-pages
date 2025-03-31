@@ -3,8 +3,9 @@ const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
     content: [
-        "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
-        "*.{js,ts,jsx,tsx,mdx}",
+        "./src/**/*.{astro,html,js,jsx,ts,tsx}",
+        "./node_modules/@material-tailwind/react/components/**/*.{js,jsx,ts,tsx}",
+        "./node_modules/@material-tailwind/react/theme/components/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
         extend: {
@@ -20,7 +21,6 @@ module.exports = withMT({
                 green07: "#DDF7F2",
                 green08: "#E3F6F1",
                 gray01: "#2A323F",
-                gray02: "#363F4D",
                 gray03: "#444E5E",
                 gray04: "#535D6E",
                 gray05: "#808C9E",
@@ -33,26 +33,14 @@ module.exports = withMT({
                 graphik: ['Graphik', 'sans-serif'],
             },
             fontSize: {
-                h1: {
-                    base: '2.25rem', // text-5xl (mobile)
-                    md: '3.75rem',   // text-6xl (desktop)
-                },
-                h2: {
-                    base: '1.875rem', // text-4xl (mobile)
-                    md: '3rem',      // text-5xl (desktop)
-                },
-                h3: {
-                    base: '1.5rem',  // text-3xl (mobile)
-                    md: '2.25rem',   // text-4xl (desktop)
-                },
-                h4: {
-                    base: '1.25rem', // text-2xl (mobile)
-                    md: '1.875rem',  // text-3xl (desktop)
-                },
-                'body-large': ['1.125rem', { lineHeight: '1.5', fontWeight: '400' }], // text-lg
-                'body-medium': ['1rem', { lineHeight: '1.5', fontWeight: '400' }],   // text-base
-                'body-small': ['0.875rem', { lineHeight: '1.6', fontWeight: '400' }], // text-sm
-                'body-extra-large': ['1.250rem', { lineHeight: '1.5', fontWeight: '400' }], // text-xl
+                h1: { base: '2.25rem', md: '3.75rem' },
+                h2: { base: '1.875rem', md: '3rem' },
+                h3: { base: '1.5rem', md: '2.25rem' },
+                h4: { base: '1.25rem', md: '1.875rem' },
+                'body-large': ['1.125rem', { lineHeight: '1.5', fontWeight: '400' }],
+                'body-medium': ['1rem', { lineHeight: '1.5', fontWeight: '400' }],
+                'body-small': ['0.875rem', { lineHeight: '1.6', fontWeight: '400' }],
+                'body-extra-large': ['1.25rem', { lineHeight: '1.5', fontWeight: '400' }],
             },
             typography: ({ theme }) => ({
                 DEFAULT: {
@@ -63,40 +51,33 @@ module.exports = withMT({
                             fontSize: theme("fontSize.h1.md"),
                             lineHeight: "1.3",
                             fontWeight: "400",
-                            color: theme("colors.gray02"),
                         },
                         h2: {
                             fontSize: theme("fontSize.h2.md"),
                             lineHeight: "1.3",
                             fontWeight: "400",
-                            color: theme("colors.gray02"),
                         },
                         h3: {
                             fontSize: theme("fontSize.h3.md"),
                             lineHeight: "1.4",
                             fontWeight: "400",
-                            color: theme("colors.gray02"),
                         },
                         h4: {
                             fontSize: theme("fontSize.h4.md"),
                             lineHeight: "1.4",
                             fontWeight: "400",
-                            color: theme("colors.gray02"),
                         },
                         p: {
                             fontSize: theme("fontSize.body-extra-large[0]"),
                             lineHeight: theme("fontSize.body-extra-large[1].lineHeight"),
                             fontWeight: theme("fontSize.body-extra-large[1].fontWeight"),
-                            color: theme("colors.gray02"),
                         },
                         li: {
-                            fontSize: theme("fontSize.body-extra-large[0]"), // ✅ Ensure list items match body size
+                            fontSize: theme("fontSize.body-extra-large[0]"),
                             lineHeight: theme("fontSize.body-extra-large[1].lineHeight"),
                             fontWeight: theme("fontSize.body-extra-large[1].fontWeight"),
-                            color: theme("colors.gray02"),
                         },
                         strong: {
-                            color: theme("colors.gray02"),
                             fontWeight: "700",
                         },
                         a: {
@@ -113,7 +94,5 @@ module.exports = withMT({
             }),
         },
     },
-    plugins: [
-        require('@tailwindcss/typography'),
-    ],
+    plugins: [require('@tailwindcss/typography')],
 });

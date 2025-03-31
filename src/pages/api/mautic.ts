@@ -2,15 +2,17 @@ import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request }) => {
     const MAUTIC_URL = 'https://crm.kyte.is/';
-    const BEARER_TOKEN = import.meta.env.PUBLIC_MAUTIC_BEARER_TOKEN;
+    const USERNAME = import.meta.env.PUBLIC_MAUTIC_USERNAME;
+    const PASSWORD = import.meta.env.PUBLIC_MAUTIC_PASSWORD;
 
     try {
         const contactData = await request.json();
+        const basicAuth = btoa(`${USERNAME}:${PASSWORD}`);
 
         const response = await fetch(`${MAUTIC_URL}api/contacts/new`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${BEARER_TOKEN}`,
+                'Authorization': `Basic ${basicAuth}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(contactData)

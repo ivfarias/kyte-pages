@@ -31,7 +31,6 @@ export default function PriceChart() {
             name: "Preço",
             data: priceData.map((point) => point.value),
         }],
-
         options: {
             chart: {
                 toolbar: { show: false },
@@ -42,17 +41,6 @@ export default function PriceChart() {
                     enabled: true
                 }
             },
-            responsive: [{
-                breakpoint: 640,
-                options: {
-                    chart: {
-                        width: '100%'
-                    },
-                    xaxis: {
-                        offsetX: 20
-                    }
-                }
-            }],
             fill: {
                 type: 'solid',
                 colors: priceData.map(point => point.color),
@@ -64,19 +52,12 @@ export default function PriceChart() {
             },
             markers: {
                 size: 6,
-                colors: priceData.map(point => point.color), // Use the point colors instead of a single color
+                colors: priceData.map(point => point.color),
                 strokeWidth: 0,
                 hover: {
                     size: 8,
                     sizeOffset: 3
                 },
-                discrete: priceData.map((point, index) => ({
-                    seriesIndex: 0,
-                    dataPointIndex: index,
-                    fillColor: point.color,
-                    strokeColor: point.color,
-                    size: 6,
-                }))
             },
             animations: {
                 enabled: true,
@@ -116,10 +97,7 @@ export default function PriceChart() {
                     text: 'Preço',
                     rotate: -90,
                     offsetX: -1,
-                    margin: {
-                        top: 20,
-                        bottom: 25
-                    },
+                    margin: { top: 20, bottom: 25 },
                     style: {
                         colors: '#363F4D',
                         fontSize: 'text-md',
@@ -142,9 +120,9 @@ export default function PriceChart() {
                 custom: ({ series, seriesIndex, dataPointIndex }: { series: number[][]; seriesIndex: number; dataPointIndex: number }) => {
                     const point = priceData[dataPointIndex];
                     return `<div style='background: ${point.color}99; padding: 8px; border-radius: 6px 6px 6px 0; color: white;'>
-                        <strong>${point.label}</strong><br />
-                        R$ ${series[seriesIndex][dataPointIndex].toFixed(2)}
-                    </div>`;
+            <strong>${point.label}</strong><br />
+            R$ ${series[seriesIndex][dataPointIndex].toFixed(2)}
+          </div>`;
                 }
             },
         },
@@ -152,12 +130,8 @@ export default function PriceChart() {
 
     return (
         <div className="w-full bg-white p-6 rounded-lg">
-            <div className="flex items-center gap-4 mb-4">
-            </div>
             <div className="w-full max-w-[640px] mx-auto border border-[#CAD6DA] rounded-xl p-6">
-                <div className="w-full">
-                    <Chart {...chartConfig as any} type="line" />
-                </div>
+                <Chart {...chartConfig as any} type="line" />
             </div>
         </div>
     );

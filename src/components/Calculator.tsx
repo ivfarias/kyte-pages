@@ -3,7 +3,11 @@
 import type React from "react";
 import Text from "./ui/Text";
 import { useState, useEffect } from "react";
-import { Card, Input, Button, Select, Option, Tooltip } from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react/components/Card";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Select, Option } from "@material-tailwind/react/components/Select";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { getMarketPrices } from "../api/googleShopping";
 import { createMauticContact } from "../api/mautic";
 
@@ -284,6 +288,7 @@ export default function IdealProductPriceCalculator() {
                 await createMauticContact({
                     email: formData.email,
                     productName: formData.productName,
+                    businessSegment: formData.businessSegment,
                     idealPrice,
                     baseCost: formData.baseCost,
                     profitMargin: formData.profitMargin.amount,

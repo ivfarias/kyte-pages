@@ -2,6 +2,7 @@ import axios from 'axios';
 
 interface MauticContact {
   productName: string;
+  businessSegment: string;
   idealPrice: number;
   baseCost: number;
   profitMargin: number;
@@ -17,10 +18,10 @@ export async function createMauticContact(contactData: MauticContact) {
       throw new Error('Email is required for creating a Mautic contact');
     }
 
-    // Transform the data to flatten field names for Mautic
     const mauticData = {
       email: contactData.email,
       productname: contactData.productName,
+      businesssegment: contactData.businessSegment,
       idealprice: contactData.idealPrice,
       basecost: contactData.baseCost,
       profitmargin: contactData.profitMargin,
@@ -31,7 +32,7 @@ export async function createMauticContact(contactData: MauticContact) {
 
     console.log('📤 Sending data to Mautic:', mauticData);
     const response = await axios.post(
-      '/api/mautic',  // Using our local API endpoint
+      '/api/mautic',
       mauticData,
       {
         headers: {
