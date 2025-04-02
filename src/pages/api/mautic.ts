@@ -2,8 +2,8 @@ import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request }) => {
     const MAUTIC_URL = 'https://crm.kyte.is/';
-    const USERNAME = import.meta.env.PUBLIC_MAUTIC_USERNAME;
-    const PASSWORD = import.meta.env.PUBLIC_MAUTIC_PASSWORD;
+    const USERNAME = import.meta.env.MAUTIC_USERNAME;
+    const PASSWORD = import.meta.env.MAUTIC_PASSWORD;
 
     try {
         const contactData = await request.json();
