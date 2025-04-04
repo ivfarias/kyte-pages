@@ -11,6 +11,19 @@ import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { getMarketPrices } from "../api/googleShopping";
 import { createMauticContact } from "../api/mautic";
 
+// Add type declaration for Google Analytics
+declare global {
+    interface Window {
+        gtag: (
+            command: string,
+            action: string,
+            params?: {
+                [key: string]: any;
+            }
+        ) => void;
+    }
+}
+
 type PercentOrValue = {
     type: "percent" | "value";
     amount: number;
@@ -242,6 +255,15 @@ export default function IdealProductPriceCalculator() {
         e.preventDefault();
         const idealPrice = calculateIdealPrice();
         const queryParams = new URLSearchParams();
+
+        // Track the lead generation event in Google Analytics
+        if (typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'generate_lead', {
+                'event_category': 'Calculator',
+                'event_label': formData.productName,
+                'value': idealPrice
+            });
+        }
 
         // Add basic parameters first
         queryParams.append("productName", formData.productName);
