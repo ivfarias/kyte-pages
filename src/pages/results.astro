@@ -76,9 +76,9 @@ const recommendedProfitValue =
               );
 
               let evaluation;
-              if (idealPrice < marketMediumPrice * 0.9) {
+              if (idealPrice < marketMediumPrice * 0.8) {
                 evaluation = { text: "barato", color: "#FF4E4E" };
-              } else if (idealPrice > marketMediumPrice * 1.1) {
+              } else if (idealPrice > marketMediumPrice * 1.2) {
                 evaluation = { text: "caro", color: "#F5A623" };
               } else {
                 evaluation = { text: "ideal", color: "#2FAE94" };
@@ -124,7 +124,7 @@ const recommendedProfitValue =
                     new URLSearchParams(Astro.url.search).get(
                       "marketMediumPrice",
                     ) || "0",
-                  ) * 0.85
+                  ) * 0.8
                 ).toFixed(2)
               }
               {" "}
@@ -135,19 +135,22 @@ const recommendedProfitValue =
                     new URLSearchParams(Astro.url.search).get(
                       "marketMediumPrice",
                     ) || "0",
-                  ) * 1.15
+                  ) * 1.2
                 ).toFixed(2)
               }
             </span>
             .
           </Text>
           <Text size="large" color="kyte-gray" align="left-all">
-            <span style={{ fontWeight: 600 }}
-              >Quer ter mais lucro nesse produto?</span
-            > Recomendamos para você o <span style={{ fontWeight: 600 }}
-              >Ecossistema Multicanal do Kyte</span
-            >, que são ferramentas simples para você vender na loja, na rua ou
-            nas redes sociais. Tudo ao mesmo tempo.
+            <span style={{ fontWeight: 600 }}>
+              Quer ter mais lucro nesse produto?</span
+            >
+            <br />
+            <br />
+            Recomendamos o Kyte, <span style={{ fontWeight: 600 }}
+              >uma plataforma de gestão para pequenos comércios</span
+            >, muito fácil de usar (inclusive no celular), que vai te dar o
+            controle necessário para você desenvolver o seu negócio.
           </Text>
           <div class="hidden md:block">
             <RedirectCheckout
@@ -310,6 +313,75 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
 </Section>
 <Section>
   <Heading2 color="kyte-gray" align="left-mobile"
+    >Conheça os preços e produtos concorrentes no mercado</Heading2
+  >
+  <div class="flex justify-center my-8">
+    <img
+      src="/images/arrow5.svg"
+      alt="Arrow pointing down"
+      width="75"
+      height="75"
+    />
+  </div>
+  <div
+    class="border-2 overflow-hidden rounded-md my-3 mx-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.02),0_10px_20px_-2px_rgba(0,0,0,0.02)]"
+  >
+    <ProductList client:load />
+  </div>
+  <div class="grid justify-items-center">
+    <Content
+      reversed={true}
+      tag="Entenda"
+      title="Como chegamos nestes concorrentes?"
+      description={`  
+Para garantir que as informações sobre os concorrentes sejam justas e realistas, utilizamos um método estatístico chamado **Intervalo Interquartil (IQR)**. Ele ajuda a identificar e remover valores extremos (outliers) que poderiam distorcer a análise. Funciona assim: calculamos os preços que estão dentro de uma faixa considerada normal (entre 25% e 75% dos valores) e descartamos aqueles que estão muito acima ou abaixo dessa média. Dessa forma, os concorrentes que mostramos refletem o mercado de maneira mais precisa e confiável para você!`}
+      imageSrc="/images/statistics.svg"
+      imageAlt="Product statistics list"
+      imageSize="small"
+      data={{
+        productName,
+        idealPrice,
+        baseCost,
+        profitMargin,
+        marketLowestPrice,
+        marketMediumPrice,
+        marketHighestPrice,
+      }}
+    />
+  </div>
+  <div class="justify-self-center w-[90%] md:w-[85%] my-12">
+    <div class="hidden md:block">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Pronto pra vender mais que eles?"
+        content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$3 por dia."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="web"
+      />
+    </div>
+    <div class="block md:hidden">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Pronto pra vender mais que eles?"
+        content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$3 por dia."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="pos"
+      />
+    </div>
+  </div>
+</Section>
+<Section>
+  <Heading2 color="kyte-gray" align="left-mobile"
     >Análise da Concorrência: Não Fique para Trás!</Heading2
   >
   <PriceChart client:only="react" />
@@ -325,32 +397,6 @@ Já parou para pensar que o preço que você colocar nele pode ser a diferença 
 Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas. Se for alta demais, pode afastar clientes. E aí, como encontrar o equilíbrio?
 `}
       imageSrc="/images/hand-notes.svg"
-      imageAlt="Your image alt text"
-      imageSize="small"
-      data={{
-        productName,
-        idealPrice,
-        baseCost,
-        profitMargin,
-        marketLowestPrice,
-        marketMediumPrice,
-        marketHighestPrice,
-      }}
-    />
-  </div>
-  <div
-    class="border-2 overflow-hidden rounded-md my-3 mx-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]"
-  >
-    <ProductList client:load />
-  </div>
-  <div class="grid justify-items-center">
-    <Content
-      reversed={true}
-      tag="Entenda"
-      title="Como chegamos nestes concorrentes?"
-      description={`  
-Para garantir que as informações sobre os concorrentes sejam justas e realistas, utilizamos um método estatístico chamado **Intervalo Interquartil (IQR)**. Ele ajuda a identificar e remover valores extremos (outliers) que poderiam distorcer a análise. Funciona assim: calculamos os preços que estão dentro de uma faixa considerada normal (entre 25% e 75% dos valores) e descartamos aqueles que estão muito acima ou abaixo dessa média. Dessa forma, os concorrentes que mostramos refletem o mercado de maneira mais precisa e confiável para você!`}
-      imageSrc="/images/statistics.svg"
       imageAlt="Your image alt text"
       imageSize="small"
       data={{

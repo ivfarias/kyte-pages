@@ -58,7 +58,7 @@ const BeforeAfterSlider = ({
           alt="Before"
           className="w-full h-full object-cover"
         />
-        <span className="absolute left-4 bottom-4 bg-gray-800/75 text-white px-2 py-1 rounded">
+        <span className="absolute left-4 bottom-4 bg-red-700/75 text-white px-2 py-1 rounded">
           {beforeLabel}
         </span>
       </div>
@@ -75,7 +75,7 @@ const BeforeAfterSlider = ({
           alt="After"
           className="w-full h-full object-cover"
         />
-        <span className="absolute right-4 bottom-4 bg-gray-800/75 text-white px-2 py-1 rounded">
+        <span className="absolute right-4 bottom-4 bg-primary/75 text-white px-2 py-1 rounded">
           {afterLabel}
         </span>
       </div>
@@ -92,7 +92,7 @@ const BeforeAfterSlider = ({
           alt="Before"
           className="w-full h-full object-cover"
         />
-        <span className="absolute left-4 bottom-4 bg-gray-800/75 text-white px-2 py-1 rounded">
+        <span className="absolute left-4 bottom-4 bg-red-600/75 text-white px-2 py-1 rounded">
           {beforeLabel}
         </span>
       </div>

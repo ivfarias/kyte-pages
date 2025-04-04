@@ -10,39 +10,48 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
 
     // Calculate needle position (0 to 180 degrees)
     const calculateNeedlePosition = () => {
-        // Calculate the ranges for each section
-        const idealLowPrice = marketLowestPrice * 0.85;  // 15% below medium price
-        const idealHighPrice = marketMediumPrice * 1.15; // 15% above medium price
+        const idealLowPrice = marketMediumPrice * 0.8;  // 20% below medium price
+        const idealHighPrice = marketMediumPrice * 1.2; // 20% above medium price
 
-        // If price is below the lowest market price (too cheap)
+        // If price is below the ideal low range (too cheap)
         if (idealPrice < idealLowPrice) {
-            const lowestRange = idealLowPrice * 0.5;
-            return Math.max(
+            // Calculate position in the "too cheap" section (0-45 degrees)
+            // Use marketLowestPrice as the minimum boundary
+            const range = idealLowPrice - marketLowestPrice;
+            // Prevent division by zero
+            if (range <= 0) return 0;
+
+            const position = Math.max(
                 0,
-                ((idealPrice - (idealLowPrice - lowestRange)) / lowestRange) * 45
+                ((idealPrice - marketLowestPrice) / range) * 45
             );
+            return position;
         }
 
         // If price is in the ideal range
         if (idealPrice >= idealLowPrice && idealPrice <= idealHighPrice) {
+            // Calculate position in the "ideal" section (45-135 degrees)
             const range = idealHighPrice - idealLowPrice;
+            // Prevent division by zero
+            if (range <= 0) return 90; // Middle of ideal range
+
             const position = ((idealPrice - idealLowPrice) / range) * 90 + 45;
             return position;
         }
 
         // If price is above ideal but below or equal to highest
         if (idealPrice > idealHighPrice && idealPrice <= marketHighestPrice) {
+            // Calculate position in the "too expensive" section (135-180 degrees)
             const range = marketHighestPrice - idealHighPrice;
+            // Prevent division by zero
+            if (range <= 0) return 135;
+
             const position = ((idealPrice - idealHighPrice) / range) * 45 + 135;
             return position;
         }
 
         // If price is above the highest market price
-        const highestRange = marketHighestPrice * 0.5;
-        return Math.min(
-            180,
-            135 + ((idealPrice - marketHighestPrice) / highestRange) * 45
-        );
+        return 180; // Maximum position (far right)
     };
 
     const needleRotation = calculateNeedlePosition();
@@ -79,7 +88,7 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
                                 stroke="#F5A623"
                                 strokeWidth="48"
                             />
-                            
+
                             {/* Needle */}
                             <g transform={`rotate(${needleRotation - 90}, 240, 240)`}>
                                 <line

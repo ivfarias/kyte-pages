@@ -14,17 +14,21 @@ import Text from "./ui/Text";
                     Encontre o preço ideal com base na concorrência
                 </H1>
                 <Text color="kyte-gray" align="left-all" size="large">
-                    Nem tão caro que ninguém compre, nem tão barato que reduza
-                    seus lucros. Nossa calculadora analisa os preços dos seus
-                    concorrentes na internet para te ajudar a definir o melhor
-                    valor de venda.
+                    <strong
+                        >Você vende sem saber se está perdendo dinheiro?</strong
+                    >
+                    <br />
+                    Resolva isso com um clique. Nosso cálculo mostra se seu preço
+                    está barato, ideal ou caro, com base no mercado. Com poucos dados,
+                    você recebe uma análise completa para tomar decisões claras e
+                    lucrar mais.
                 </Text>
                 <!-- BeforeAfter Slider - Hidden on mobile, visible on desktop -->
                 <div class="hidden md:block">
                     <BeforeAfterSlider
                         client:load
-                        beforeImage="/images/beforeImage.webp"
-                        afterImage="/images/afterImage.webp"
+                        beforeImage="/images/womanBefore.webp"
+                        afterImage="/images/womanAfter.webp"
                         beforeLabel="Antes"
                         afterLabel="Depois"
                     />
@@ -32,6 +36,16 @@ import Text from "./ui/Text";
             </div>
 
             <div class="w-full md:w-1/2 justify-items-center">
+                <!-- Arrows - Desktop only -->
+                <div class="hidden md:flex justify-center mb-8">
+                    <img
+                        src="/images/arrows1.svg"
+                        alt="Arrows pointing to calculator"
+                        width="80"
+                        height="80"
+                        class="transform scale-x-[-1]"
+                    />
+                </div>
                 <!-- Calculator - Visible on all screens -->
                 <IdealProductPriceCalculator client:only="react" />
                 <div class="flex flex-row items-center gap-4 mt-6">
@@ -57,8 +71,8 @@ import Text from "./ui/Text";
             <div class="block md:hidden w-full">
                 <BeforeAfterSlider
                     client:load
-                    beforeImage="/images/beforeImage.webp"
-                    afterImage="/images/afterImage.webp"
+                    beforeImage="/images/womanBefore.webp"
+                    afterImage="/images/womanAfter.webp"
                     beforeLabel="Antes"
                     afterLabel="Depois"
                 />

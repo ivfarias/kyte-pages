@@ -88,7 +88,7 @@ export default function Example() {
 
     return (
         <div className="bg-white">
-            <div className="w-full py-8 sm:py-16">
+            <div className="w-full py-8 sm:py-12">
                 <div className="flex flex-col divide-y divide-gray07">
                     {products
                         .sort((a, b) => a.id - b.id)
