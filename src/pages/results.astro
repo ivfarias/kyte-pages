@@ -214,104 +214,6 @@ const recommendedProfitValue =
   </Section>
 </Layout>
 <Section>
-  <Heading2 client:load color="kyte-gray">
-    Qual estratégia você quer neste momento do seu negócio?
-  </Heading2>
-  <div
-    class="bg-white w-full max-w-[1250px] mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-8 px-8 md:px-16"
-  >
-    <Card
-      mainImage="/images/lowestPriceOverlayImage.png"
-      overlayImage="/images/lowestPriceOverlayImage.png"
-      title={`Vender mais rápido: R$ ${parseFloat(
-        new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
-      ).toFixed(2)}`}
-      content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
-      borderColor="#F3A626"
-    />
-    <Card
-      mainImage="/images/mediumPriceOverlayImage.png"
-      overlayImage="/images/mediumPriceOverlayImage.png"
-      title={`Maximizar seus lucros: R$ ${parseFloat(
-        new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
-      ).toFixed(2)}`}
-      content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
-      borderColor="#2DD1AC"
-    />
-    <Card
-      mainImage="/images/highestPriceOverlayImage.png"
-      overlayImage="/images/highestPriceOverlayImage.png"
-      title={`Selecionar melhor seus clientes: R$ ${parseFloat(
-        new URLSearchParams(Astro.url.search).get("marketHighestPrice") || "0",
-      ).toFixed(2)}`}
-      content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
-      borderColor="#547AB8"
-    />
-  </div>
-  <div class="grid justify-items-center">
-    <Content
-      tag="Estratégia"
-      title="Como chegar ao seu preço ideal?"
-      description={`  
-Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}, é importante levar alguns outros pontos em consideração.  
-<br>
-A partir disso, é possível entender tanto se você tem um custo saudável para seu produto, e também se está deixando dinheiro na mesa, ou afastando clientes.
-
-- **Posicionamento:** Você quer ser o mais barato, ficar na média ou se destacar como premium?  
-- **Custos:** Seus custos estão cobertos? Lembre-se de incluir tudo, desde matéria-prima até taxas e impostos.  
-- **Diferencial:** Seus clientes estão dispostos a pagar mais por um produto ou serviço de qualidade superior?  
-
-> Precificar bem não é ser o mais barato, mas sim ter um preço justo que reflita o valor do seu produto e a realidade do seu negócio. E nós estamos aqui para te ajudar nisso!
-
-`}
-      imageSrc="/images/Catalogo-beta-ilustra.svg"
-      imageAlt="Your image alt text"
-      imageSize="small"
-      data={{
-        productName,
-        idealPrice,
-        baseCost,
-        profitMargin,
-        marketLowestPrice,
-        marketMediumPrice,
-        marketHighestPrice,
-        recommendedMargin,
-        recommendedProfitValue,
-      }}
-    />
-  </div>
-  <div class="justify-self-center w-[90%] md:w-[85%] my-12">
-    <div class="hidden md:block">
-      <CallToAction
-        type="email"
-        variant="primary"
-        heading="Vamos avançar com o crescimento do seu negócio!"
-        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-        buttonText="Quero começar"
-        lang="pt"
-        plan="prime"
-        recurrence="monthly"
-        flow="subscription"
-        app="web"
-      />
-    </div>
-    <div class="block md:hidden">
-      <CallToAction
-        type="email"
-        variant="primary"
-        heading="Vamos avançar com o crescimento do seu negócio!"
-        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-        buttonText="Quero começar"
-        lang="pt"
-        plan="prime"
-        recurrence="monthly"
-        flow="subscription"
-        app="pos"
-      />
-    </div>
-  </div>
-</Section>
-<Section>
   <Heading2 color="kyte-gray" align="left-mobile"
     >Conheça os preços e produtos concorrentes no mercado</Heading2
   >
@@ -410,6 +312,104 @@ Se ela for muito baixa, você trabalha demais só para conseguir pagar as contas
         marketHighestPrice,
       }}
     />
+  </div>
+</Section>
+<Section>
+  <Heading2 client:load color="kyte-gray">
+    Qual estratégia você quer neste momento do seu negócio?
+  </Heading2>
+  <div
+    class="bg-white w-full max-w-[1250px] mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-8 px-8 md:px-16"
+  >
+    <Card
+      mainImage="/images/lowestPriceOverlayImage.png"
+      overlayImage="/images/lowestPriceOverlayImage.png"
+      title={`Vender mais rápido: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketLowestPrice") || "0",
+      ).toFixed(2)}`}
+      content="Preço mais atrativo que seus concorrentes, mas não o mais eficiente em termos de caixa. Ideal para quem quer fazer queima de estoque e giro rápido."
+      borderColor="#F3A626"
+    />
+    <Card
+      mainImage="/images/mediumPriceOverlayImage.png"
+      overlayImage="/images/mediumPriceOverlayImage.png"
+      title={`Maximizar seus lucros: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
+      ).toFixed(2)}`}
+      content="Vender com estratégia e eficiência, pensando no fluxo de caixa da sua loja e no seu lucro. Ideal para ter mais saúde financeira."
+      borderColor="#2DD1AC"
+    />
+    <Card
+      mainImage="/images/highestPriceOverlayImage.png"
+      overlayImage="/images/highestPriceOverlayImage.png"
+      title={`Selecionar melhor seus clientes: R$ ${parseFloat(
+        new URLSearchParams(Astro.url.search).get("marketHighestPrice") || "0",
+      ).toFixed(2)}`}
+      content="Valorizar a qualidade dos seus produtos e os diferenciais. Ideal para itens de alto padrão e poucos concorrentes."
+      borderColor="#547AB8"
+    />
+  </div>
+  <div class="grid justify-items-center">
+    <Content
+      tag="Estratégia"
+      title="Como chegar ao seu preço ideal?"
+      description={`  
+Pode ser que você esteja pensando que vender **{productName} por R$ {idealPrice.toFixed(2)}** seja competitivo, mas com um preço de custo de **R$ {baseCost.toFixed(2)}**, e uma margem que deveria estar por volta de {recommendedMargin}% ou seja R$ {recommendedProfitValue.toFixed(2)}, é importante levar alguns outros pontos em consideração.  
+<br>
+A partir disso, é possível entender tanto se você tem um custo saudável para seu produto, e também se está deixando dinheiro na mesa, ou afastando clientes.
+
+- **Posicionamento:** Você quer ser o mais barato, ficar na média ou se destacar como premium?  
+- **Custos:** Seus custos estão cobertos? Lembre-se de incluir tudo, desde matéria-prima até taxas e impostos.  
+- **Diferencial:** Seus clientes estão dispostos a pagar mais por um produto ou serviço de qualidade superior?  
+
+> Precificar bem não é ser o mais barato, mas sim ter um preço justo que reflita o valor do seu produto e a realidade do seu negócio. E nós estamos aqui para te ajudar nisso!
+
+`}
+      imageSrc="/images/Catalogo-beta-ilustra.svg"
+      imageAlt="Your image alt text"
+      imageSize="small"
+      data={{
+        productName,
+        idealPrice,
+        baseCost,
+        profitMargin,
+        marketLowestPrice,
+        marketMediumPrice,
+        marketHighestPrice,
+        recommendedMargin,
+        recommendedProfitValue,
+      }}
+    />
+  </div>
+  <div class="justify-self-center w-[90%] md:w-[85%] my-12">
+    <div class="hidden md:block">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Vamos avançar com o crescimento do seu negócio!"
+        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="web"
+      />
+    </div>
+    <div class="block md:hidden">
+      <CallToAction
+        type="email"
+        variant="primary"
+        heading="Vamos avançar com o crescimento do seu negócio!"
+        content="Acesse o Kyte por menos de R$3 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        buttonText="Quero começar"
+        lang="pt"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
+        app="pos"
+      />
+    </div>
   </div>
 </Section>
 <Features />
