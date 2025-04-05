@@ -1,4 +1,5 @@
 import Chart from "react-apexcharts";
+import { useEffect, useState } from "react";
 
 type PricePoint = {
     label: string;
@@ -7,6 +8,23 @@ type PricePoint = {
 };
 
 export default function PriceChart() {
+    const [isMobile, setIsMobile] = useState(false);
+    
+    useEffect(() => {
+        const checkIfMobile = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+        
+        // Check initially
+        checkIfMobile();
+        
+        // Add resize listener
+        window.addEventListener('resize', checkIfMobile);
+        
+        // Cleanup
+        return () => window.removeEventListener('resize', checkIfMobile);
+    }, []);
+
     const params = new URLSearchParams(window.location.search);
 
     const idealPrice = parseFloat(params.get("idealPrice") || "0");
@@ -87,7 +105,7 @@ export default function PriceChart() {
                     align: 'center'
                 },
                 offsetY: 20,
-                offsetX: 75,
+                offsetX: isMobile ? 0 : 75,
                 position: 'bottom',
                 axisBorder: { show: true },
                 axisTicks: { show: false },
@@ -129,8 +147,8 @@ export default function PriceChart() {
     };
 
     return (
-        <div className="w-full bg-white p-6 rounded-lg">
-            <div className="w-full max-w-[640px] mx-auto border border-[#CAD6DA] rounded-xl p-6">
+        <div className="w-full bg-white p-1 rounded-lg">
+            <div className="w-full sm:max-w-[640px] mx-auto border border-[#CAD6DA] rounded-xl p-6">
                 <Chart {...chartConfig as any} type="line" />
             </div>
         </div>

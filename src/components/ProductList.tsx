@@ -88,7 +88,7 @@ export default function Example() {
 
     return (
         <div className="bg-white">
-            <div className="w-full py-8 sm:py-12">
+            <div className="w-full py-2 sm:py-4">
                 <div className="flex flex-col divide-y divide-gray07">
                     {products
                         .sort((a, b) => a.id - b.id)
@@ -98,7 +98,7 @@ export default function Example() {
                                 <a
                                     key={product.id}
                                     href={product.href}
-                                    className="flex items-start space-x-3 p-3 sm:space-x-4 sm:p-4 hover:bg-gray-50"
+                                    className="flex items-start space-x-3 p-2 sm:space-x-4 sm:p-4 hover:bg-gray-50"
                                 >
                                     <div className="flex-shrink-0">
                                         <img
@@ -112,27 +112,45 @@ export default function Example() {
                                             <div className="min-w-0 pr-2 flex flex-col items-start">
                                                 <Text
                                                     color="kyte-gray"
-                                                    size="small"
+                                                    size="medium"
                                                     align="left-all"
-                                                    className="font-graphik-medium font-medium break-words"
+                                                    className="font-medium break-words sm:hidden"
                                                 >
                                                     {product.name}
                                                 </Text>
-                                                <span
-                                                    className="inline-block px-2 py-1 rounded-md text-xs sm:text-sm mt-2"
-                                                    style={{
-                                                        color: category.color,
-                                                        backgroundColor: `${category.color}1A`,
-                                                    }}
+                                                <Text
+                                                    color="kyte-gray"
+                                                    size="large"
+                                                    align="left-all"
+                                                    className="font-medium break-words hidden sm:block"
                                                 >
-                                                    {category.text}
-                                                </span>
+                                                    {product.name}
+                                                </Text>
+                                                <div className="flex items-center justify-between w-full mt-2">
+                                                    <span
+                                                        className="inline-block px-2 py-1 rounded-md text-xs sm:text-sm"
+                                                        style={{
+                                                            color: category.color,
+                                                            backgroundColor: `${category.color}1A`,
+                                                        }}
+                                                    >
+                                                        {category.text}
+                                                    </span>
+                                                    <Text
+                                                        color="kyte-gray"
+                                                        size="medium"
+                                                        align="left-all"
+                                                        className="font-graphik-regular sm:hidden"
+                                                    >
+                                                        {product.price}
+                                                    </Text>
+                                                </div>
                                             </div>
                                             <Text
                                                 color="kyte-gray"
-                                                size="small"
+                                                size="large"
                                                 align="left-all"
-                                                className="font-graphik-regular mt-2 sm:mt-0 self-end sm:self-start"
+                                                className="font-graphik-regular hidden sm:block self-start"
                                             >
                                                 {product.price}
                                             </Text>

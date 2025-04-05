@@ -27,7 +27,7 @@ const alignMap = {
 export default function h2({ children, color = "kyte-gray", align = "center-all" }: H4Props) {
     return (
         <h4
-            className={`text-xl md:text-2xl font-semibold mt-4 mb-3 leading-normal ${alignMap[align]}`}
+            className={`text-xl md:text-3xl font-semibold mt-4 mb-3 leading-normal ${alignMap[align]}`}
             style={{ color: colorMap[color] }}
         >
             {children}

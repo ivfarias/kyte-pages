@@ -36,7 +36,7 @@ export default function h2({
     return (
         <h2
             id={id}
-            className={`text-3xl md:text-4xl font-medium mt-4 mb-3 leading-relaxed max-w-xl mx-auto ${alignMap[align]} ${className || ''}`}
+            className={`text-3xl md:text-5xl font-medium leading-normal my-4 md:my-8 max-w-xl mx-auto ${alignMap[align]} ${className || ''}`}
             style={{ color: colorMap[color] }}
         >
             {children}

@@ -87,7 +87,7 @@ const BulkCalculator: React.FC<BulkCalculatorProps> = ({
     };
 
     return (
-        <div className="w-full max-w-3xl mx-auto">
+        <div className="w-full max-w-3xl mx-auto pt-6">
             <Heading3 color="kyte-gray" align="left-mobile">Veja quanto desconto você pode dar sem perder lucro
             </Heading3>
             <Text size="extra-large" color="kyte-gray" align="left-mobile">Preencha os campos abaixo. O resultado aparece na hora.</Text>

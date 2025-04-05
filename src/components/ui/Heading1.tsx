@@ -27,7 +27,7 @@ const alignMap = {
 export default function H1({ children, color = "kyte-gray", align = "center-all" }: H1Props) {
     return (
         <h1
-            className={`text-5xl leading-[1.2] md:leading-[1.2] md:text-6xl font-medium mt-8 mb-6 max-w-xl mx-auto ${alignMap[align]}`}
+            className={`text-4xl leading-[1.2] md:leading-[1.2] md:text-6xl font-medium mt-8 mb-6 max-w-xl mx-auto ${alignMap[align]}`}
             style={{ color: colorMap[color] }}
         >
             {children}

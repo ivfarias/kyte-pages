@@ -15,7 +15,7 @@ const {
 } = Astro.props;
 ---
 
-<section class="py-20 container mx-auto max-w-[1080px]">
+<section class="py-8 md:py-16 container mx-auto max-w-[1080px] px-4 md:px-0">
     <div
         class="mb-4 shadow-sm px-4 py-2 flex bg-gray02 flex-wrap items-center justify-between gap-x-2 rounded-md"
     >
@@ -31,11 +31,7 @@ const {
         </a>
         <div class="flex items-center gap-x-2">
             <div class="hidden md:block">
-                <Button
-                    variant="primary"
-                    type="button"
-                    href={buttonUrl}
-                >
+                <Button variant="primary" type="button" href={buttonUrl}>
                     {buttonText}
                 </Button>
             </div>
