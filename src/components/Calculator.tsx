@@ -11,16 +11,9 @@ import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { getMarketPrices } from "../api/googleShopping";
 import { createMauticContact } from "../api/mautic";
 
-// Add type declaration for Google Analytics
 declare global {
     interface Window {
-        gtag: (
-            command: string,
-            action: string,
-            params?: {
-                [key: string]: any;
-            }
-        ) => void;
+        dataLayer: any[];
     }
 }
 
@@ -106,6 +99,7 @@ const BUSINESS_SEGMENTS: {
 
 export default function IdealProductPriceCalculator() {
     const [formData, setFormData] = useState<FormData>(initialFormData);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getSegmentMargins = (segment: string) => {
         for (const category of Object.values(BUSINESS_SEGMENTS)) {
@@ -174,8 +168,9 @@ export default function IdealProductPriceCalculator() {
     }, []);
 
     useEffect(() => {
+        const extendedData = calculateExtendedData();
         localStorage.setItem("idealPriceCalculatorData", JSON.stringify(calculateExtendedData()));
-    }, [formData]);
+    }, [formData.productName, formData.baseCost, formData.profitMargin, formData.email, formData.businessSegment, formData.marketLowestPrice, formData.marketMediumPrice, formData.marketHighestPrice]);
 
     const formatValue = (value: string, type: "percent" | "value"): string => {
         const digits = value.replace(/\D/g, "");
@@ -253,15 +248,49 @@ export default function IdealProductPriceCalculator() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!formData.productName || !formData.email || !formData.businessSegment) {
+            alert("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            alert("Por favor, insira um email válido.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
         const idealPrice = calculateIdealPrice();
         const queryParams = new URLSearchParams();
 
-        // Track the lead generation event in Google Analytics
-        if (typeof window !== 'undefined' && window.gtag) {
-            window.gtag('event', 'generate_lead', {
-                'event_category': 'Calculator',
-                'event_label': formData.productName,
-                'value': idealPrice
+        const getTrackingParam = (paramName: string) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromUrl = urlParams.get(paramName);
+            if (fromUrl) return fromUrl;
+
+            const fromStorage = localStorage.getItem(paramName);
+            if (fromStorage) return fromStorage;
+
+            const cookies = document.cookie.split(';').map(c => c.trim());
+            const cookiePrefix = `${paramName}=`;
+            const cookie = cookies.find(c => c.startsWith(cookiePrefix));
+            return cookie ? cookie.substring(cookiePrefix.length) : '';
+        };
+
+        if (typeof window !== 'undefined') {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'generate_lead',
+                event_id: Date.now(),
+                value: idealPrice,
+                currency: 'BRL',
+                product_name: formData.productName,
+                business_segment: formData.businessSegment,
+                email: formData.email,
+                gclid: getTrackingParam('gclid'),
+                gbraid: getTrackingParam('gbraid'),
+                gl: getTrackingParam('_gl')
             });
         }
 
@@ -298,7 +327,6 @@ export default function IdealProductPriceCalculator() {
 
                 localStorage.setItem("marketProductsData", JSON.stringify(newMarketData));
 
-                // Fix: Ensure market prices are added to query params with numeric values
                 const lowestPrice = parsePrice(sortedProducts[0].price);
                 const mediumPrice = parsePrice(sortedProducts[1].price);
                 const highestPrice = parsePrice(sortedProducts[2].price);
@@ -307,22 +335,30 @@ export default function IdealProductPriceCalculator() {
                 queryParams.set("marketMediumPrice", mediumPrice.toString());
                 queryParams.set("marketHighestPrice", highestPrice.toString());
 
-                await createMauticContact({
-                    email: formData.email,
-                    productName: formData.productName,
-                    businessSegment: formData.businessSegment,
-                    idealPrice,
-                    baseCost: formData.baseCost,
-                    profitMargin: formData.profitMargin.amount,
-                    marketLowestPrice: lowestPrice,
-                    marketMediumPrice: mediumPrice,
-                    marketHighestPrice: highestPrice
-                });
+                try {
+                    await createMauticContact({
+                        email: formData.email,
+                        productName: formData.productName,
+                        businessSegment: formData.businessSegment,
+                        idealPrice,
+                        baseCost: formData.baseCost,
+                        profitMargin: formData.profitMargin.amount,
+                        marketLowestPrice: lowestPrice,
+                        marketMediumPrice: mediumPrice,
+                        marketHighestPrice: highestPrice
+                    });
+                } catch (mauticError) {
+                    console.error("Error creating Mautic contact:", mauticError);
+                }
+            } else {
+                console.warn("No market prices found for the product");
             }
 
             window.location.href = `/results?${queryParams.toString()}`;
         } catch (error) {
             console.error("Error in form submission:", error);
+        } finally {
+            // Ensure we redirect even if there are errors
             window.location.href = `/results?${queryParams.toString()}`;
         }
     };
@@ -359,17 +395,22 @@ export default function IdealProductPriceCalculator() {
                                 onChange={handleInputChange}
                                 color="teal"
                                 crossOrigin="anonymous"
+                                required
+                                aria-required="true"
+                                aria-describedby="product-name-tooltip"
                             />
                             <Tooltip
                                 content="Digite o nome completo do item com especificações. Quanto mais detalhes, melhor os resultados."
                                 placement="top"
                                 className="bg-white text-gray02 p-2 shadow-lg rounded"
                                 trigger="hover click"
+                                id="product-name-tooltip"
                             >
                                 <button
                                     type="button"
                                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
                                     onClick={(e) => e.preventDefault()}
+                                    aria-label="Informações sobre o nome do produto"
                                 >
                                     <img
                                         src="/images/info-icon.svg"
@@ -403,11 +444,13 @@ export default function IdealProductPriceCalculator() {
                                 placement="top"
                                 className="bg-white text-gray02 p-2 shadow-lg rounded"
                                 trigger="hover click"
+                                id="base-cost-tooltip"
                             >
                                 <button
                                     type="button"
                                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
                                     onClick={(e) => e.preventDefault()}
+                                    aria-label="Informações sobre o preço de custo"
                                 >
                                     <img
                                         src="/images/info-icon.svg"
@@ -534,8 +577,9 @@ export default function IdealProductPriceCalculator() {
                     className="w-full h-11 mt-6 bg-green03 text-white font-bold py-2 px-4 rounded hover:bg-opacity-80"
                     onPointerEnterCapture={() => { }}
                     onPointerLeaveCapture={() => { }}
+                    disabled={isSubmitting}
                 >
-                    Ver Resultado
+                    {isSubmitting ? "Processando..." : "Ver Resultado"}
                 </Button>
             </form>
         </Card>

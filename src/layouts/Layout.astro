@@ -1,10 +1,10 @@
 ---
 export interface Props {
 	title: string;
-	variant?: 'white' | 'gray09';
+	variant?: "white" | "gray09";
 }
 
-const { title, variant = 'gray09' } = Astro.props;
+const { title, variant = "gray09" } = Astro.props;
 ---
 
 <!doctype html>
@@ -36,15 +36,53 @@ const { title, variant = 'gray09' } = Astro.props;
 		</script>
 		<!-- End Google Tag Manager -->
 
+		<!-- _gl Parameter Handler -->
+		<script>
+			function storeGlParam(value: string) {
+				if (!value) return;
+
+				try {
+					localStorage.setItem("_gl", value);
+				} catch (e) {
+					console.warn("Could not store in localStorage:", e);
+				}
+
+				const expiryDate = new Date();
+				expiryDate.setDate(expiryDate.getDate() + 30);
+				document.cookie = `_gl=${value};expires=${expiryDate.toUTCString()};path=/;SameSite=Lax`;
+			}
+
+			(function () {
+				const urlParams = new URLSearchParams(window.location.search);
+				const glParam = urlParams.get("_gl");
+
+				if (glParam) {
+					storeGlParam(glParam);
+				}
+			})();
+
+			document.addEventListener("DOMContentLoaded", function () {
+				const urlParams = new URLSearchParams(window.location.search);
+				const glParam = urlParams.get("_gl");
+
+				if (glParam) {
+					storeGlParam(glParam);
+				}
+			});
+		</script>
+		<!-- End _gl Parameter Handler -->
+
 		<title>{title}</title>
 	</head>
-	<body class:list={[
-		"font-graphik m-0",
-		{
-			'bg-white': variant === 'white',
-			'bg-gray09': variant === 'gray09'
-		}
-	]}>
+	<body
+		class:list={[
+			"font-graphik m-0",
+			{
+				"bg-white": variant === "white",
+				"bg-gray09": variant === "gray09",
+			},
+		]}
+	>
 		<slot />
 		<script
 			defer
