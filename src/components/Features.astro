@@ -2,8 +2,6 @@
 import CallToAction from "./CallToAction.astro";
 import FeatureCard from "./FeatureCard.astro";
 import Heading3 from "./ui/Heading3";
-import RedirectButton from "./ui/RedirectCheckout.tsx";
-import Text from "./ui/Text";
 
 const features = [
     {
@@ -82,42 +80,6 @@ const features = [
                         />
                     ))
                 }
-            </div>
-            <div class="my-12 py-12 justify-items-center">
-                <Heading3 color="kyte-gray" align="center-all">
-                    Para vender mais e melhor é simples e custa menos de R$3 por
-                    dia.
-                </Heading3>
-
-                {/* Desktop version */}
-                <div class="hidden md:block">
-                    <RedirectButton
-                        buttonText="Começar agora"
-                        redirectUrl="https://kyteapp.com/loading"
-                        os="lp"
-                        flow="subscription"
-                        app="web"
-                        lang="pt"
-                        recurrence="monthly"
-                        plan="prime"
-                        client:only="react"
-                    />
-                </div>
-
-                {/* Mobile version */}
-                <div class="md:hidden">
-                    <RedirectButton
-                        buttonText="Começar agora"
-                        redirectUrl="https://kyteapp.com/loading"
-                        os="lp"
-                        flow="subscription"
-                        app="pos"
-                        lang="pt"
-                        recurrence="monthly"
-                        plan="prime"
-                        client:only="react"
-                    />
-                </div>
             </div>
         </div>
     </div>
