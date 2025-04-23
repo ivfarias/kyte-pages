@@ -1,0 +1,607 @@
+---
+import Heading2 from "../components/ui/Heading2.tsx";
+import Heading3 from "../components/ui/Heading3.tsx";
+import Heading4 from "../components/ui/Heading4.tsx";
+import Text from "../components/ui/Text.tsx";
+
+import RedirectButton from "./ui/RedirectCheckout";
+
+import CheckIcon from "/images/check.svg";
+---
+
+<div class="p-4">
+    <div class="max-w-5xl max-lg:max-w-2xl mx-auto">
+        <div class="text-center">
+            <Heading2 color="kyte-gray" align="center-all">
+                Todo negócio precisa de um plano
+            </Heading2>
+            <Text color="kyte-gray" size="medium" align="center-all">
+                Todos os planos de assinatura mensal da Kyte não possuem
+                contratos ou custos extras. Assine no boleto, pix ou cartão de
+                crédito.
+            </Text>
+        </div>
+
+        <div
+            class="grid lg:grid-cols-3 sm:grid-cols-2 gap-6 mt-10 max-sm:max-w-sm max-sm:mx-auto"
+        >
+            <div class="border shadow rounded-md p-6">
+                <Heading3 color="kyte-gray" align="left-all"> PRO </Heading3>
+                <Text color="kyte-gray" size="medium" align="left-all">
+                    Ideal para quem está começando e faz tudo pelo celular
+                </Text>
+
+                <div
+                    class="mt-6 flex flex-row items-center justify-items-start"
+                >
+                    <Heading3 color="kyte-gray" align="left-all">
+                        R$39,90
+                    </Heading3>
+                    <Text color="kyte-gray" size="medium" align="left-all">
+                        /por mês
+                    </Text>
+                </div>
+                <div class="mt-6">
+                    <Heading4 color="kyte-gray" align="left-all">
+                        Principais recursos:
+                    </Heading4>
+                    <ul class="mt-6 space-y-4">
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Ponto de venda no celular
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Catálogo online
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Recibos digitais e impressos
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Gestão de gastos
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Controle de estoque
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Controle de fiado
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Fluxo de caixa completo
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Atendimento por e-mail
+                            </Text>
+                        </li>
+                    </ul>
+                    {/* Button for Mobile/Tablet */}
+                    <div class="lg:hidden">
+                        <RedirectButton
+                            buttonText="Assinar o PRO"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="pos"
+                            plan="pro"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                    {/* Button for Desktop */}
+                    <div class="hidden lg:block">
+                        <RedirectButton
+                            buttonText="Assinar o PRO"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="web"
+                            plan="pro"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="border shadow rounded-md p-6">
+                <Heading3 color="kyte-gray" align="left-all"> GROW </Heading3>
+                <Text color="kyte-gray" size="medium" align="left-all">
+                    Para comerciantes que buscam controle total para si e para a
+                    equipe
+                </Text>
+
+                <div class="mt-6 flex flex-row items-center">
+                    <Heading3 color="kyte-gray" align="left-all">
+                        R$59,90
+                    </Heading3>
+                    <Text color="kyte-gray" size="medium" align="left-all">
+                        /por mês
+                    </Text>
+                </div>
+                <div class="mt-6">
+                    <Heading4 color="kyte-gray" align="left-all">
+                        Todos os recursos do PRO e mais:
+                    </Heading4>
+                    <ul class="mt-6 space-y-4">
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Versão do Kyte para Computador
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                IA para criar descrições de produtos
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Importação de produtos em massa
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Edição e exclusão em massa de produtos e
+                                categorias
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Aplicação de desconto em massa
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Gestão de fornecedores
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Gestão de gastos com recorrência
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                10 contas de usuários / vendedores
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Atendimento em tempo real via chat
+                            </Text>
+                        </li>
+                    </ul>
+                    {/* Button for Mobile/Tablet */}
+                    <div class="lg:hidden">
+                        <RedirectButton
+                            buttonText="Assinar o GROW"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="pos"
+                            plan="grow"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                    {/* Button for Desktop */}
+                    <div class="hidden lg:block">
+                        <RedirectButton
+                            buttonText="Assinar o GROW"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="web"
+                            plan="grow"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="border shadow rounded-md p-6">
+                <Heading3 color="kyte-gray" align="left-all"> PRIME </Heading3>
+                <Text color="kyte-gray" size="medium" align="left-all">
+                    Para negócios que buscam atendimento personalizado
+                </Text>
+
+                <div class="mt-6 flex flex-row items-center">
+                    <Heading3 color="kyte-gray" align="left-all">
+                        R$89,90
+                    </Heading3>
+                    <Text color="kyte-gray" size="medium" align="left-all">
+                        /por mês
+                    </Text>
+                </div>
+                <div class="mt-6">
+                    <Heading4 color="kyte-gray" align="left-all">
+                        Todos os recursos do PRO e GROW e mais:
+                    </Heading4>
+                    <ul class="mt-6 space-y-4">
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Videochamada para ajudar na chegada ao Kyte
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Suporte via WhatsApp
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Atendimento prioritário durante a semana
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Atendimento exclusivo aos sábados
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Usuários e vendedores ilimitados
+                            </Text>
+                        </li>
+                        <li
+                            class="flex items-center text-sm text-gray02 font-medium"
+                        >
+                            <img
+                                src="/images/check.svg"
+                                alt="Check"
+                                width="16"
+                                height="16"
+                                class="mr-3"
+                            />
+                            <Text
+                                color="kyte-gray"
+                                size="medium"
+                                align="left-all"
+                            >
+                                Acesso exclusivo às novidades e lançamentos do
+                                Kyte
+                            </Text>
+                        </li>
+                    </ul>
+                    {/* Button for Mobile/Tablet */}
+                    <div class="lg:hidden">
+                        <RedirectButton
+                            buttonText="Assinar o PRIME"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="pos"
+                            plan="prime"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                    {/* Button for Desktop */}
+                    <div class="hidden lg:block">
+                        <RedirectButton
+                            buttonText="Assinar o PRIME"
+                            redirectUrl="https://kyteapp.com/loading"
+                            os="lp"
+                            flow="subscription"
+                            app="web"
+                            plan="prime"
+                            lang="pt"
+                            recurrence="monthly"
+                            variant="primary"
+                            client:only="react"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

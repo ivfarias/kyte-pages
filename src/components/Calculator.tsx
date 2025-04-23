@@ -239,7 +239,6 @@ export default function IdealProductPriceCalculator() {
         return Number(price.toFixed(2));
     };
 
-    // Updated parser to extract numeric part only.
     const parsePrice = (priceStr: string): number => {
         const match = priceStr.match(/[\d.,]+/);
         if (!match) return 0;
@@ -294,7 +293,6 @@ export default function IdealProductPriceCalculator() {
             });
         }
 
-        // Add basic parameters first
         queryParams.append("productName", formData.productName);
         queryParams.append("baseCost", formData.baseCost.toString());
         queryParams.append(
@@ -354,12 +352,19 @@ export default function IdealProductPriceCalculator() {
                 console.warn("No market prices found for the product");
             }
 
-            window.location.href = `/results?${queryParams.toString()}`;
+            const urlParams = new URLSearchParams(window.location.search);
+            const flowParam = urlParams.get('flow');
+            const resultsPath = flowParam === 'p' ? '/results-p' : '/results';
+
+            window.location.href = `${resultsPath}?${queryParams.toString()}`;
         } catch (error) {
             console.error("Error in form submission:", error);
         } finally {
-            // Ensure we redirect even if there are errors
-            window.location.href = `/results?${queryParams.toString()}`;
+            const urlParams = new URLSearchParams(window.location.search);
+            const flowParam = urlParams.get('flow');
+            const resultsPath = flowParam === 'p' ? '/results-p' : '/results';
+
+            window.location.href = `${resultsPath}?${queryParams.toString()}`;
         }
     };
 

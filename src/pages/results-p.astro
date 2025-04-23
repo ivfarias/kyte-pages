@@ -11,15 +11,13 @@ import Content from "../components/Content.astro";
 import PriceChart from "../components/Chart";
 import Gauge from "../components/Gauge";
 import Features from "../components/Features.astro";
-import PricingTrio from "../components/PricingTrio.astro";
 import ProductList from "../components/ProductList";
+import PricingTrio from "../components/PricingTrio.astro";
 import RedirectCheckout from "../components/ui/RedirectCheckout";
 import BulkCalculator from "../components/BulkCalculator";
 
 import Heading1 from "../components/ui/Heading1";
 import Heading2 from "../components/ui/Heading2";
-import Heading3 from "../components/ui/Heading3";
-import Heading4 from "../components/ui/Heading4";
 import Text from "../components/ui/Text";
 import MauticHandler from "../components/MauticHandler";
 
@@ -152,10 +150,10 @@ const recommendedProfitValue =
               redirectUrl="https://kyteapp.com/loading"
               variant="primary"
               lang="pt"
-              plan="prime"
-              recurrence="monthly"
+              plan=""
+              recurrence=""
               os="lp"
-              flow="subscription"
+              flow="product"
               app="web"
             />
           </div>
@@ -166,10 +164,10 @@ const recommendedProfitValue =
               redirectUrl="https://kyteapp.com/loading"
               variant="primary"
               lang="pt"
-              plan="prime"
-              recurrence="monthly"
+              plan=""
+              recurrence=""
               os="lp"
-              flow="subscription"
+              flow="product"
               app="pos"
             />
           </div>
@@ -249,12 +247,12 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
           type="email"
           variant="primary"
           heading="Pronto pra vender mais que eles?"
-          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$ 2 por dia."
-          buttonText="Quero começar"
+          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos."
+          buttonText="Começar Grátis"
           lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
+          plan=""
+          recurrence=""
+          flow="product"
           app="web"
         />
       </div>
@@ -263,12 +261,12 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
           type="email"
           variant="primary"
           heading="Pronto pra vender mais que eles?"
-          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$2 por dia."
-          buttonText="Quero começar"
+          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. "
+          buttonText="Começar grátis"
           lang="pt"
-          plan="prime"
-          recurrence="monthly"
-          flow="subscription"
+          plan=""
+          recurrence=""
+          flow="product"
           app="pos"
         />
       </div>
@@ -418,7 +416,7 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         />
         <InfoCard
           title="Tudo isso cabe no seu bolso"
-          content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 2 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
+          content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 3 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
           image="/images/customer5.webp"
           imageLink="https://www.youtube.com/watch?v=1J2QocSp4B0&t"
           isReversed={false}
@@ -430,13 +428,13 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         type="email"
         variant="primary"
         heading="Vamos vender e organizar melhor este e outros de seus produtos?"
-        content="Assine o Kyte por menos de R$2 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        content="Experimente o Kyte e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
         buttonText="Começar agora"
         isHidden={true}
         lang="pt"
-        plan="prime"
-        recurrence="monthly"
-        flow="subscription"
+        plan=""
+        recurrence=""
+        flow="product"
       />
     </div>
     <PricingTrio />
@@ -447,7 +445,7 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         {
           question: "Isso tudo é caro?",
           answer:
-            "Além do plano Gratuito, o Kyte possui assinaturas bastante acessíveis. Começando com R$39,90 ao mês, ou cerca de R$ 1,50 reais por dia e você só paga pelo que realmente precisa, sem surpresas ou custos extras.",
+            "Além de uma versão gratuita, o Kyte possui planos bastante acessíveis. Começando por R$39.90 ao mês, ou cerca de 1 real por dia e você só paga pelo que realmente precisa, sem surpresas ou custos extras.",
           order: 1,
         },
         {
