@@ -3,187 +3,175 @@ import Heading2 from "../components/ui/Heading2.tsx";
 import Heading3 from "../components/ui/Heading3.tsx";
 import Heading4 from "../components/ui/Heading4.tsx";
 import Text from "../components/ui/Text.tsx";
-
 import RedirectButton from "./ui/RedirectCheckout";
+import Section from "./Section.astro";
+
+interface PlanFeature {
+    text: string;
+}
+
+interface PlanInfo {
+    name: string;
+    description: string;
+    price: string;
+    pricePerMonth: string;
+    featuresTitle: string;
+    features: PlanFeature[];
+    buttonText: string;
+}
+
+interface PricingTrioProps {
+    title: string;
+    subtitle: string;
+    proInfo: Omit<PlanInfo, 'price'> & { defaultPrice: string };
+    growInfo: Omit<PlanInfo, 'price'> & { defaultPrice: string };
+    primeInfo: Omit<PlanInfo, 'price'> & { defaultPrice: string };
+    lang?: string;
+    dynamicPricing?: boolean;
+}
+
+const {
+    title = "Todo negócio precisa de um plano",
+    subtitle = "Todos os planos de assinatura mensal da Kyte não possuem contratos ou custos extras.\nAssine no boleto, pix ou cartão de crédito.",
+    proInfo = {
+        name: "PRO",
+        description: "Ideal para quem está começando e faz tudo pelo celular",
+        defaultPrice: "R$39,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Principais recursos:",
+        features: [
+            { text: "Ponto de venda no celular" },
+            { text: "Catálogo online" },
+            { text: "Recibos digitais e impressos" },
+            { text: "Gestão de gastos" },
+            { text: "Controle de estoque" },
+            { text: "Controle de fiado" },
+            { text: "Fluxo de caixa completo" },
+            { text: "Atendimento por e-mail" }
+        ],
+        buttonText: "Assinar o PRO"
+    },
+    growInfo = {
+        name: "GROW",
+        description: "Para comerciantes que buscam controle total para si e para a equipe",
+        defaultPrice: "R$59,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Todos os recursos do PRO e mais:",
+        features: [
+            { text: "Versão do Kyte para Computador" },
+            { text: "IA para criar descrições de produtos" },
+            { text: "Importação de produtos em massa" },
+            { text: "Edição e exclusão em massa de produtos e categorias" },
+            { text: "Aplicação de desconto em massa" },
+            { text: "Gestão de fornecedores" },
+            { text: "Gestão de gastos com recorrência" },
+            { text: "10 contas de usuários / vendedores" },
+            { text: "Atendimento em tempo real via chat" }
+        ],
+        buttonText: "Assinar o GROW"
+    },
+    primeInfo = {
+        name: "PRIME",
+        description: "Para negócios que buscam atendimento personalizado",
+        defaultPrice: "R$89,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Todos os recursos do PRO e GROW e mais:",
+        features: [
+            { text: "Videochamada para ajudar na chegada ao Kyte" },
+            { text: "Suporte via WhatsApp" },
+            { text: "Atendimento prioritário" },
+            { text: "Acesso exclusivo às novidades e lançamentos do Kyte" }
+        ],
+        buttonText: "Assinar o PRIME"
+    },
+    lang = "pt",
+    dynamicPricing = false
+} = Astro.props as PricingTrioProps;
+
+// Create plan info objects with price property for rendering
+const proInfoWithPrice = { ...proInfo, price: proInfo.defaultPrice };
+const growInfoWithPrice = { ...growInfo, price: growInfo.defaultPrice };
+const primeInfoWithPrice = { ...primeInfo, price: primeInfo.defaultPrice };
+
+// Use these variables for rendering
+const proInfoFinal = proInfoWithPrice;
+const growInfoFinal = growInfoWithPrice;
+const primeInfoFinal = primeInfoWithPrice;
+
+const subtitleLines = subtitle.split('\n');
 ---
 
-<div class="p-4">
+<Section>
     <div class="max-w-5xl max-lg:max-w-2xl mx-auto">
         <div class="text-center">
             <Heading2 color="kyte-gray" align="center-all">
-                Todo negócio precisa de um plano
+                {title}
             </Heading2>
             <Text color="kyte-gray" size="medium" align="center-all">
-                Todos os planos de assinatura mensal da Kyte não possuem
-                contratos ou custos extras.
-                <br />
-                Assine no boleto, pix ou cartão de crédito.
+                {subtitleLines[0]}
+                {subtitleLines.length > 1 && (
+                    <>
+                        <br />
+                        {subtitleLines[1]}
+                    </>
+                )}
             </Text>
         </div>
 
         <div
             class="grid lg:grid-cols-3 sm:grid-cols-2 gap-4 mt-10 max-sm:max-w-sm max-sm:mx-auto"
         >
+            {/* PRO Plan */}
             <div class="border shadow rounded-md p-6">
-                <Heading3 color="kyte-gray" align="left-all"> PRO </Heading3>
+                <Heading3 color="kyte-gray" align="left-all"> {proInfoFinal.name} </Heading3>
                 <Text color="kyte-gray" size="medium" align="left-all">
-                    Ideal para quem está começando e faz tudo pelo celular
+                    {proInfoFinal.description}
                 </Text>
 
                 <div
                     class="mt-6 flex flex-row items-center justify-items-start"
                 >
-                    <Heading3 color="kyte-gray" align="left-all">
-                        R$39,90
+                    <Heading3 color="kyte-gray" align="left-all" id="pro-monthly">
+                        {proInfoFinal.price}
                     </Heading3>
                     <Text color="kyte-gray" size="medium" align="left-all">
-                        /por mês
+                        {proInfoFinal.pricePerMonth}
                     </Text>
                 </div>
                 <div class="mt-6">
                     <Heading4 color="kyte-gray" align="left-all">
-                        Principais recursos:
+                        {proInfoFinal.featuresTitle}
                     </Heading4>
                     <ul class="mt-6 space-y-4">
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Ponto de venda no celular
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Catálogo online
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Recibos digitais e impressos
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Gestão de gastos
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Controle de estoque
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Controle de fiado
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Fluxo de caixa completo
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Atendimento por e-mail
-                            </Text>
-                        </li>
+                        {proInfoFinal.features.map((feature: PlanFeature) => (
+                            <li class="flex items-center text-sm text-gray02">
+                                <img
+                                    src="/images/check.svg"
+                                    alt="Check"
+                                    width="16"
+                                    height="16"
+                                    class="mr-3"
+                                />
+                                <Text
+                                    color="kyte-gray"
+                                    size="medium"
+                                    align="left-all"
+                                >
+                                    {feature.text}
+                                </Text>
+                            </li>
+                        ))}
                     </ul>
                     {/* Button for Mobile/Tablet */}
                     <div class="lg:hidden">
                         <RedirectButton
-                            buttonText="Assinar o PRO"
+                            buttonText={proInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="pos"
                             plan="pro"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -192,13 +180,13 @@ import RedirectButton from "./ui/RedirectCheckout";
                     {/* Button for Desktop */}
                     <div class="hidden lg:block">
                         <RedirectButton
-                            buttonText="Assinar o PRO"
+                            buttonText={proInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="web"
                             plan="pro"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -207,182 +195,55 @@ import RedirectButton from "./ui/RedirectCheckout";
                 </div>
             </div>
 
+            {/* GROW Plan */}
             <div class="border shadow rounded-md p-6">
-                <Heading3 color="kyte-gray" align="left-all"> GROW </Heading3>
+                <Heading3 color="kyte-gray" align="left-all"> {growInfoFinal.name} </Heading3>
                 <Text color="kyte-gray" size="medium" align="left-all">
-                    Para comerciantes que buscam controle total para si e para a
-                    equipe
+                    {growInfoFinal.description}
                 </Text>
 
                 <div class="mt-6 flex flex-row items-center">
-                    <Heading3 color="kyte-gray" align="left-all">
-                        R$59,90
+                    <Heading3 color="kyte-gray" align="left-all" id="grow-monthly">
+                        {growInfoFinal.price}
                     </Heading3>
                     <Text color="kyte-gray" size="medium" align="left-all">
-                        /por mês
+                        {growInfoFinal.pricePerMonth}
                     </Text>
                 </div>
                 <div class="mt-6">
                     <Heading4 color="kyte-gray" align="left-all">
-                        Todos os recursos do PRO e mais:
+                        {growInfoFinal.featuresTitle}
                     </Heading4>
                     <ul class="mt-6 space-y-4">
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Versão do Kyte para Computador
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                IA para criar descrições de produtos
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Importação de produtos em massa
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Edição e exclusão em massa de produtos e
-                                categorias
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Aplicação de desconto em massa
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Gestão de fornecedores
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Gestão de gastos com recorrência
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                10 contas de usuários / vendedores
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Atendimento em tempo real via chat
-                            </Text>
-                        </li>
+                        {growInfoFinal.features.map((feature: PlanFeature) => (
+                            <li class="flex items-center text-sm text-gray02">
+                                <img
+                                    src="/images/check.svg"
+                                    alt="Check"
+                                    width="16"
+                                    height="16"
+                                    class="mr-3"
+                                />
+                                <Text
+                                    color="kyte-gray"
+                                    size="medium"
+                                    align="left-all"
+                                >
+                                    {feature.text}
+                                </Text>
+                            </li>
+                        ))}
                     </ul>
                     {/* Button for Mobile/Tablet */}
                     <div class="lg:hidden">
                         <RedirectButton
-                            buttonText="Assinar o GROW"
+                            buttonText={growInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="pos"
                             plan="grow"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -391,13 +252,13 @@ import RedirectButton from "./ui/RedirectCheckout";
                     {/* Button for Desktop */}
                     <div class="hidden lg:block">
                         <RedirectButton
-                            buttonText="Assinar o GROW"
+                            buttonText={growInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="web"
                             plan="grow"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -406,133 +267,55 @@ import RedirectButton from "./ui/RedirectCheckout";
                 </div>
             </div>
 
+            {/* PRIME Plan */}
             <div class="border shadow rounded-md p-6">
-                <Heading3 color="kyte-gray" align="left-all"> PRIME </Heading3>
+                <Heading3 color="kyte-gray" align="left-all"> {primeInfoFinal.name} </Heading3>
                 <Text color="kyte-gray" size="medium" align="left-all">
-                    Para negócios que buscam atendimento personalizado
+                    {primeInfoFinal.description}
                 </Text>
 
                 <div class="mt-6 flex flex-row items-center">
-                    <Heading3 color="kyte-gray" align="left-all">
-                        R$89,90
+                    <Heading3 color="kyte-gray" align="left-all" id="prime-monthly">
+                        {primeInfoFinal.price}
                     </Heading3>
                     <Text color="kyte-gray" size="medium" align="left-all">
-                        /por mês
+                        {primeInfoFinal.pricePerMonth}
                     </Text>
                 </div>
                 <div class="mt-6">
                     <Heading4 color="kyte-gray" align="left-all">
-                        Todos os recursos do PRO e GROW e mais:
+                        {primeInfoFinal.featuresTitle}
                     </Heading4>
                     <ul class="mt-6 space-y-4">
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Videochamada para ajudar na chegada ao Kyte
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Suporte via WhatsApp
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Atendimento prioritário durante a semana
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Atendimento exclusivo aos sábados
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Usuários e vendedores ilimitados
-                            </Text>
-                        </li>
-                        <li class="flex items-center text-sm text-gray02">
-                            <img
-                                src="/images/check.svg"
-                                alt="Check"
-                                width="16"
-                                height="16"
-                                class="mr-3"
-                            />
-                            <Text
-                                color="kyte-gray"
-                                size="medium"
-                                align="left-all"
-                            >
-                                Acesso exclusivo às novidades e lançamentos do
-                                Kyte
-                            </Text>
-                        </li>
+                        {primeInfoFinal.features.map((feature: PlanFeature) => (
+                            <li class="flex items-center text-sm text-gray02">
+                                <img
+                                    src="/images/check.svg"
+                                    alt="Check"
+                                    width="16"
+                                    height="16"
+                                    class="mr-3"
+                                />
+                                <Text
+                                    color="kyte-gray"
+                                    size="medium"
+                                    align="left-all"
+                                >
+                                    {feature.text}
+                                </Text>
+                            </li>
+                        ))}
                     </ul>
                     {/* Button for Mobile/Tablet */}
                     <div class="lg:hidden">
                         <RedirectButton
-                            buttonText="Assinar o PRIME"
+                            buttonText={primeInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="pos"
                             plan="prime"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -541,13 +324,13 @@ import RedirectButton from "./ui/RedirectCheckout";
                     {/* Button for Desktop */}
                     <div class="hidden lg:block">
                         <RedirectButton
-                            buttonText="Assinar o PRIME"
+                            buttonText={primeInfoFinal.buttonText}
                             redirectUrl="https://kyteapp.com/loading"
                             os="lp"
                             flow="subscription"
                             app="web"
                             plan="prime"
-                            lang="pt"
+                            lang={lang}
                             recurrence="monthly"
                             variant="primary"
                             client:only="react"
@@ -557,4 +340,56 @@ import RedirectButton from "./ui/RedirectCheckout";
             </div>
         </div>
     </div>
-</div>
+</Section>
+
+{dynamicPricing && (
+    <script>
+        function getCountryCode() {
+            try {
+                const r = new XMLHttpRequest();
+                r.open("GET", "https://pro.ip-api.com/json?key=mABwd9BINggwJrN&fields=countryCode", false);
+                r.send(null);
+                return JSON.parse(r.responseText).countryCode;
+            } catch (error) {
+                console.error("Error fetching country code:", error);
+                return "BR"; // Default to Brazil if error
+            }
+        }
+
+        function getCurrencyInfo(countryCode: string) {
+            try {
+                const url = `https://kyte-prices.azurewebsites.net/plans/${countryCode}`;
+                const n = new XMLHttpRequest();
+                n.open("GET", url, false);
+                n.send(null);
+                return JSON.parse(n.responseText);
+            } catch (error) {
+                console.error("Error fetching currency info:", error);
+                return null;
+            }
+        }
+
+        function setInnerHTMLIfExists(id: string, content: string) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = content;
+            }
+        }
+
+        // Execute when DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            try {
+                const countryCode = getCountryCode();
+                const currencyGroup = getCurrencyInfo(countryCode);
+
+                if (currencyGroup) {
+                    setInnerHTMLIfExists("pro-monthly", currencyGroup.pro.monthly);
+                    setInnerHTMLIfExists("grow-monthly", currencyGroup.grow.monthly);
+                    setInnerHTMLIfExists("prime-monthly", currencyGroup.prime.monthly);
+                }
+            } catch (error) {
+                console.error("Error updating prices:", error);
+            }
+        });
+    </script>
+)}

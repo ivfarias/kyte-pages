@@ -1,0 +1,144 @@
+{
+    "Elige tu segmento de negocio": {
+        " ": {
+            "low": 0,
+            "high": 0
+        }
+    },
+    "Alimentos y Bebidas": {
+        "Restaurantes y fondas": {
+            "low": 150,
+            "high": 200
+        },
+        "Bares y cafeterías": {
+            "low": 200,
+            "high": 300
+        },
+        "Venta de comida casera y delivery": {
+            "low": 150,
+            "high": 250
+        }
+    },
+    "Moda y Accesorios": {
+        "Tiendas de ropa y calzado": {
+            "low": 100,
+            "high": 200
+        },
+        "Ropa usada y de segunda mano": {
+            "low": 150,
+            "high": 250
+        },
+        "Artesanías y bisutería": {
+            "low": 200,
+            "high": 300
+        }
+    },
+    "Venta Minorista y Comercio General": {
+        "Tienditas y minimercados": {
+            "low": 30,
+            "high": 50
+        },
+        "Tiendas de conveniencia": {
+            "low": 50,
+            "high": 100
+        },
+        "Papelerías y bazares": {
+            "low": 50,
+            "high": 100
+        }
+    },
+    "Belleza y Cuidado Personal": {
+        "Salones de belleza y barberías": {
+            "low": 100,
+            "high": 200
+        },
+        "Estudios de uñas y estética": {
+            "low": 150,
+            "high": 250
+        },
+        "Venta de cosméticos y perfumes": {
+            "low": 100,
+            "high": 200
+        }
+    },
+    "Servicios": {
+        "Servicio técnico": {
+            "low": 100,
+            "high": 200
+        },
+        "Servicios de limpieza y mantenimiento": {
+            "low": 100,
+            "high": 200
+        },
+        "Lavanderías": {
+            "low": 100,
+            "high": 200
+        }
+    },
+    "Tecnología y Electrónica": {
+        "Accesorios para celulares": {
+            "low": 50,
+            "high": 100
+        },
+        "Venta y reparación de electrónicos": {
+            "low": 50,
+            "high": 100
+        },
+        "Computación y suministros": {
+            "low": 50,
+            "high": 100
+        }
+    },
+    "Hogar y Decoración": {
+        "Tiendas de muebles y decoración": {
+            "low": 100,
+            "high": 200
+        },
+        "Artículos de organización y hogar": {
+            "low": 50,
+            "high": 100
+        },
+        "Materiales de construcción y bricolaje": {
+            "low": 30,
+            "high": 50
+        }
+    },
+    "Salud y Bienestar": {
+        "Farmacias y productos naturales": {
+            "low": 30,
+            "high": 50
+        },
+        "Gimnasios y estudios de yoga/pilates": {
+            "low": 100,
+            "high": 200
+        },
+        "Venta de suplementos": {
+            "low": 50,
+            "high": 100
+        }
+    },
+    "Entretenimiento y Cultura": {
+        "Librerías y tiendas de libros usados": {
+            "low": 50,
+            "high": 100
+        },
+        "Tiendas de juguetes y juegos": {
+            "low": 50,
+            "high": 100
+        },
+        "Papelerías y artículos para fiestas": {
+            "low": 50,
+            "high": 100
+        }
+    },
+    "Transporte y Movilidad": {
+        "Autopartes y accesorios": {
+            "low": 50,
+            "high": 100
+        },
+        "Talleres mecánicos y bicicleterías": {
+            "low": 50,
+            "high": 100
+        }
+    }
+}

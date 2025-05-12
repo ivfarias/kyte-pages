@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { getUserLocation } from '../utils/geolocation';
 
 interface ShoppingItem {
     title: string;
@@ -24,7 +25,6 @@ interface PriceAnalytics {
 const MAX_RETRIES = 3;
 const TIMEOUT = 10000;
 
-// Update environment variable access for Astro
 const SERPER_API_KEY = import.meta.env.SERPER_API_KEY;
 if (!SERPER_API_KEY) {
     console.error('SERPER_API_KEY is not defined in environment variables');
@@ -43,6 +43,17 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
         };
     }
 
+    const locationData = await getUserLocation();
+
+    console.log('📍 Google Shopping API - Location data:', {
+        country: locationData.country,
+        region: locationData.region,
+        city: locationData.city,
+        formattedLocation: locationData.formattedLocation,
+        countryCode: locationData.countryCode,
+        language: locationData.language
+    });
+
     const config = {
         method: 'post',
         url: 'https://google.serper.dev/shopping',
@@ -52,9 +63,9 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
         },
         data: {
             q: productName.trim(),
-            location: "Brazil",
-            gl: "br",
-            hl: "pt-br"
+            location: locationData.formattedLocation || "Brazil",
+            gl: locationData.countryCode.toLowerCase() || "br",
+            hl: locationData.language || "pt-br"
         },
         timeout: TIMEOUT
     };
@@ -72,8 +83,6 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
 
             const items: ShoppingItem[] = response.data.shopping;
 
-            // Create array of items with their numeric prices
-            // Add these constants at the top of the file
             const MONTHLY_PAYMENT_INDICATORS = [
                 '/mês', '/mes', 'mensal', '/month', '/mo', 'monthly',
                 'por mês', 'per month', '/mois', 'mensuel'
@@ -81,7 +90,6 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
 
             const CURRENCY_SYMBOLS = ['R$', '$', '€', '£', '¥'];
 
-            // Add out-of-stock indicators
             const OUT_OF_STOCK_INDICATORS = [
                 'indisponível',
                 'fora de estoque',
@@ -90,41 +98,33 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
                 'esgotado'
             ];
 
-            // Update the price filtering logic
             const itemsWithPrices = items
                 .filter(item => {
                     if (!item.price) return false;
 
-                    // Check for out of stock indicators in title
-                    if (OUT_OF_STOCK_INDICATORS.some(indicator => 
+                    if (OUT_OF_STOCK_INDICATORS.some(indicator =>
                         item.title.toLowerCase().includes(indicator))) {
                         return false;
                     }
 
-                    // Normalize price string
                     const normalizedPrice = item.price.toLowerCase().trim();
 
-                    // Check for monthly payment indicators in any language
                     if (MONTHLY_PAYMENT_INDICATORS.some(indicator =>
                         normalizedPrice.includes(indicator.toLowerCase()))) {
                         return false;
                     }
 
-                    // Check if price starts with any known currency symbol
                     const hasCurrencySymbol = CURRENCY_SYMBOLS.some(symbol =>
                         normalizedPrice.startsWith(symbol.toLowerCase()));
 
-                    // Price should have currency symbol and contain numbers
                     return hasCurrencySymbol && /\d/.test(normalizedPrice);
                 })
                 .map(item => {
-                    // Remove all currency symbols and normalize number format
                     let priceStr = item.price;
                     CURRENCY_SYMBOLS.forEach(symbol => {
                         priceStr = priceStr.replace(symbol, '');
                     });
 
-                    // Handle different number formats (1,234.56 or 1.234,56)
                     const hasCommaDecimal = /,\d{2}$/.test(priceStr);
                     if (hasCommaDecimal) {
                         priceStr = priceStr.replace(/\./g, '').replace(',', '.');
@@ -149,10 +149,8 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
                 };
             }
 
-            // Sort items by price
             const sortedItems = [...itemsWithPrices].sort((a, b) => a.price - b.price);
 
-            // Remove extreme outliers (prices that are too low or too high)
             const q1Index = Math.floor(sortedItems.length * 0.25);
             const q3Index = Math.floor(sortedItems.length * 0.75);
             const q1 = sortedItems[q1Index].price;
@@ -177,7 +175,6 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
                 };
             }
 
-            // Get representative prices from the filtered list
             const lowestPriceItem = validPrices[0];
             const highestPriceItem = validPrices[validPrices.length - 1];
             const medianIndex = Math.floor(validPrices.length / 2);
@@ -212,7 +209,6 @@ export async function getMarketPrices(productName: string): Promise<PriceAnalyti
         }
     }
 
-    // Update error return to include empty products
     console.error('All attempts failed:', lastError);
     return {
         lowestPrice: 0,

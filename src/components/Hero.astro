@@ -1,9 +1,46 @@
 ---
-import IdealProductPriceCalculator from "./Calculator";
 import BeforeAfterSlider from "../components/BeforeAfterSlider.tsx";
 import Section from "./Section.astro";
 import H1 from "./ui/Heading1";
 import Text from "./ui/Text";
+import {
+    PortugueseCalculator,
+    SpanishCalculator,
+} from "../data/CalculatorReference";
+
+interface Props {
+    title: string;
+    subtitleBold: string;
+    subtitleRegular: string;
+    beforeImage: string;
+    afterImage: string;
+    beforeLabel: string;
+    afterLabel: string;
+    proof1Image: string;
+    proof1Alt: string;
+    proof2Image: string;
+    proof2Alt: string;
+    proof3Image: string;
+    proof3Alt: string;
+    calculatorVariant?: "portuguese" | "spanish";
+}
+
+const {
+    title,
+    subtitleBold,
+    subtitleRegular,
+    beforeImage,
+    afterImage,
+    beforeLabel,
+    afterLabel,
+    proof1Image,
+    proof1Alt,
+    proof2Image,
+    proof2Alt,
+    proof3Image,
+    proof3Alt,
+    calculatorVariant = "portuguese",
+} = Astro.props;
 ---
 
 <Section variant="white">
@@ -11,32 +48,29 @@ import Text from "./ui/Text";
         <div class="flex flex-col md:flex-row items-end justify-between gap-8">
             <div class="w-full md:w-1/2 text-center md:text-left">
                 <H1 color="kyte-gray" align="left-all">
-                    Encontre o preço ideal com base na concorrência
+                    {title}
                 </H1>
                 <Text color="kyte-gray" align="left-all" size="large">
-                    <strong
-                        >Você vende sem saber se está perdendo dinheiro?</strong
-                    >
+                    <strong>{subtitleBold}</strong>
                     <br />
-                    Resolva isso com um clique. Nosso cálculo mostra se seu preço
-                    está barato, ideal ou caro, com base no mercado. Com poucos dados,
-                    você recebe uma análise completa para tomar decisões claras e
-                    lucrar mais.
+                    {subtitleRegular}
                 </Text>
-                <!-- BeforeAfter Slider - Hidden on mobile, visible on desktop -->
+                {
+                    /* BeforeAfter Slider - Hidden on mobile, visible on desktop */
+                }
                 <div class="hidden md:block">
                     <BeforeAfterSlider
                         client:load
-                        beforeImage="/images/womanBefore.webp"
-                        afterImage="/images/womanAfter.webp"
-                        beforeLabel="Antes"
-                        afterLabel="Depois"
+                        beforeImage={beforeImage}
+                        afterImage={afterImage}
+                        beforeLabel={beforeLabel}
+                        afterLabel={afterLabel}
                     />
                 </div>
             </div>
 
             <div class="w-full md:w-1/2 justify-items-center">
-                <!-- Arrows - Desktop only -->
+                {/* Arrows - Desktop only */}
                 <div class="hidden md:flex justify-center mb-8">
                     <img
                         src="/images/arrows1.svg"
@@ -46,35 +80,29 @@ import Text from "./ui/Text";
                         class="transform scale-x-[-1]"
                     />
                 </div>
-                <!-- Calculator - Visible on all screens -->
-                <IdealProductPriceCalculator client:only="react" />
+                {/* Calculator - Visible on all screens */}
+                {
+                    calculatorVariant === "spanish" ? (
+                        <SpanishCalculator client:only="react" />
+                    ) : (
+                        <PortugueseCalculator client:only="react" />
+                    )
+                }
                 <div class="flex flex-row items-center gap-4 mt-6">
-                    <img
-                        src="/images/ra-verificado.webp"
-                        alt="RA Verificado"
-                        width="100"
-                    />
-                    <img
-                        src="/images/seguroGoogle.svg"
-                        alt="Seguro Google"
-                        width="100"
-                    />
-                    <img
-                        src="/images/seguroSSL.svg"
-                        alt="Seguro SSL"
-                        width="100"
-                    />
+                    <img src={proof1Image} alt={proof1Alt} width="100" />
+                    <img src={proof2Image} alt={proof2Alt} width="100" />
+                    <img src={proof3Image} alt={proof3Alt} width="100" />
                 </div>
             </div>
 
-            <!-- BeforeAfter Slider - Visible only on mobile -->
+            {/* BeforeAfter Slider - Visible only on mobile */}
             <div class="block md:hidden w-full">
                 <BeforeAfterSlider
                     client:load
-                    beforeImage="/images/womanBefore.webp"
-                    afterImage="/images/womanAfter.webp"
-                    beforeLabel="Antes"
-                    afterLabel="Depois"
+                    beforeImage={beforeImage}
+                    afterImage={afterImage}
+                    beforeLabel={beforeLabel}
+                    afterLabel={afterLabel}
                 />
             </div>
         </div>

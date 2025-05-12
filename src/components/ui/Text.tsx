@@ -1,6 +1,6 @@
 interface TextProps {
     children: React.ReactNode;
-    color?: "white" | "kyte-green" | "kyte-gray" | "secondary-gray";
+    color?: "white" | "kyte-green" | "kyte-gray" | "secondary-gray" | string;
     size?: "extra-small" | "small" | "medium" | "large" | "extra-large";
     align?: "center-all" | "center-desktop" | "center-mobile" |
     "left-all" | "left-desktop" | "left-mobile" |
@@ -44,11 +44,14 @@ export default function Text({
     id,
     className
 }: TextProps) {
+    // Check if color is a predefined key in colorMap, otherwise use it directly
+    const textColor = colorMap[color as keyof typeof colorMap] || color;
+
     return (
         <p
             id={id}
             className={`font-graphik ${sizeMap[size]} ${alignMap[align]} ${className || ''}`}
-            style={{ color: colorMap[color] }}
+            style={{ color: textColor }}
         >
             {children}
         </p>

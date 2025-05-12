@@ -10,6 +10,9 @@ import { Select, Option } from "@material-tailwind/react/components/Select";
 import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { getMarketPrices } from "../api/googleShopping";
 import { createMauticContact } from "../api/mautic";
+import { getUserLocation } from "../utils/geolocation";
+import { currencyMap } from "../data/currencyData";
+import { ProgressLabelOutside } from "./ProgressBar";
 
 declare global {
     interface Window {
@@ -31,6 +34,83 @@ interface FormData {
     marketLowestPrice?: number | string;
     marketMediumPrice?: number | string;
     marketHighestPrice?: number | string;
+    country?: string;
+    region?: string;
+    city?: string;
+    language?: string;
+    currencySymbol?: string;
+}
+
+interface BusinessSegmentsType {
+    [category: string]: {
+        [segment: string]: { low: number; high: number };
+    };
+}
+interface StepData {
+    title: string;
+    description: string;
+}
+
+interface StepDescriptions {
+    step1: string;
+    step2: string;
+    step3: string;
+    step4: string;
+    complete: string;
+}
+
+interface LocalizationData {
+    calculatorSteps: StepData[];
+    stepDescriptions: StepDescriptions;
+    completionText: string;
+}
+
+interface CalculatorProps {
+    localizationData?: LocalizationData;
+
+    // Business segments data path and configuration
+    businessSegmentsData: BusinessSegmentsType;
+
+    // Currency configuration
+    currencySymbol: string;
+    currencyCode: string;
+    defaultCountry: string;
+    defaultLanguage: string;
+    autoDetectLocation?: boolean;
+
+    // Form header and description
+    headerText: string;
+
+    // Form field labels and placeholders
+    productNameLabel: string;
+    productNamePlaceholder: string;
+    productNameTooltip: string;
+    productNameAriaLabel: string;
+
+    baseCostLabel: string;
+    baseCostPlaceholder: string;
+    baseCostTooltip: string;
+    baseCostAriaLabel: string;
+
+    businessSegmentLabel: string;
+
+    profitMarginLabel: string;
+    profitMarginTooltip: string;
+
+    emailLabel: string;
+    emailPlaceholder: string;
+
+    // Button text
+    submitButtonText: string;
+    processingButtonText: string;
+
+    // Alert messages
+    requiredFieldsAlert: string;
+    invalidEmailAlert: string;
+
+    // Results paths
+    plgResultsPath: string;
+    slgResultsPath: string;
 }
 
 const initialFormData: FormData = {
@@ -39,67 +119,105 @@ const initialFormData: FormData = {
     profitMargin: { type: "value", amount: 0 },
     email: "",
     businessSegment: "",
+    currencySymbol: "",
 };
 
-const BUSINESS_SEGMENTS: {
-    [category: string]: {
-        [segment: string]: { low: number; high: number };
-    };
-} = {
-    "Alimentação e Bebidas": {
-        "Restaurantes e lanchonetes": { low: 150, high: 200 },
-        "Bares e cafés": { low: 200, high: 300 },
-        "Venda de alimentos caseiros e delivery": { low: 150, high: 250 },
+const defaultProps: CalculatorProps = {
+    businessSegmentsData: {},
+    currencySymbol: "R$",
+    currencyCode: "BRL",
+    defaultCountry: "Brazil",
+    defaultLanguage: "pt-br",
+
+    headerText: "Preencha as informações e descubra o passo a passo para vender mais e melhor que seus concorrentes",
+
+    productNameLabel: "Nome do Produto",
+    productNamePlaceholder: "Ex: Samsung Galaxy S21",
+    productNameTooltip: "Digite o nome completo do item com especificações. Quanto mais detalhes, melhor os resultados.",
+    productNameAriaLabel: "Informações sobre o nome do produto",
+
+    baseCostLabel: "Preço de custo (R$)",
+    baseCostPlaceholder: "0,00",
+    baseCostTooltip: "Insira o valor pago pelo produto ou gasto para ser fabricado.",
+    baseCostAriaLabel: "Informações sobre o preço de custo",
+
+    businessSegmentLabel: "Área de atuação",
+
+    profitMarginLabel: "Lucro ideal estimado (R$ ou %)",
+    profitMarginTooltip: "Aqui calculamos a margem de lucro ideal para o seu produto com base no segmento de mercado selecionado. Você pode alterar para um valor fixo ou um percentual.",
+
+    emailLabel: "Seu E-mail",
+    emailPlaceholder: "seu@email.com",
+
+    submitButtonText: "Ver Resultado",
+    processingButtonText: "Processando...",
+
+    requiredFieldsAlert: "Por favor, preencha todos os campos obrigatórios.",
+    invalidEmailAlert: "Por favor, insira um email válido.",
+
+    plgResultsPath: "/results",
+    slgResultsPath: "/results-s"
+};
+const defaultLocalization: LocalizationData = {
+    calculatorSteps: [
+        { title: "Step 1", description: "" },
+        { title: "Step 2", description: "" },
+        { title: "Step 3", description: "" },
+        { title: "Step 4", description: "" }
+    ],
+    stepDescriptions: {
+        step1: "",
+        step2: "",
+        step3: "",
+        step4: "",
+        complete: ""
     },
-    "Moda e Acessórios": {
-        "Lojas de roupas e calçados": { low: 100, high: 200 },
-        "Brechós e roupas de segunda mão": { low: 150, high: 250 },
-        "Artesanato e bijuterias": { low: 200, high: 300 },
-    },
-    "Varejo e Comércio Geral": {
-        "Mercadinhos e minimercados": { low: 30, high: 50 },
-        "Lojas de conveniência": { low: 50, high: 100 },
-        "Papelarias e bazares": { low: 50, high: 100 },
-    },
-    "Beleza e Bem-estar": {
-        "Salões de beleza e barbearias": { low: 100, high: 200 },
-        "Estúdios de manicure e estética": { low: 150, high: 250 },
-        "Venda de cosméticos e perfumaria": { low: 100, high: 200 },
-    },
-    "Serviços": {
-        "Assistência técnica": { low: 100, high: 200 },
-        "Serviços de limpeza e manutenção": { low: 100, high: 200 },
-        "Lavanderias": { low: 100, high: 200 },
-    },
-    "Tecnologia e Eletrônicos": {
-        "Lojas de acessórios para celulares": { low: 50, high: 100 },
-        "Venda e manutenção de eletrônicos": { low: 50, high: 100 },
-        "Informática e suprimentos": { low: 50, high: 100 },
-    },
-    "Casa e Decoração": {
-        "Lojas de móveis e decoração": { low: 100, high: 200 },
-        "Itens para organização e utilidades domésticas": { low: 50, high: 100 },
-        "Materiais de construção e bricolagem": { low: 30, high: 50 },
-    },
-    "Saúde e Bem-estar": {
-        "Farmácias e produtos naturais": { low: 30, high: 50 },
-        "Academias e estúdios de yoga/pilates": { low: 100, high: 200 },
-        "Venda de suplementos": { low: 50, high: 100 },
-    },
-    "Entretenimento e Cultura": {
-        "Livrarias e sebos": { low: 50, high: 100 },
-        "Lojas de brinquedos e jogos": { low: 50, high: 100 },
-        "Papelarias e artigos para festas": { low: 50, high: 100 },
-    },
-    "Transporte e Mobilidade": {
-        "Autopeças e acessórios": { low: 50, high: 100 },
-        "Oficinas mecânicas e bicicletarias": { low: 50, high: 100 },
-    },
+    completionText: "Complete"
 };
 
-export default function IdealProductPriceCalculator() {
+export default function IdealProductPriceCalculator(props: Partial<CalculatorProps> = {}) {
+
+    const calculatorProps: CalculatorProps = { ...defaultProps, ...props };
+    // Use the provided localization data or fallback to default
+    const localizationData = calculatorProps.localizationData || defaultLocalization;
+
+    const BUSINESS_SEGMENTS: BusinessSegmentsType = calculatorProps.businessSegmentsData;
+
     const [formData, setFormData] = useState<FormData>(initialFormData);
+    const [locationDetected, setLocationDetected] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [progressPercentage, setProgressPercentage] = useState(0);
+    const [progressLabel, setProgressLabel] = useState('');
+    const [progressDescription, setProgressDescription] = useState('');
+
+    useEffect(() => {
+        // Only fetch if autoDetectLocation is true and location hasn't been detected yet
+        if (calculatorProps.autoDetectLocation && !locationDetected) {
+            const fetchUserLocation = async () => {
+                console.log("📍 Calculator: Attempting to auto-detect user location...");
+                try {
+                    const location = await getUserLocation();
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        country: location.country,
+                        region: location.region,
+                        city: location.city,
+                        language: location.language, // Also store language if available and needed
+                        currencySymbol: location.currencySymbol, // Add currencySymbol here
+                    }));
+                    setLocationDetected(true); // Mark as detected to prevent re-fetching
+                    console.log("📍 Calculator: User location auto-detected and set in form data:", location);
+                } catch (error) {
+                    console.error("📍 Calculator: Failed to auto-detect user location:", error);
+                    // Fallback logic is handled within getUserLocation.
+                    // Mark as detected to avoid repeated attempts on error, or implement more robust retry/error handling.
+                    setLocationDetected(true);
+                }
+            };
+
+            fetchUserLocation();
+        }
+    }, [calculatorProps.autoDetectLocation, locationDetected, setFormData, setLocationDetected]);
 
     const getSegmentMargins = (segment: string) => {
         for (const category of Object.values(BUSINESS_SEGMENTS)) {
@@ -133,19 +251,62 @@ export default function IdealProductPriceCalculator() {
     };
 
     useEffect(() => {
+        if (calculatorProps.autoDetectLocation && !locationDetected) {
+            const detectLocation = async () => {
+                try {
+                    const locationData = await getUserLocation();
+                    let currencyCode = calculatorProps.currencyCode;
+                    let currencySymbol = calculatorProps.currencySymbol;
+
+                    if (locationData.countryCode && currencyMap[locationData.countryCode]) {
+                        currencyCode = currencyMap[locationData.countryCode].code;
+                        currencySymbol = currencyMap[locationData.countryCode].symbol;
+                    }
+
+                    setFormData(prev => ({
+                        ...prev,
+                        country: locationData.country,
+                        region: locationData.region,
+                        city: locationData.city,
+                        language: locationData.language
+                    }));
+
+                    setLocationDetected(true);
+
+                    calculatorProps.currencyCode = currencyCode;
+                    calculatorProps.currencySymbol = currencySymbol;
+                    calculatorProps.defaultCountry = locationData.country;
+                    calculatorProps.defaultLanguage = locationData.language;
+
+                } catch (error) {
+                    console.error('Failed to auto-detect location:', error);
+                }
+            };
+
+            detectLocation();
+        }
+    }, [calculatorProps.autoDetectLocation, locationDetected]);
+
+    useEffect(() => {
         const savedData = localStorage.getItem("idealPriceCalculatorData");
         if (savedData) {
             const parsed = JSON.parse(savedData);
-            setFormData({
-                productName: parsed.productName || "",
-                baseCost: parsed.baseCost || 0,
-                profitMargin: parsed.profitMargin || { type: "value", amount: 0 },
-                email: parsed.email || "",
-                businessSegment: parsed.businessSegment || "",
-                marketLowestPrice: parsed.marketLowestPrice,
-                marketMediumPrice: parsed.marketMediumPrice,
-                marketHighestPrice: parsed.marketHighestPrice,
-            });
+            setFormData(prevFormData => ({
+                ...prevFormData, // Preserve existing state, especially from auto-detection
+                productName: parsed.productName || prevFormData.productName || "",
+                baseCost: parsed.baseCost || prevFormData.baseCost || 0,
+                profitMargin: parsed.profitMargin || prevFormData.profitMargin || { type: "value", amount: 0 },
+                email: parsed.email || prevFormData.email || "",
+                businessSegment: parsed.businessSegment || prevFormData.businessSegment || "",
+                marketLowestPrice: parsed.marketLowestPrice || prevFormData.marketLowestPrice,
+                marketMediumPrice: parsed.marketMediumPrice || prevFormData.marketMediumPrice,
+                marketHighestPrice: parsed.marketHighestPrice || prevFormData.marketHighestPrice,
+                country: parsed.country || prevFormData.country || "",
+                region: parsed.region || prevFormData.region || "",
+                city: parsed.city || prevFormData.city || "",
+                language: parsed.language || prevFormData.language || calculatorProps.defaultLanguage,
+                currencySymbol: parsed.currencySymbol || prevFormData.currencySymbol || "",
+            }));
         }
         const params = new URLSearchParams(window.location.search);
         const urlData: Partial<FormData> = {};
@@ -154,23 +315,30 @@ export default function IdealProductPriceCalculator() {
             "baseCost",
             "email",
             "businessSegment",
+            "country",
+            "region",
+            "city",
+            "language",
+            "currencySymbol",
         ];
         params.forEach((value, key) => {
             if (allowedKeys.includes(key as keyof FormData)) {
                 if (key === "baseCost") {
                     urlData.baseCost = parseFloat(value) || 0;
                 } else {
-                    urlData[key as "productName" | "email" | "businessSegment"] = value;
+                    const formDataKey = key as keyof FormData;
+                    (urlData as any)[formDataKey] = value;
                 }
             }
         });
+        // Apply URL params over potentially localStorage-loaded data, but after initial auto-detection
         setFormData((prev) => ({ ...prev, ...urlData }));
-    }, []);
+    }, [calculatorProps.defaultLanguage]); // Rerun if default language changes, though typically stable
 
     useEffect(() => {
         const extendedData = calculateExtendedData();
-        localStorage.setItem("idealPriceCalculatorData", JSON.stringify(calculateExtendedData()));
-    }, [formData.productName, formData.baseCost, formData.profitMargin, formData.email, formData.businessSegment, formData.marketLowestPrice, formData.marketMediumPrice, formData.marketHighestPrice]);
+        localStorage.setItem("idealPriceCalculatorData", JSON.stringify(extendedData));
+    }, [formData]);
 
     const formatValue = (value: string, type: "percent" | "value"): string => {
         const digits = value.replace(/\D/g, "");
@@ -184,7 +352,8 @@ export default function IdealProductPriceCalculator() {
         const digits = e.target.value.replace(/\D/g, "");
         const amount = parseInt(digits) || 0;
         const formatted = (amount / 100).toFixed(2);
-        setFormData((prev) => ({ ...prev, baseCost: Number(formatted) }));
+        const numericValue = Number(formatted);
+        setFormData((prev) => ({ ...prev, baseCost: numericValue }));
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,19 +411,32 @@ export default function IdealProductPriceCalculator() {
     const parsePrice = (priceStr: string): number => {
         const match = priceStr.match(/[\d.,]+/);
         if (!match) return 0;
-        return parseFloat(match[0].replace(/\./g, "").replace(",", "."));
+
+        let cleanPrice = match[0];
+
+        const hasCommaDecimal = /,\d{1,2}$/.test(cleanPrice);
+
+        if (hasCommaDecimal) {
+            cleanPrice = cleanPrice.replace(/\./g, "").replace(",", ".");
+        } else {
+            cleanPrice = cleanPrice.replace(/,/g, "");
+        }
+
+        const price = parseFloat(cleanPrice);
+        console.log(`Parsing price: ${priceStr} -> ${cleanPrice} -> ${price}`);
+        return price;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.productName || !formData.email || !formData.businessSegment) {
-            alert("Por favor, preencha todos os campos obrigatórios.");
+        if (!formData.productName || !formData.email || !formData.businessSegment || formData.baseCost <= 0) {
+            alert(calculatorProps.requiredFieldsAlert);
             return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
-            alert("Por favor, insira um email válido.");
+            alert(calculatorProps.invalidEmailAlert);
             return;
         }
 
@@ -283,10 +465,14 @@ export default function IdealProductPriceCalculator() {
                 event: 'generate_lead',
                 event_id: Date.now(),
                 value: idealPrice,
-                currency: 'BRL',
+                currency: calculatorProps.currencyCode,
                 product_name: formData.productName,
                 business_segment: formData.businessSegment,
                 email: formData.email,
+                country: formData.country || calculatorProps.defaultCountry,
+                region: formData.region || "",
+                city: formData.city || "",
+                language: formData.language || calculatorProps.defaultLanguage,
                 gclid: getTrackingParam('gclid'),
                 gbraid: getTrackingParam('gbraid'),
                 gl: getTrackingParam('_gl')
@@ -295,6 +481,10 @@ export default function IdealProductPriceCalculator() {
 
         queryParams.append("productName", formData.productName);
         queryParams.append("baseCost", formData.baseCost.toString());
+        queryParams.append("country", formData.country || calculatorProps.defaultCountry);
+        queryParams.append("region", formData.region || "");
+        queryParams.append("city", formData.city || "");
+        queryParams.append("language", formData.language || calculatorProps.defaultLanguage);
         queryParams.append(
             "profitMargin",
             `${formData.profitMargin.amount}${formData.profitMargin.type === "percent" ? "%" : ""}`
@@ -302,8 +492,30 @@ export default function IdealProductPriceCalculator() {
         queryParams.append("email", formData.email);
         queryParams.append("businessSegment", formData.businessSegment);
         queryParams.append("idealPrice", idealPrice.toString());
+        queryParams.append("currencySymbol", formData.currencySymbol || "");
 
         try {
+            const locationData = await getUserLocation();
+
+            setFormData(prev => ({
+                ...prev,
+                country: locationData.country,
+                region: locationData.region,
+                city: locationData.city,
+                language: locationData.language,
+                currencySymbol: locationData.currencySymbol
+            }));
+
+            queryParams.set("country", locationData.country || calculatorProps.defaultCountry);
+            queryParams.set("region", locationData.region || "");
+            queryParams.set("city", locationData.city || "");
+            queryParams.set("language", locationData.language || calculatorProps.defaultLanguage);
+            queryParams.set("currencySymbol", locationData.currencySymbol || "");
+            queryParams.set("countryCode", locationData.countryCode || "");
+            queryParams.set("formattedLocation", locationData.formattedLocation || "");
+            queryParams.set("currencyCode", locationData.currencyCode || "");
+            queryParams.set("currencySymbol", locationData.currencySymbol || "");
+
             const marketPrices = await getMarketPrices(formData.productName);
 
             if (marketPrices && marketPrices.lowestPriceProduct) {
@@ -333,6 +545,11 @@ export default function IdealProductPriceCalculator() {
                 queryParams.set("marketMediumPrice", mediumPrice.toString());
                 queryParams.set("marketHighestPrice", highestPrice.toString());
 
+                const urlParamsForMautic = new URLSearchParams(window.location.search);
+                const flowParamForMautic = urlParamsForMautic.get('flow');
+                const isSLGFlow = flowParamForMautic === 's';
+                const mauticFlow = isSLGFlow ? 'slg' : 'plg';
+
                 try {
                     await createMauticContact({
                         email: formData.email,
@@ -343,7 +560,12 @@ export default function IdealProductPriceCalculator() {
                         profitMargin: formData.profitMargin.amount,
                         marketLowestPrice: lowestPrice,
                         marketMediumPrice: mediumPrice,
-                        marketHighestPrice: highestPrice
+                        marketHighestPrice: highestPrice,
+                        country: formData.country,
+                        region: formData.region,
+                        city: formData.city,
+                        language: formData.language,
+                        flow: mauticFlow
                     });
                 } catch (mauticError) {
                     console.error("Error creating Mautic contact:", mauticError);
@@ -353,20 +575,55 @@ export default function IdealProductPriceCalculator() {
             }
 
             const urlParams = new URLSearchParams(window.location.search);
-            const flowParam = urlParams.get('flow');
-            const resultsPath = flowParam === 'p' ? '/results-p' : '/results';
-
+            const isSLGRedirect = urlParams.get('flow') === 's';
+            const resultsPath = isSLGRedirect ? calculatorProps.slgResultsPath : calculatorProps.plgResultsPath;
             window.location.href = `${resultsPath}?${queryParams.toString()}`;
         } catch (error) {
             console.error("Error in form submission:", error);
-        } finally {
-            const urlParams = new URLSearchParams(window.location.search);
-            const flowParam = urlParams.get('flow');
-            const resultsPath = flowParam === 'p' ? '/results-p' : '/results';
-
-            window.location.href = `${resultsPath}?${queryParams.toString()}`;
         }
     };
+
+    useEffect(() => {
+        // Use localized steps from the provided data
+        const steps = localizationData.calculatorSteps;
+        const descriptions = localizationData.stepDescriptions;
+
+        if (!steps.length) return; // Skip if no localization data available
+
+        let progress = 0;
+        let currentLabel = steps[0].title;
+        let currentDescription = descriptions.step1;
+
+        const productNameWords = formData.productName.trim().split(/\s+/);
+        if (productNameWords.length >= 2 && productNameWords[0] !== '') {
+            progress = 25;
+            currentLabel = steps[1].title;
+            currentDescription = descriptions.step2;
+        }
+
+        if (progress === 25 && formData.baseCost > 0) {
+            progress = 50;
+            currentLabel = steps[2].title;
+            currentDescription = descriptions.step3;
+        }
+
+        if (progress === 50 && formData.businessSegment) {
+            progress = 75;
+            currentLabel = steps[3].title;
+            currentDescription = descriptions.step4;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (progress === 75 && emailRegex.test(formData.email)) {
+            progress = 100;
+            currentLabel = `${localizationData.completionText}`;
+            currentDescription = descriptions.complete;
+        }
+
+        setProgressPercentage(progress);
+        setProgressLabel(currentLabel);
+        setProgressDescription(currentDescription);
+    }, [formData, localizationData]);
 
     return (
         <Card
@@ -375,15 +632,18 @@ export default function IdealProductPriceCalculator() {
             onPointerEnterCapture={() => { }}
             onPointerLeaveCapture={() => { }}
         >
-            <Text
-                color="kyte-gray"
-                align="left-all"
-                size="extra-large"
-                className="font-semibold mb-4"
-            >
-                Preencha as informações e descubra o passo a passo para
-                vender mais e melhor que seus concorrentes
-            </Text>
+
+            <div className="mb-6">
+                <ProgressLabelOutside
+                    title={progressLabel}
+                    description={progressDescription}
+                    percentage={progressPercentage}
+                    titleColor={progressPercentage === 100 ? "gray02" : "gray02"}
+                    descriptionColor={progressPercentage === 100 ? "gray02" : "gray02"}
+                    barColor={progressPercentage === 100 ? "teal" : "amber"}
+                    backgroundColor="gray10"
+                />
+            </div>
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                 <div className="relative">
                     <div className="flex items-center gap-2">
@@ -393,8 +653,8 @@ export default function IdealProductPriceCalculator() {
                                 onPointerLeaveCapture={() => { }}
                                 size="lg"
                                 type="text"
-                                label="Nome do Produto"
-                                placeholder="Ex: Samsung Galaxy S21"
+                                label={calculatorProps.productNameLabel}
+                                placeholder={calculatorProps.productNamePlaceholder}
                                 name="productName"
                                 value={formData.productName || " "}
                                 onChange={handleInputChange}
@@ -405,9 +665,9 @@ export default function IdealProductPriceCalculator() {
                                 aria-describedby="product-name-tooltip"
                             />
                             <Tooltip
-                                content="Digite o nome completo do item com especificações. Quanto mais detalhes, melhor os resultados."
+                                content={calculatorProps.productNameTooltip}
                                 placement="top"
-                                className="bg-white text-gray02 p-2 shadow-lg rounded"
+                                className="bg-white text-gray04 p-2 shadow-lg rounded max-w-xs whitespace-normal break-words"
                                 trigger="hover click"
                                 id="product-name-tooltip"
                             >
@@ -415,7 +675,7 @@ export default function IdealProductPriceCalculator() {
                                     type="button"
                                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
                                     onClick={(e) => e.preventDefault()}
-                                    aria-label="Informações sobre o nome do produto"
+                                    aria-label={calculatorProps.productNameAriaLabel}
                                 >
                                     <img
                                         src="/images/info-icon.svg"
@@ -437,17 +697,17 @@ export default function IdealProductPriceCalculator() {
                                 onPointerLeaveCapture={() => { }}
                                 size="lg"
                                 type="text"
-                                label="Preço de custo (R$)"
-                                placeholder="0,00"
+                                label={calculatorProps.baseCostLabel}
+                                placeholder={calculatorProps.baseCostPlaceholder}
                                 value={formData.baseCost.toFixed(2).replace(".", ",")}
                                 onChange={handleBaseCostChange}
                                 color="teal"
                                 crossOrigin="anonymous"
                             />
                             <Tooltip
-                                content="Insira o valor pago pelo produto ou gasto para ser fabricado."
+                                content={calculatorProps.baseCostTooltip}
                                 placement="top"
-                                className="bg-white text-gray02 p-2 shadow-lg rounded"
+                                className="bg-white text-gray04 p-2 shadow-lg rounded max-w-xs whitespace-normal break-words"
                                 trigger="hover click"
                                 id="base-cost-tooltip"
                             >
@@ -455,7 +715,7 @@ export default function IdealProductPriceCalculator() {
                                     type="button"
                                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
                                     onClick={(e) => e.preventDefault()}
-                                    aria-label="Informações sobre o preço de custo"
+                                    aria-label={calculatorProps.baseCostAriaLabel}
                                 >
                                     <img
                                         src="/images/info-icon.svg"
@@ -475,7 +735,7 @@ export default function IdealProductPriceCalculator() {
                         onPointerEnterCapture={() => { }}
                         onPointerLeaveCapture={() => { }}
                         size="lg"
-                        label="Área de atuação"
+                        label={calculatorProps.businessSegmentLabel}
                         value={formData.businessSegment}
                         onChange={(value) => handleBusinessSegmentChange({ target: { value } } as any)}
                         color="teal"
@@ -500,8 +760,8 @@ export default function IdealProductPriceCalculator() {
                             onPointerLeaveCapture={() => { }}
                             size="lg"
                             type="text"
-                            label="Lucro ideal estimado (R$ ou %)"
-                            placeholder="0,00"
+                            label={calculatorProps.profitMarginLabel}
+                            placeholder={calculatorProps.baseCostPlaceholder}
                             value={
                                 formData.profitMargin?.type === "value"
                                     ? (formData.profitMargin?.amount || 0).toFixed(2).replace(".", ",")
@@ -511,10 +771,11 @@ export default function IdealProductPriceCalculator() {
                             color="teal"
                             crossOrigin="anonymous"
                         />
+
                         <Tooltip
-                            content="Aqui calculamos a margem de lucro ideal para o seu produto com base no segmento de mercado selecionado. Você pode alterar para um valor fixo ou um percentual."
+                            content={calculatorProps.profitMarginTooltip}
                             placement="top"
-                            className="bg-white text-gray02 p-2 shadow-lg rounded"
+                            className="bg-white text-gray04 p-2 shadow-lg rounded max-w-xs whitespace-normal break-words"
                             trigger="hover click"
                         >
                             <button
@@ -538,10 +799,8 @@ export default function IdealProductPriceCalculator() {
                             setFormData((prev) => {
                                 let newAmount = prev.profitMargin.amount;
                                 if (newType === "value" && prev.profitMargin.type === "percent") {
-                                    // Convert percentage to actual value based on base cost
                                     newAmount = (prev.baseCost * (prev.profitMargin.amount / 100));
                                 } else if (newType === "percent" && prev.profitMargin.type === "value") {
-                                    // Convert value to percentage, but only if base cost is not zero
                                     newAmount = prev.baseCost > 0
                                         ? (prev.profitMargin.amount / prev.baseCost) * 100
                                         : 0;
@@ -557,7 +816,7 @@ export default function IdealProductPriceCalculator() {
                         }}
                         className="text-sm h-[44px] w-16 px-2 py-2 rounded-md border border-blue-gray-200 text-textColor min-w-[64px] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
                     >
-                        <option value="value">R$</option>
+                        <option value="value">{calculatorProps.currencySymbol}</option>
                         <option value="percent">%</option>
                     </select>
                 </div>
@@ -567,8 +826,8 @@ export default function IdealProductPriceCalculator() {
                         onPointerLeaveCapture={() => { }}
                         size="lg"
                         type="email"
-                        label="Seu E-mail"
-                        placeholder="seu@email.com"
+                        label={calculatorProps.emailLabel}
+                        placeholder={calculatorProps.emailPlaceholder}
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
@@ -584,7 +843,7 @@ export default function IdealProductPriceCalculator() {
                     onPointerLeaveCapture={() => { }}
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? "Processando..." : "Ver Resultado"}
+                    {isSubmitting ? calculatorProps.processingButtonText : calculatorProps.submitButtonText}
                 </Button>
             </form>
         </Card>

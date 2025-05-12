@@ -28,6 +28,8 @@ module.exports = withMT({
                 gray07: "#D9DCE2",
                 gray08: "#E8E9EA",
                 gray09: "#EFF1F3",
+                gray10: "#F7F7F8",
+                error: "#FF4E4E",
             },
             fontFamily: {
                 graphik: ['Graphik', 'sans-serif'],

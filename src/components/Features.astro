@@ -3,36 +3,80 @@ import CallToAction from "./CallToAction.astro";
 import FeatureCard from "./FeatureCard.astro";
 import Heading3 from "./ui/Heading3";
 
-const features = [
-    {
-        number: 1,
-        title: "Ampliar seus canais de venda",
-        description:
-            "Você vai ter mais chances de vender mais se aumentar o número de locais que sua loja aparece. Venda na loja online, no WhatsApp, Instagram, Facebook, TikTok, e diversifique sua atuação.",
-        overlayImage: "/images/featureImage1.png",
+interface Feature {
+    number: number;
+    title: string;
+    description: string;
+    overlayImage: string;
+}
+
+interface CallToActionProps {
+    type: string;
+    variant: string;
+    heading: string;
+    content: string;
+    buttonText: string;
+    lang: string;
+    plan: string;
+    recurrence: string;
+    flow: string;
+    os: string;
+}
+
+interface Props {
+    features: Feature[];
+    heading: string;
+    callToAction: CallToActionProps;
+    mainImageBg?: string;
+}
+
+const {
+    features = [
+        {
+            number: 1,
+            title: "Ampliar seus canais de venda",
+            description:
+                "Você vai ter mais chances de vender mais se aumentar o número de locais que sua loja aparece. Venda na loja online, no WhatsApp, Instagram, Facebook, TikTok, e diversifique sua atuação.",
+            overlayImage: "/images/featureImage1.png",
+        },
+        {
+            number: 2,
+            title: "Monitorar suas vendas e estoque",
+            description:
+                "Acompanhe todas as suas vendas e movimentações dos produtos no seu estoque. Fique sempre de olho no que está acontecendo, de qualquer lugar que estiver, a qualquer momento.",
+            overlayImage: "/images/featureImage2.png",
+        },
+        {
+            number: 3,
+            title: "Melhorar a experiência do cliente na sua loja",
+            description:
+                "Tenha uma loja online com divisão por setores, fácil de navegar, e de fazer e acompanhar o pedido. Faça de um jeito que estimule a pessoa a voltar e comprar com você de novo.",
+            overlayImage: "/images/featureImage3.png",
+        },
+        {
+            number: 4,
+            title: "Descobrir os produtos mais vendidos (e os que têm pouca saída)",
+            description:
+                "Acompanhe os números do seu negócio para saber onde estão os maiores gastos e como reduzi-los, quais itens são os favoritos da sua clientela e como vendê-los ainda mais, e quais estão parados no estoque e o que fazer para resolver.",
+            overlayImage: "/images/featureImage4.png",
+        },
+    ],
+    heading = "Agora que você já sabe o preço ideal dos seus produtos, o que precisa fazer?",
+    callToAction = {
+        type: "email",
+        variant: "primary",
+        heading: "Quer uma ajuda para vender melhor?",
+        content:
+            "O Kyte é um sistema de vendas que ajuda você a vender melhor seus produtos, melhorar a experiência do cliente e garantir que você consiga sempre a maior margem de lucro.",
+        buttonText: "Começar agora",
+        lang: "pt",
+        plan: "prime",
+        recurrence: "monthly",
+        flow: "subscription",
+        os: "lp",
     },
-    {
-        number: 2,
-        title: "Monitorar suas vendas e estoque",
-        description:
-            "Acompanhe todas as suas vendas e movimentações dos produtos no seu estoque. Fique sempre de olho no que está acontecendo, de qualquer lugar que estiver, a qualquer momento.",
-        overlayImage: "/images/featureImage2.png",
-    },
-    {
-        number: 3,
-        title: "Melhorar a experiência do cliente na sua loja",
-        description:
-            "Tenha uma loja online com divisão por setores, fácil de navegar, e de fazer e acompanhar o pedido. Faça de um jeito que estimule a pessoa a voltar e comprar com você de novo.",
-        overlayImage: "/images/featureImage3.png",
-    },
-    {
-        number: 4,
-        title: "Descobrir os produtos mais vendidos (e os que têm pouca saída)",
-        description:
-            "Acompanhe os números do seu negócio para saber onde estão os maiores gastos e como reduzi-los, quais itens são os favoritos da sua clientela e como vendê-los ainda mais, e quais estão parados no estoque e o que fazer para resolver.",
-        overlayImage: "/images/featureImage4.png",
-    },
-];
+    mainImageBg = "#2DD1AC",
+} = Astro.props;
 ---
 
 <div
@@ -43,16 +87,16 @@ const features = [
     >
         <div class="w-[90%] md:w-[80%]">
             <CallToAction
-                type="email"
-                variant="primary"
-                heading="Quer uma ajuda para vender melhor?"
-                content="O Kyte é um sistema de vendas que ajuda você a vender melhor seus produtos, melhorar a experiência do cliente e garantir que você consiga sempre a maior margem de lucro."
-                buttonText="Começar agora"
-                lang="pt"
-                plan="prime"
-                recurrence="monthly"
-                flow="subscription"
-                os="lp"
+                type={callToAction.type as "email" | "cta"}
+                variant={callToAction.variant as "primary" | "secondary"}
+                heading={callToAction.heading}
+                content={callToAction.content}
+                buttonText={callToAction.buttonText}
+                lang={callToAction.lang}
+                plan={callToAction.plan}
+                recurrence={callToAction.recurrence}
+                flow={callToAction.flow}
+                os={callToAction.os}
             />
         </div>
     </div>
@@ -61,8 +105,7 @@ const features = [
         <div class="space-y-16 px-3 md:px-0">
             <div class="my-24">
                 <Heading3 color="kyte-gray" align="center-all">
-                    Agora que você já sabe o preço ideal dos seus produtos, o
-                    que precisa fazer?
+                    {heading}
                 </Heading3>
             </div>
             <div class="relative">
@@ -73,7 +116,7 @@ const features = [
                 {
                     features.map((feature, index) => (
                         <FeatureCard
-                            mainImageBg="#2DD1AC"
+                            mainImageBg={mainImageBg}
                             content={feature.description}
                             {...feature}
                             isReversed={index % 2 !== 0}

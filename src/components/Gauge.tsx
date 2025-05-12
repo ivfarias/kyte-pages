@@ -3,55 +3,83 @@ interface GaugeProps {
     marketLowestPrice: number;
     marketMediumPrice: number;
     marketHighestPrice: number;
+    language?: 'en' | 'pt' | 'es';
 }
 
-function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighestPrice }: GaugeProps) {
-    console.log('Gauge Props:', { idealPrice, marketLowestPrice, marketMediumPrice, marketHighestPrice });
+function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighestPrice, language = 'pt' }: GaugeProps) {
+    console.log('Gauge Props:', { idealPrice, marketLowestPrice, marketMediumPrice, marketHighestPrice, language });
+
+    // Translations for gauge labels
+    const translations = {
+        en: {
+            cheap: 'Cheap',
+            ideal: 'Ideal',
+            expensive: 'Expensive'
+        },
+        pt: {
+            cheap: 'Barato',
+            ideal: 'Ideal',
+            expensive: 'Caro'
+        },
+        es: {
+            cheap: 'Barato',
+            ideal: 'Ideal',
+            expensive: 'Caro'
+        }
+    };
+
+    // Get the correct labels based on language
+    const labels = translations[language] || translations.pt;
+
+    // Ensure all values are valid numbers
+    const validIdealPrice = isNaN(idealPrice) ? 0 : idealPrice;
+    const validLowestPrice = isNaN(marketLowestPrice) ? 0 : marketLowestPrice;
+    const validMediumPrice = isNaN(marketMediumPrice) ? 0 : marketMediumPrice;
+    const validHighestPrice = isNaN(marketHighestPrice) ? 0 : marketHighestPrice;
 
     // Calculate needle position (0 to 180 degrees)
     const calculateNeedlePosition = () => {
-        const idealLowPrice = marketMediumPrice * 0.8;  // 20% below medium price
-        const idealHighPrice = marketMediumPrice * 1.2; // 20% above medium price
+        // Use validated values for calculation
+        const idealLowPrice = validMediumPrice * 0.8;  // 20% below medium price
+        const idealHighPrice = validMediumPrice * 1.2; // 20% above medium price
 
-        // If price is below the ideal low range (too cheap)
-        if (idealPrice < idealLowPrice) {
-            // Calculate position in the "too cheap" section (0-45 degrees)
-            // Use marketLowestPrice as the minimum boundary
-            const range = idealLowPrice - marketLowestPrice;
+        if (validMediumPrice <= 0) {
+            return 90;
+        }
+
+        if (validIdealPrice < idealLowPrice) {
+            if (validIdealPrice <= validLowestPrice) {
+                return 0;
+            }
+
+            const range = idealLowPrice - validLowestPrice;
             // Prevent division by zero
             if (range <= 0) return 0;
 
             const position = Math.max(
                 0,
-                ((idealPrice - marketLowestPrice) / range) * 45
+                ((validIdealPrice - validLowestPrice) / range) * 45
             );
             return position;
         }
 
-        // If price is in the ideal range
-        if (idealPrice >= idealLowPrice && idealPrice <= idealHighPrice) {
-            // Calculate position in the "ideal" section (45-135 degrees)
+        if (validIdealPrice >= idealLowPrice && validIdealPrice <= idealHighPrice) {
             const range = idealHighPrice - idealLowPrice;
-            // Prevent division by zero
             if (range <= 0) return 90; // Middle of ideal range
 
-            const position = ((idealPrice - idealLowPrice) / range) * 90 + 45;
+            const position = ((validIdealPrice - idealLowPrice) / range) * 90 + 45;
             return position;
         }
 
-        // If price is above ideal but below or equal to highest
-        if (idealPrice > idealHighPrice && idealPrice <= marketHighestPrice) {
-            // Calculate position in the "too expensive" section (135-180 degrees)
-            const range = marketHighestPrice - idealHighPrice;
-            // Prevent division by zero
+        if (validIdealPrice > idealHighPrice && validIdealPrice <= validHighestPrice) {
+            const range = validHighestPrice - idealHighPrice;
             if (range <= 0) return 135;
 
-            const position = ((idealPrice - idealHighPrice) / range) * 45 + 135;
+            const position = ((validIdealPrice - idealHighPrice) / range) * 45 + 135;
             return position;
         }
 
-        // If price is above the highest market price
-        return 180; // Maximum position (far right)
+        return 180;
     };
 
     const needleRotation = calculateNeedlePosition();
@@ -108,15 +136,15 @@ function Gauge({ idealPrice, marketLowestPrice, marketMediumPrice, marketHighest
                             <div className="flex justify-between px-8 md:px-12 relative">
                                 <div className="flex items-center gap-2 absolute left-4">
                                     <div className="w-6 h-6 rounded-full" style={{ backgroundColor: '#FF4E4E' }}></div>
-                                    <span className="text-base font-medium">Barato</span>
+                                    <span className="text-base font-medium">{labels.cheap}</span>
                                 </div>
                                 <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
                                     <div className="w-6 h-6 rounded-full" style={{ backgroundColor: '#2FAE94' }}></div>
-                                    <span className="text-base font-medium">Ideal</span>
+                                    <span className="text-base font-medium">{labels.ideal}</span>
                                 </div>
                                 <div className="flex items-center gap-2 absolute right-4">
                                     <div className="w-6 h-6 rounded-full" style={{ backgroundColor: '#F5A623' }}></div>
-                                    <span className="text-base font-medium">Caro</span>
+                                    <span className="text-base font-medium">{labels.expensive}</span>
                                 </div>
                             </div>
                         </div>

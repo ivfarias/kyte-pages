@@ -10,7 +10,11 @@ interface MauticContact {
   marketLowestPrice: number;
   marketMediumPrice: number;
   marketHighestPrice: number;
-  country?: string; // Optional field for country
+  country?: string;
+  region?: string;
+  city?: string;
+  language?: string;
+  flow?: string;
 }
 
 export async function createMauticContact(contactData: MauticContact) {
@@ -30,6 +34,10 @@ export async function createMauticContact(contactData: MauticContact) {
       marketmediumprice: contactData.marketMediumPrice,
       markethighestprice: contactData.marketHighestPrice,
       country: contactData.country || 'Brazil',
+      region: contactData.region || '',
+      city: contactData.city || '',
+      language: contactData.language || 'pt-br',
+      flow: contactData.flow || ''
     };
 
     console.log('📤 Sending data to Mautic:', mauticData);

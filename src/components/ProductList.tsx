@@ -22,6 +22,10 @@ interface ShoppingItem {
     position: number;
 }
 
+interface ProductListProps {
+    language?: 'en' | 'es' | 'pt';
+}
+
 interface MarketProducts {
     lowestPriceProduct: ShoppingItem;
     mediumPriceProduct: ShoppingItem;
@@ -61,20 +65,38 @@ const transformShoppingData = (marketProducts: MarketProducts): Product[] => {
     ];
 };
 
-const getCategoryStyle = (id: number): { text: string; color: string } => {
+const getCategoryStyle = (id: number, lang: 'en' | 'es' | 'pt' = 'pt'): { text: string; color: string } => {
+    const localizations = {
+        en: {
+            1: 'Cheap',
+            2: 'Medium',
+            3: 'Expensive',
+        },
+        es: {
+            1: 'Barato',
+            2: 'Medio',
+            3: 'Caro',
+        },
+        pt: {
+            1: 'Barato',
+            2: 'Médio',
+            3: 'Caro',
+        },
+    };
+    const text = localizations[lang]?.[id as keyof typeof localizations[typeof lang]] || '';
     switch (id) {
         case 1:
-            return { text: 'Barato', color: '#FF4E4E' };
+            return { text, color: '#FF4E4E' };
         case 2:
-            return { text: 'Médio', color: '#2FAE94' };
+            return { text, color: '#2FAE94' };
         case 3:
-            return { text: 'Caro', color: '#F5A623' };
+            return { text, color: '#F5A623' };
         default:
             return { text: '', color: '' };
     }
 };
 
-export default function Example() {
+export default function ProductList({ language = 'pt' }: ProductListProps) {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {
@@ -93,7 +115,7 @@ export default function Example() {
                     {products
                         .sort((a, b) => a.id - b.id)
                         .map((product) => {
-                            const category = getCategoryStyle(product.id);
+                            const category = getCategoryStyle(product.id, language);
                             return (
                                 <a
                                     key={product.id}

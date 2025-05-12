@@ -1,28 +1,29 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Footer from "../components/Footer.astro";
-import CallToAction from "../components/CallToAction.astro";
-import Section from "../components/Section.astro";
-import Card from "../components/Card.astro";
-import InfoCard from "../components/InfoCard.astro";
-import Faq from "../components/Faq.astro";
-import Content from "../components/Content.astro";
+import Layout from "../../../layouts/Layout.astro";
+import Footer from "../../../components/Footer.astro";
+import CallToAction from "../../../components/CallToAction.astro";
+import Section from "../../../components/Section.astro";
+import Card from "../../../components/Card.astro";
+import InfoCard from "../../../components/InfoCard.astro";
+import Faq from "../../../components/Faq.astro";
+import Content from "../../../components/Content.astro";
 
-import PriceChart from "../components/Chart";
-import Gauge from "../components/Gauge";
-import Features from "../components/Features.astro";
-import ProductList from "../components/ProductList";
-import PricingTrio from "../components/PricingTrio.astro";
-import RedirectCheckout from "../components/ui/RedirectCheckout";
-import BulkCalculator from "../components/BulkCalculator";
+import PriceChart from "../../../components/Chart";
+import Gauge from "../../../components/Gauge";
+import Features from "../../../components/Features.astro";
+import ProductList from "../../../components/ProductList";
+import PricingTrio from "../../../components/PricingTrio.astro";
+import RedirectCheckout from "../../../components/ui/RedirectCheckout";
+import BulkCalculator from "../../../components/BulkCalculator";
 
-import Heading1 from "../components/ui/Heading1";
-import Heading2 from "../components/ui/Heading2";
-import Text from "../components/ui/Text";
-import MauticHandler from "../components/MauticHandler";
+import Heading1 from "../../../components/ui/Heading1";
+import Heading2 from "../../../components/ui/Heading2";
+import Text from "../../../components/ui/Text";
+import MauticHandler from "../../../components/MauticHandler";
 
 const params = Astro.url.searchParams;
 const email = params.get("email") || "";
+const businessSegment = params.get("businessSegment") || "";
 const productName = params.get("productName") || "";
 const idealPrice = Number(params.get("idealPrice")) || 0;
 const baseCost = Number(params.get("baseCost")) || 0;
@@ -33,12 +34,18 @@ const marketHighestPrice = Number(params.get("marketHighestPrice")) || 0;
 const recommendedMargin = Number(params.get("recommendedMargin")) || 0;
 const recommendedProfitValue =
   Number(params.get("recommendedProfitValue")) || 0;
+const country = params.get("country") || "";
+const region = params.get("region") || "";
+const city = params.get("city") || "";
+const language = params.get("language") || "";
+const flow = params.get("flow") || "";
 ---
 
 <Layout title="Kyte | Resultado do Cálculo">
   <MauticHandler
     client:load
     email={email}
+    businessSegment={businessSegment}
     productName={productName}
     idealPrice={idealPrice}
     baseCost={baseCost}
@@ -46,6 +53,11 @@ const recommendedProfitValue =
     marketLowestPrice={marketLowestPrice}
     marketMediumPrice={marketMediumPrice}
     marketHighestPrice={marketHighestPrice}
+    country={country}
+    region={region}
+    city={city}
+    language={language}
+    flow={flow}
   />
   <Section>
     <div class="flex flex-col md:flex-row gap-2 md:gap-12">
@@ -150,10 +162,10 @@ const recommendedProfitValue =
               redirectUrl="https://kyteapp.com/loading"
               variant="primary"
               lang="pt"
-              plan=""
-              recurrence=""
+              plan="prime"
+              recurrence="monthly"
               os="lp"
-              flow="product"
+              flow="subscription"
               app="web"
             />
           </div>
@@ -164,10 +176,10 @@ const recommendedProfitValue =
               redirectUrl="https://kyteapp.com/loading"
               variant="primary"
               lang="pt"
-              plan=""
-              recurrence=""
+              plan="prime"
+              recurrence="monthly"
               os="lp"
-              flow="product"
+              flow="subscription"
               app="pos"
             />
           </div>
@@ -183,6 +195,7 @@ const recommendedProfitValue =
         </a>
         <Gauge
           client:load
+          language="pt"
           idealPrice={parseFloat(
             new URLSearchParams(Astro.url.search).get("idealPrice") || "0",
           )}
@@ -218,7 +231,44 @@ const recommendedProfitValue =
       <ProductList client:load />
     </div>
     <div>
-      <BulkCalculator client:only="react" />
+      <BulkCalculator
+        client:only="react"
+        marketMediumPrice={parseFloat(
+          new URLSearchParams(Astro.url.search).get("marketMediumPrice") || "0",
+        )}
+        baseCost={parseFloat(
+          new URLSearchParams(Astro.url.search).get("baseCost") || "0",
+        )}
+        heading="Veja quanto desconto você pode dar sem perder lucro"
+        subheading="Preencha os campos abaixo. O resultado aparece na hora."
+        unitPriceLabel="Preço por unidade (R$)"
+        costPerUnitLabel="Custo por unidade (R$)"
+        bulkQuantityLabel="Quantidade mínima"
+        discountPercentageLabel="Percentual de desconto (%)"
+        cardTitle="Com essas condições, seu lucro será:"
+        discountedPriceLabel="Preço com desconto"
+        profitPerUnitLabel="Lucro por unidade"
+        marginLabel="Margem de lucro"
+        currencySymbol="R$"
+        summaryTemplateText="Se você vender {bulkQuantity} unidades com {discountPercentage}% de desconto, você terá {currencySymbol} {profitPerUnit} por unidade. {resultText}"
+        resultTexts={{
+          loss: "Atenção: você terá prejuízo por unidade vendida.",
+          lowMargin: "Cuidado: sua margem está abaixo de 20%.",
+          safe: "Este é um desconto seguro.",
+        }}
+        showCheckoutRedirect={true}
+        redirectProps={{
+          buttonText: "Quero vender com o Kyte",
+          redirectUrl: "https://kyteapp.com/loading",
+          os: "lp",
+          flow: "subscription",
+          app: "pos",
+          lang: "pt",
+          recurrence: "monthly",
+          plan: "grow",
+          variant: "secondary",
+        }}
+      />
     </div>
     <div class="grid justify-items-center">
       <Content
@@ -247,12 +297,12 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
           type="email"
           variant="primary"
           heading="Pronto pra vender mais que eles?"
-          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos."
-          buttonText="Começar Grátis"
+          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$ 2 por dia."
+          buttonText="Quero começar"
           lang="pt"
-          plan=""
-          recurrence=""
-          flow="product"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
           app="web"
         />
       </div>
@@ -261,12 +311,12 @@ Para garantir que as informações sobre os concorrentes sejam justas e realista
           type="email"
           variant="primary"
           heading="Pronto pra vender mais que eles?"
-          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. "
-          buttonText="Começar grátis"
+          content="Com o Kyte, você fecha vendas direto do celular — onde estiver. Controle estoque, pedidos e cobranças em segundos. Tudo isso por menos de R$2 por dia."
+          buttonText="Quero começar"
           lang="pt"
-          plan=""
-          recurrence=""
-          flow="product"
+          plan="prime"
+          recurrence="monthly"
+          flow="subscription"
           app="pos"
         />
       </div>
@@ -374,7 +424,52 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
       />
     </div>
   </Section>
-  <Features />
+  <Features
+    heading="Agora que você já sabe o preço ideal dos seus produtos, o que precisa fazer?"
+    features={[
+      {
+        number: 1,
+        title: "Título do recurso 1",
+        description: "Descrição do recurso 1",
+        overlayImage: "/images/featureImage1.png",
+      },
+      {
+        number: 2,
+        title: "Monitorar suas vendas e estoque",
+        description:
+          "Acompanhe todas as suas vendas e movimentações dos produtos no seu estoque. Fique sempre de olho no que está acontecendo, de qualquer lugar que estiver, a qualquer momento.",
+        overlayImage: "/images/featureImage2.png",
+      },
+      {
+        number: 3,
+        title: "Melhorar a experiência do cliente na sua loja",
+        description:
+          "Tenha uma loja online com divisão por setores, fácil de navegar, e de fazer e acompanhar o pedido. Faça de um jeito que estimule a pessoa a voltar e comprar com você de novo.",
+        overlayImage: "/images/featureImage3.png",
+      },
+      {
+        number: 4,
+        title: "Descobrir os produtos mais vendidos (e os que têm pouca saída)",
+        description:
+          "Acompanhe os números do seu negócio para saber onde estão os maiores gastos e como reduzi-los, quais itens são os favoritos da sua clientela e como vendê-los ainda mais, e quais estão parados no estoque e o que fazer para resolver.",
+        overlayImage: "/images/featureImage4.png",
+      },
+    ]}
+    callToAction={{
+      type: "email",
+      variant: "primary",
+      heading: "Quer uma ajuda para vender melhor?",
+      content:
+        "O Kyte é um sistema de vendas que ajuda você a vender melhor seus produtos, melhorar a experiência do cliente e garantir que você consiga sempre a maior margem de lucro.",
+      buttonText: "Começar agora",
+      lang: "pt",
+      plan: "prime",
+      recurrence: "monthly",
+      flow: "subscription",
+      os: "lp",
+    }}
+    mainImageBg="#2DD1AC"
+  />
   <Section>
     <div class="justify-self-center"></div>
     <Heading2 color="kyte-gray" align="left-mobile"
@@ -416,7 +511,7 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         />
         <InfoCard
           title="Tudo isso cabe no seu bolso"
-          content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 3 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
+          content="O Kyte oferece planos acessíveis que cabem no seu orçamento. Com menos de R$ 2 por dia, você pode ter acesso a todas as ferramentas que seu negócio precisa para crescer e vender mais. Além disso, oferecemos um plano gratuito para quem está começando e quer testar a plataforma antes de investir. E o melhor: logo ao criar sua conta, você ganha 7 dias grátis no plano GROW, sem compromisso, para testar todos os recursos e ver na prática como o Kyte pode transformar sua gestão. Nosso objetivo é oferecer uma solução completa, eficiente e acessível para pequenos empreendedores, porque sabemos que vender bem não precisa ser complicado – nem caro."
           image="/images/customer5.webp"
           imageLink="https://www.youtube.com/watch?v=1J2QocSp4B0&t"
           isReversed={false}
@@ -428,16 +523,73 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         type="email"
         variant="primary"
         heading="Vamos vender e organizar melhor este e outros de seus produtos?"
-        content="Experimente o Kyte e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
-        buttonText="Testar grátis"
+        content="Assine o Kyte por menos de R$2 ao dia e tenha acesso a ferramentas que você precisa para vender e organizar melhor este e outros de seus produtos."
+        buttonText="Começar agora"
         isHidden={true}
         lang="pt"
-        plan=""
-        recurrence=""
-        flow="product"
+        plan="prime"
+        recurrence="monthly"
+        flow="subscription"
       />
     </div>
-    <PricingTrio />
+    <PricingTrio
+      title="Todo negócio precisa de um plano"
+      subtitle="Todos os planos de assinatura mensal da Kyte não possuem contratos ou custos extras.\nAssine no boleto, pix ou cartão de crédito."
+      proInfo={{
+        name: "PRO",
+        description: "Ideal para quem está começando e faz tudo pelo celular",
+        defaultPrice: "R$39,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Principais recursos:",
+        features: [
+          { text: "Ponto de venda no celular" },
+          { text: "Catálogo online" },
+          { text: "Recibos digitais e impressos" },
+          { text: "Gestão de gastos" },
+          { text: "Controle de estoque" },
+          { text: "Controle de fiado" },
+          { text: "Fluxo de caixa completo" },
+          { text: "Atendimento por e-mail" },
+        ],
+        buttonText: "Assinar o PRO",
+      }}
+      growInfo={{
+        name: "GROW",
+        description:
+          "Para comerciantes que buscam controle total para si e para a equipe",
+        defaultPrice: "R$59,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Todos os recursos do PRO e mais:",
+        features: [
+          { text: "Versão do Kyte para Computador" },
+          { text: "IA para criar descrições de produtos" },
+          { text: "Importação de produtos em massa" },
+          { text: "Edição e exclusão em massa de produtos e categorias" },
+          { text: "Aplicação de desconto em massa" },
+          { text: "Gestão de fornecedores" },
+          { text: "Gestão de gastos com recorrência" },
+          { text: "10 contas de usuários / vendedores" },
+          { text: "Atendimento em tempo real via chat" },
+        ],
+        buttonText: "Assinar o GROW",
+      }}
+      primeInfo={{
+        name: "PRIME",
+        description: "Para negócios que buscam atendimento personalizado",
+        defaultPrice: "R$89,90",
+        pricePerMonth: "/por mês",
+        featuresTitle: "Todos os recursos do PRO e GROW e mais:",
+        features: [
+          { text: "Videochamada para ajudar na chegada ao Kyte" },
+          { text: "Suporte via WhatsApp" },
+          { text: "Atendimento prioritário" },
+          { text: "Acesso exclusivo às novidades e lançamentos do Kyte" },
+        ],
+        buttonText: "Assinar o PRIME",
+      }}
+      lang="pt"
+      dynamicPricing={false}
+    />
     <Faq
       title="Outras perguntas que surgem com frequência"
       description="Além disso, você pode entrar em contato com a gente através do help@kyte.com.br se quiser conversar"
@@ -445,7 +597,7 @@ A partir disso, é possível entender tanto se você tem um custo saudável para
         {
           question: "Isso tudo é caro?",
           answer:
-            "Além de uma versão gratuita, o Kyte possui planos bastante acessíveis. Começando por R$39.90 ao mês, ou cerca de 1 real por dia e você só paga pelo que realmente precisa, sem surpresas ou custos extras.",
+            "Além do plano Gratuito, o Kyte possui assinaturas bastante acessíveis. Começando com R$39,90 ao mês, ou cerca de R$ 1,50 reais por dia e você só paga pelo que realmente precisa, sem surpresas ou custos extras.",
           order: 1,
         },
         {

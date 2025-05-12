@@ -1,0 +1,28 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Hero from "../../../components/Hero.astro";
+import Footer from "../../../components/Footer.astro";
+---
+
+<Layout
+    title="Kyte | Descubre el precio ideal para tu producto"
+    variant="gray09"
+>
+    <Hero
+        title="Encuentra el precio ideal según la competencia"
+        subtitleBold="¿Vendes sin saber si estás perdiendo dinero?"
+        subtitleRegular="Resuelve eso con un clic. Nuestro cálculo muestra si tu precio está barato, ideal o caro, según el mercado. Con pocos datos, recibes un análisis completo para tomar decisiones claras y ganar más."
+        beforeImage="/images/womanBefore.webp"
+        afterImage="/images/womanAfter.webp"
+        beforeLabel="Antes"
+        afterLabel="Después"
+        proof1Image="/images/storeSocialProof.svg"
+        proof1Alt="RA Verificado"
+        proof2Image="/images/seguroGoogle.svg"
+        proof2Alt="Seguro Google"
+        proof3Image="/images/trustedSSL.svg"
+        proof3Alt="Seguro SSL"
+        calculatorVariant="spanish"
+    />
+    <Footer />
+</Layout>
