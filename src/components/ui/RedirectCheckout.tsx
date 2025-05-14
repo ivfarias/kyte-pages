@@ -9,6 +9,7 @@ interface RedirectButtonProps {
     lang: string;
     recurrence: string;
     plan: string;
+    dataKyteGa?: string;
     variant?: 'primary' | 'secondary';
 }
 
@@ -21,6 +22,7 @@ const RedirectButton = ({
     lang,
     recurrence,
     plan,
+    dataKyteGa = "G-41YGQTYJJS",
     variant = 'primary',
 }: RedirectButtonProps) => {
     const [email, setEmail] = useState<string>("");
@@ -48,7 +50,7 @@ const RedirectButton = ({
         }
 
         const encodedEmail = encodeURIComponent(email);
-        const finalURL = `${redirectUrl}?email=${encodedEmail}&os=${os}&flow=${flow}&app=${app}&lang=${lang}&recurrence=${recurrence}&plan=${plan}`;
+        const finalURL = `${redirectUrl}?email=${encodedEmail}&os=${os}&flow=${flow}&app=${app}&lang=${lang}&recurrence=${recurrence}&plan=${plan}&kyte-ga=${dataKyteGa}`;
 
         console.log("🔗 Redirecting to:", finalURL);
 

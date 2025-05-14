@@ -19,6 +19,7 @@ interface Props {
     flow?: string;
     formAuth?: boolean;
     app?: string;
+    dataKyteGa?: string;
 }
 
 const {
@@ -34,6 +35,7 @@ const {
     os = "lp",
     flow = "",
     app = "",
+    dataKyteGa = "G-41YGQTYJJS",
 } = Astro.props;
 
 const styles = {
@@ -88,6 +90,7 @@ const currentStyle = styles[variant];
                     os={os}
                     flow={flow}
                     app={app}
+                    dataKyteGa={dataKyteGa}
                 />
             ) : (
                 <Button
