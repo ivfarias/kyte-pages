@@ -41,8 +41,10 @@ const BeforeAfterSlider = ({
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    e.preventDefault();
-    handleMove(e.touches[0].clientX);
+    if (isResizing) {
+      e.preventDefault();
+      handleMove(e.touches[0].clientX);
+    }
   };
 
   useEffect(() => {
