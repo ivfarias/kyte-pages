@@ -17,18 +17,18 @@ const BeforeAfterSlider = ({
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = () => {
+  const handleStart = () => {
     setIsResizing(true);
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setIsResizing(false);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMove = (clientX: number) => {
     if (isResizing && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+      const x = clientX - rect.left;
       const containerWidth = containerRef.current.offsetWidth;
       const newPosition = (x / containerWidth) * 100;
 
@@ -36,13 +36,26 @@ const BeforeAfterSlider = ({
     }
   };
 
+  const handleMouseMove = (e: MouseEvent) => {
+    handleMove(e.clientX);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
+    handleMove(e.touches[0].clientX);
+  };
+
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleEnd);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleEnd);
     };
   }, [isResizing]);
 
@@ -101,7 +114,8 @@ const BeforeAfterSlider = ({
       <div
         className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize"
         style={{ left: `${position}%` }}
-        onMouseDown={handleMouseDown}
+        onMouseDown={handleStart}
+        onTouchStart={handleStart}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
           <svg
